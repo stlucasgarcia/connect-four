@@ -1,1 +1,2 @@
-# Connect-Four
+# Connect Four
+> Connect four game built in Pygame.
