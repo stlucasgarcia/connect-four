@@ -137,8 +137,8 @@ close_game: bool = False
 turn: int = 0
 SQUARE_SIZE: int = 100
 
-width = COLUMN_AMOUNT * SQUARE_SIZE
-height = (ROW_AMOUNT + 1) * SQUARE_SIZE
+width = 1920
+height = 1080
 
 size: tuple = (width, height)
 
@@ -148,9 +148,13 @@ pygame.init()
 
 myFont = pygame.font.SysFont("monospace", 75)
 
-screen = pygame.display.set_mode(size)
+screen = pygame.display.set_mode((size), pygame.FULLSCREEN)
 draw_board(board)
 pygame.display.update()
+# Put image
+# background_image = pygame.image.load("images/background/game_screen.png")
+# screen.blit(background_image, (0, 0))
+# pygame.display.flip()
 
 while not close_game:
     for event in pygame.event.get():
