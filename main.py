@@ -2,7 +2,7 @@ import sys
 import pygame
 import numpy as np
 import math
-
+from init_screen import init_screen
 
 ROW_AMOUNT: int = 6
 COLUMN_AMOUNT: int = 7
@@ -161,18 +161,33 @@ while not close_game:
         if event.type == pygame.QUIT:
             sys.exit()
 
+        starterscreen = True
+        while starterscreen:
+            starterscreen = init_screen(screen=screen).starter_screen()
+            if not starterscreen:
+                break
+
         if event.type == pygame.MOUSEMOTION:
+            pygame.display.update()
+
+            pygame.mouse.set_visible(0)
+
             pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARE_SIZE))
+
             posx = event.pos[0]
+
             if turn == 0:
                 pygame.draw.circle(screen, RED, (posx, int(SQUARE_SIZE / 2)), RADIUS)
             else:
                 pygame.draw.circle(screen, YELLOW, (posx, int(SQUARE_SIZE / 2)), RADIUS)
 
+            pygame.display.update()
+
         pygame.display.update()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARE_SIZE))
+            
             if turn == 0:
                 # Ask player 1 input
                 posx = event.pos[0]
