@@ -140,5 +140,9 @@ cython_debug/
 # VsCode files
 .VsCode
 
-# Examples
+# Examples/Tests
 example.py
+test.py
+
+# Photoshop files
+*.psd 
