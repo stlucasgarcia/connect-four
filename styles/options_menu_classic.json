@@ -4,10 +4,10 @@
         "colours":
         {
              "normal_bg": "#25292e",
-             "hovered_bg": "#35393e",
+             "hovered_bg": "#5f606a",
              "disabled_bg": "#25292e",
              "selected_bg": "#25292e",
-             "active_bg": "#193784",
+             "active_bg": "#efd600",
              "normal_text": "#c5cbd8",
              "hovered_text": "#FFFFFF",
              "selected_text": "#FFFFFF",
@@ -39,9 +39,9 @@
 
         "font":
         {
-            "name": "JustMyType",
+            "name": "classic",
             "size": "50",
-            "regular_path": "fonts/JustMyType-KePl.ttf"
+            "regular_path": "fonts/classic.ttf"
         }
     },
 
@@ -56,7 +56,7 @@
         {
             "name": "JustMyType",
             "size": "150",
-            "regular_path": "fonts/JustMyType-KePl.ttf"
+            "regular_path": "fonts/classic.ttf"
         }
     }
 }

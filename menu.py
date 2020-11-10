@@ -1,3 +1,4 @@
+from sys import exit
 import pygame as pg
 import pygame_gui
 
@@ -21,6 +22,9 @@ class OptionsMenu:
 
         pg.init()
         pg.display.set_mode(self.res, pg.FULLSCREEN)
+        self.img = pg.image.load("pb.png")
+        self.img.set_alpha(100)
+
         self._setup()
 
     def _setup(self):
@@ -53,3 +57,33 @@ class OptionsMenu:
             manager=self.manager,
             object_id="#Options",
         )
+
+    def run(self, screen, clock):
+        options = True
+
+        while options:
+            for event in pg.event.get():
+                self.manager.process_events(event)
+
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        options = False
+
+                if self.resume.check_pressed():
+                    options = False
+
+                if self.starter_menu.check_pressed():
+                    pass
+
+                if self.quit.check_pressed():
+                    exit()
+
+            time_delta = clock.tick(60) / 1000.0
+
+            screen.blit(self.img, (0, 0))
+            pg.display.flip()
+
+            self.manager.update(time_delta)
+            self.manager.draw_ui(screen)
+
+            pg.display.update()
