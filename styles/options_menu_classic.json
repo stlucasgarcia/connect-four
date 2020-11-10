@@ -48,7 +48,7 @@
     "#Menu": {
         "colours":
         {
-            "dark_bg": "#ffffff",
+            "dark_bg": "#1C00ff00",
             "normal_text": "#25292e"
          },
 
