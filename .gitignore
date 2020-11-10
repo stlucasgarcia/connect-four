@@ -140,6 +140,9 @@ cython_debug/
 # VsCode files
 .VsCode
 
+# PyCharm files
+.idea/
+
 # Examples/Tests
 example.py
 test.py
