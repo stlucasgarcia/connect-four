@@ -2,6 +2,7 @@ import sys
 import pygame
 import numpy as np
 import math
+
 from init_screen import init_screen
 
 ROW_AMOUNT: int = 6
@@ -13,7 +14,7 @@ RED: tuple = (255, 0, 0)
 YELLOW: tuple = (255, 255, 0)
 
 
-def create_board() -> list:
+def create_matrix() -> list:
     board = np.zeros((ROW_AMOUNT, COLUMN_AMOUNT))
     return board
 
@@ -132,7 +133,7 @@ def draw_board(board: list):
     pygame.display.update()
 
 
-board = create_board()
+board = create_matrix()
 close_game: bool = False
 turn: int = 0
 SQUARE_SIZE: int = 100
@@ -149,28 +150,32 @@ pygame.init()
 myFont = pygame.font.SysFont("monospace", 75)
 
 screen = pygame.display.set_mode((size), pygame.FULLSCREEN)
-draw_board(board)
+# draw_board(board)
 pygame.display.update()
-# Put image
-# background_image = pygame.image.load("images/background/game_screen.png")
-# screen.blit(background_image, (0, 0))
-# pygame.display.flip()
+
+background_image = pygame.image.load(
+    "images/game_screens/classic/game_screen_Classic.png"
+)
+
+screen.blit(background_image, (0, 0))
+
+pygame.display.flip()
 
 while not close_game:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
 
-        starterscreen = True
-        while starterscreen:
-            starterscreen = init_screen(screen=screen).starter_screen()
-            if not starterscreen:
-                break
+        # starterscreen = True
+        # while starterscreen:
+        #     starterscreen = init_screen(screen=screen).starter_screen()
+        #     if not starterscreen:
+        #         break
 
+        # if not starterscreen:
+        #     print("Passed")
         if event.type == pygame.MOUSEMOTION:
-            pygame.display.update()
-
-            pygame.mouse.set_visible(0)
+            # pygame.mouse.set_visible(0)
 
             pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARE_SIZE))
 
@@ -181,13 +186,11 @@ while not close_game:
             else:
                 pygame.draw.circle(screen, YELLOW, (posx, int(SQUARE_SIZE / 2)), RADIUS)
 
-            pygame.display.update()
-
         pygame.display.update()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pygame.draw.rect(screen, BLACK, (0, 0, width, SQUARE_SIZE))
-            
+
             if turn == 0:
                 # Ask player 1 input
                 posx = event.pos[0]

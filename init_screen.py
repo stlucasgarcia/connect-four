@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 import os
 
 from itertools import cycle
@@ -9,14 +9,14 @@ class init_screen:
         self.screen = screen
 
     def starter_screen(self):
-        background = pygame.image.load("images\starter\starterclassic.png")
+        background = pg.image.load("images\starter\starterclassic.png")
 
-        FONT = pygame.font.Font(f"{os.getcwd()}\\fonts\JustMyType-KePl.ttf", 95)
+        FONT = pg.font.Font(f"{os.getcwd()}\\fonts\JustMyType-KePl.ttf", 125)
 
         intro = True
         while intro == True:
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN:
                     intro = False
                     return False
 
@@ -27,7 +27,7 @@ class init_screen:
 
             self.screen.blit(text, [580, 800])
 
-            pygame.display.update()
+            pg.display.update()
 
             if not intro:
                 break
