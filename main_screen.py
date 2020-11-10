@@ -13,7 +13,7 @@ def create_matrix() -> list:
     return matrix
 
 
-def drop_piece(matrix: list, row: int, column: int, piece: int):
+def drop_piece(matrix: list, row: int, column: int, piece: int) -> None:
     matrix[row][column] = piece
 
 
@@ -21,48 +21,130 @@ def is_available(matrix: list, column: int) -> bool:
     return matrix[ROW_AMOUNT - 1][column] == 0
 
 
-def location_X(matrix: list, click_loc: int):
+def location_X(matrix: list, click_loc: int) -> None:
     # First location (X)
-    if click_loc >= 355 and click_loc <= 535:
+    if click_loc > 357 and click_loc < 551:
         print("Loc 1")
-        return 1, x
-    elif click_loc >= 535 and click_loc <= 705:
+        return 1
+    elif click_loc > 551 and click_loc < 714:
         print("loc 2")
-        return 2, x
-    elif click_loc >= 705 and click_loc <= 877:
+        return 2
+    elif click_loc > 714 and click_loc < 879:
         print("loc 3")
-        return 3, x
-    elif click_loc >= 877 and click_loc <= 1043:
+        return 3
+    elif click_loc > 879 and click_loc < 1038:
         print("loc 4")
-        return 4, x
-    elif click_loc >= 1043 and click_loc <= 1210:
+        return 4
+    elif click_loc > 1038 and click_loc < 1203:
         print("loc 5")
-        return 5, x
-    elif click_loc >= 1210 and click_loc <= 1380:
+        return 5
+    elif click_loc > 1203 and click_loc < 1362:
         print("loc 6")
-        return 6, x
-    elif click_loc >= 1380 and click_loc <= 1556:
+        return 6
+    elif click_loc > 1362 and click_loc < 1423:
         print("loc 7")
-        return 7, x
+        return 7
+    else:
+        return 0
 
 
-def draw_board(matrix: list, screen):
+# [[1, 2, 0, 0, 0, 0, 0],
+# [0, 0, 0, 0, 0, 0, 0],
+# [0, 0, 0, 0, 0, 0, 0],
+# [0, 0, 0, 0, 0, 0, 0],
+# [0, 0, 0, 0, 0, 0, 0],
+# [0, 0, 0, 0, 0, 0, 0]]
+
+
+def draw_board(matrix: list, screen) -> None:
     screen.blit(background_image, (0, 0))
 
     for column in range(COLUMN_AMOUNT):
         for row in range(ROW_AMOUNT):
             if matrix[row][column] == 1:
-                screen.blit(chip_1, (x, y))
+                X_CONST = 140
+                Y_CONST = 128.5
 
+                x = 403 + ((X_CONST * column) + (23 * (column)))  # CERTO
+
+                y = 924 - (Y_CONST * (row) + (17 * (row)))
+
+                screen.blit(
+                    chip_1,
+                    (x, y),
+                )
+                # python -u "c:\Users\lukep\Documents\Projects\Connect Four\Connect-Four\main_screen.py"
             elif matrix[row][column] == 2:
-                screen.blit(chip_2, (x, y))
+                X_CONST = 140
+                Y_CONST = 128.5
+
+                x = 403 + ((X_CONST * column) + (23 * (column)))  # CERTO
+
+                y = 924 - (Y_CONST * (row) + (17 * (row)))
+
+                screen.blit(
+                    chip_2,
+                    (x, y),
+                )
 
 
-background_image = pg.image.load("images/game_screens/vaporwave/game_screen.png")
+def get_next_open_row(matrix: list, column: int) -> int:
+    for row in range(ROW_AMOUNT):
+        if matrix[row][column] == 0:
+            return row
 
-chip_1 = pg.image.load("images/game_screens/vaporwave/chip_1.png")
 
-chip_2 = pg.image.load("images/game_screens/vaporwave/chip_2.png")
+def is_victory(matrix: list, chip: int) -> bool:
+    # Check horizontal
+    for column in range(COLUMN_AMOUNT - 3):
+        for row in range(ROW_AMOUNT):
+            if (
+                matrix[row][column] == chip
+                and matrix[row][column + 1] == chip
+                and matrix[row][column + 2] == chip
+                and matrix[row][column + 3] == chip
+            ):
+                return True
+
+    # Check Vertical
+    for column in range(COLUMN_AMOUNT):
+        for row in range(ROW_AMOUNT - 3):
+            if (
+                matrix[row][column] == chip
+                and matrix[row + 1][column] == chip
+                and matrix[row + 2][column] == chip
+                and matrix[row + 3][column] == chip
+            ):
+                return True
+
+    # Main diagonal
+    for column in range(COLUMN_AMOUNT - 3):
+        for row in range(ROW_AMOUNT - 3):
+            if (
+                matrix[row][column] == chip
+                and matrix[row + 1][column + 1] == chip
+                and matrix[row + 2][column + 2] == chip
+                and matrix[row + 3][column + 3] == chip
+            ):
+                return True
+
+    # MainC diagonal
+    for column in range(COLUMN_AMOUNT - 3):
+        for row in range(3, ROW_AMOUNT):
+            if (
+                matrix[row][column] == chip
+                and matrix[row - 1][column + 1] == chip
+                and matrix[row - 2][column + 2] == chip
+                and matrix[row - 3][column + 3] == chip
+            ):
+                return True
+
+
+background_image = pg.image.load("images/game_screens/halloween/game_screen.png")
+
+chip_1 = pg.image.load("images/game_screens/halloween/chip_1.png")
+
+chip_2 = pg.image.load("images/game_screens/halloween/chip_2.png")
 
 pg.init()
 
@@ -94,7 +176,7 @@ screen.blit(chip, (x, y))
 
 pg.mouse.set_pos(963, 63)
 
-pg.mouse.set_visible(0)
+pg.mouse.set_visible(1)
 
 pg.display.set_caption("Connect Four")
 
@@ -106,49 +188,40 @@ while not close_game:
 
         if event.type == pg.MOUSEMOTION:
             x = event.pos[0]
-
             y = event.pos[1]
 
-        pg.transform.scale(chip, (x, y))
-        # screen.blit(chip, (x, y))
+        draw_board(matrix, screen)
+        screen.blit(chip, (x, y))
         pg.display.update()
 
         if event.type == pg.MOUSEBUTTONDOWN:
             print(pg.mouse.get_pos())
-            # if turn == 0:
-            # Ask player 1 input
-            location_X(None, pg.mouse.get_pos()[0])
-            screen.blit(chip, (402, 194))  # 194 * Y
-            # if is_available(matrix, column):
-            #     row = get_next_open_row(matrix, column)
-            #     drop_piece(matrix, row, column, 1)
-            #     if winning_move(matrix, 1):
-            #         label = myFont.render("Player 1 Wins!", 1, RED)
-            #         screen.blit(label, (40, 10))
-            #         close_game = True
+            if turn == 0:
+                # Ask player 1 input
+                column = location_X(None, pg.mouse.get_pos()[0])
+                if column != 0:
+                    column -= 1
+                    if is_available(matrix, column):
+                        row = get_next_open_row(matrix, column)
+                        drop_piece(matrix, row, column, 1)
 
-            # else:
-            #     # Ask player 2 input
-            #     posx = event.pos[0]
-            #     column = int(math.floor(posx / SQUARE_SIZE))
+            else:
+                # Ask player 2 input
+                column = location_X(None, pg.mouse.get_pos()[0])
 
-            #     if is_valid_location(board, column):
-            #         row = get_next_open_row(board, column)
-            #         drop_piece(board, row, column, 2)
-
-            #         if winning_move(board, 2):
-            #             label = myFont.render("Player 2 Wins!", 1, YELLOW)
-            #             screen.blit(label, (40, 10))
-            #             close_game = True
+                if column != 0:
+                    column -= 1
+                    if is_available(matrix, column):
+                        row = get_next_open_row(matrix, column)
+                        drop_piece(matrix, row, column, 2)
 
             turn += 1
             turn %= 2
 
+            # draw_board(matrix, screen)
             pg.display.flip()
 
             if turn == 0:
                 chip = chip_1
             else:
                 chip = chip_2
-
-            screen.blit(background_image, (0, 0))
