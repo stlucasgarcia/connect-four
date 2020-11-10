@@ -58,11 +58,11 @@ def draw_board(matrix: list, screen):
                 screen.blit(chip_2, (x, y))
 
 
-background_image = pg.image.load("images/game_screens/old_west/game_screen.png")
+background_image = pg.image.load("images/game_screens/vaporwave/game_screen.png")
 
-chip_1 = pg.image.load("images/game_screens/old_west/chip_1.png")
+chip_1 = pg.image.load("images/game_screens/vaporwave/chip_1.png")
 
-chip_2 = pg.image.load("images/game_screens/old_west/chip_2.png")
+chip_2 = pg.image.load("images/game_screens/vaporwave/chip_2.png")
 
 pg.init()
 
