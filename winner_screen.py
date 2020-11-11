@@ -12,8 +12,8 @@ class EndingScreen:
         self.screen = screen
         self.score_1, self.score_2 = data.values()
         self.name_1, self.name_2 = data.keys()
+        self.width = Settings().width
 
-        pg.init()
         pg.display.set_mode(kwargs["res"], pg.FULLSCREEN)
         self.manager = pygame_gui.UIManager(
             kwargs["res"], "data/styles/winner_menu.json"
@@ -41,18 +41,19 @@ class EndingScreen:
         )
 
     def scores(self) -> bool:
-        a = screen.get_width() // 2
-        b = screen.get_height()
+        pg.mouse.set_visible(1)
+
+        a = self.screen.get_width() // 2
+        b = self.screen.get_height()
+
         WHITE = (255, 255, 255)
-        background = pg.image.load("data\images\\background\\black.jpg")
+
         FONT = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 125)
+
         clock = pg.time.Clock()
 
         ending = True
         while ending:
-
-            self.screen.blit(background, (0, 0))
-
             text = FONT.render("SCORE SCREEN", True, (WHITE))
             text_rec = text.get_rect().width // 2
 
@@ -74,7 +75,7 @@ class EndingScreen:
             time_delta = clock.tick(60) / 1000.0
 
             self.manager.update(time_delta)
-            self.manager.draw_ui(screen)
+            self.manager.draw_ui(self.screen)
 
             for event in pg.event.get():
                 self.manager.process_events(event)
@@ -94,28 +95,30 @@ class EndingScreen:
 
             pg.display.update()
 
+        pg.mouse.set_visible(0)
+
         return False
 
 
-st = Settings()
+# st = Settings()
 
-pg.init()
+# pg.init()
 
-# Pega as config que ta no user_settings.json (TA EM FULLHD E CLASSIC)
-width = st.width
-height = st.height
+# # Pega as config que ta no user_settings.json (TA EM FULLHD E CLASSIC)
+# width = st.width
+# height = st.height
 
-size = st.size
-screen = pg.display.set_mode(size, pg.FULLSCREEN)
+# size = st.size
+# screen = pg.display.set_mode(size, pg.FULLSCREEN)
 
 
-data = {"Guilherme": 10, "Leonardo": 5}
-ac = EndingScreen(
-    screen,
-    data,
-    res=size,
-    pg_res=st.win_pg,
-    sm_res=st.win_sm,
-    quit_res=st.win_quit,
-)
-ac.scores()
+# data = {"Guilherme": 10, "Leonardo": 5}
+# ac = EndingScreen(
+#     screen,
+#     data,
+#     res=size,
+#     pg_res=st.win_pg,
+#     sm_res=st.win_sm,
+#     quit_res=st.win_quit,
+# )
+# ac.scores()

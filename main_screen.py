@@ -1,4 +1,5 @@
 import sys
+from winner_screen import EndingScreen
 import pygame as pg
 
 from utilities import UtilitiesMain
@@ -78,9 +79,18 @@ class MainScreen:
 
                                 if utilities.is_victory(matrix, 1):
                                     # Insert winning_screen here
+                                    data = {"Guilherme": 10, "Leonardo": 5}
 
-                                    print("Won")
-                                    sys.exit()
+                                    ending = EndingScreen(
+                                        self.screen,
+                                        data,
+                                        res=config.size,
+                                        pg_res=config.win_pg,
+                                        sm_res=config.win_sm,
+                                        quit_res=config.win_quit,
+                                    )
+
+                                    ending.scores()
 
                     else:
                         # Player 2 input
@@ -96,9 +106,18 @@ class MainScreen:
 
                                 if utilities.is_victory(matrix, 2):
                                     # Insert winning_screen here
+                                    data = {"Guilherme": 10, "Leonardo": 5}
 
-                                    print("Won")
-                                    sys.exit()
+                                    ending = EndingScreen(
+                                        self.screen,
+                                        data,
+                                        res=config.size,
+                                        pg_res=config.win_pg,
+                                        sm_res=config.win_sm,
+                                        quit_res=config.win_quit,
+                                    )
+
+                                    ending.scores()
 
                     if utilities.location_X(pg.mouse.get_pos()[0]) != 0:
                         turn += 1
