@@ -37,6 +37,7 @@ pip install -r requirements.txt
 ```
 
 ## Meta
+
 If you need any help, contact the developers and we will help you if you ran through any issue or have any ideas, don't hesitate to contact us.  
 
 Lucas Garcia – [@lsglucass](https://twitter.com/lsglucass) – lsglucas@pm.me  
