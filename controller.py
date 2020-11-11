@@ -35,7 +35,7 @@ class Controller:
                 if axisX < -0.5:
                     self.x_axis -= 10
 
-    def controllerDpad(self, dpad):
+    def controllerDpad(self):
         if self.x_axis >= 270 and self.x_axis < 380:
             if dpad == (-1, 0):
                 self.x_axis = 270
@@ -90,28 +90,29 @@ class Controller:
     #         print(f"Botão B or Start: {joystick.get_button(1)}, {joystick.get_button(7)}")
 
     def joystickRun(self):
-        joystickType = self.joystick.get_name()
+        # joystickType = self.joystick.get_name()
+
+        c = Controller()
 
         close = True
         while close:
+
             for event in pg.event.get():  # User did something.
-                if event.type == pg.QUIT:  # If user clicked close.
-                    close = False  # Flag that we are done so we exit this loop.
-
-                elif event.type == pg.JOYBUTTONDOWN:
-                    print("Joystick button pressed.")
-
-                elif event.type == pg.JOYBUTTONUP:
-                    print("Joystick button released.")
+                pass
 
             joystick = pg.joystick.Joystick(0)
             joystick.init()
 
             dpad = joystick.get_hat(0)
-
             axisX = joystick.get_axis(0)  # Horizontal Axis of left joystick
+
             # right_trigger = joystick.get_axis(5)
 
-            Controller().controllerDpad(dpad)
-            Controller().controllerStick(axisX)
+            c.controllerDpad(dpad)
+            c.controllerStick(axisX)
+            print(dpad)
+            print(axisX)
             # Controller.pressButtons()
+
+
+Controller().joystickRun()
