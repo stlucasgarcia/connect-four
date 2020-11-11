@@ -31,12 +31,18 @@ class Settings:
         self.width = 1920
         self.height = 1080
         self.size = (1920, 1080)
+        self.win_pg = ((530, 700), (200, 80))
+        self.win_sm = ((835, 700), (250, 80))
+        self.win_quit = ((1185, 700), (150, 80))
         self.fullhd = True
 
     def _hd(self):
         self.width = 1280
         self.height = 720
         self.size = (1280, 720)
+        self.win_pg = ((230, 550), (200, 80))
+        self.win_sm = ((515, 550), (250, 80))
+        self.win_quit = ((850, 550), (150, 80))
         self.fullhd = False
 
     def _config_font(self):

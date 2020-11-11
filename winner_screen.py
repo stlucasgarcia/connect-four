@@ -3,37 +3,38 @@ import pygame_gui
 import pygame as pg
 from sys import exit
 
-from itertools import cycle
+from typing import Any
+from settings import Settings
 
 
 class EndingScreen:
-    def __init__(self, screen, data: list, res) -> None:
+    def __init__(self, screen: Any, data: dict, **kwargs):
         self.screen = screen
-        self.score_1 = data[0]
-        self.name_1 = data[1]
-        self.score_2 = data[2]
-        self.name_2 = data[3]
+        self.score_1, self.score_2 = data.values()
+        self.name_1, self.name_2 = data.keys()
 
         pg.init()
-        pg.display.set_mode(res, pg.FULLSCREEN)
-        self.manager = pygame_gui.UIManager(res, "data/styles/winner_menu.json")
+        pg.display.set_mode(kwargs["res"], pg.FULLSCREEN)
+        self.manager = pygame_gui.UIManager(
+            kwargs["res"], "data/styles/winner_menu.json"
+        )
 
         self.play_again = pygame_gui.elements.UIButton(
-            relative_rect=pg.Rect((530, 700), (200, 80)),
+            relative_rect=pg.Rect(*kwargs["pg_res"]),
             text="Play Again",
             manager=self.manager,
             object_id="#PlayAgain",
         )
 
         self.starter_menu = pygame_gui.elements.UIButton(
-            relative_rect=pg.Rect((835, 700), (250, 80)),
+            relative_rect=pg.Rect(*kwargs["sm_res"]),
             text="Starter Menu",
             manager=self.manager,
             object_id="#StarterMenu",
         )
 
         self.quit = pygame_gui.elements.UIButton(
-            relative_rect=pg.Rect((1185, 700), (150, 80)),
+            relative_rect=pg.Rect(*kwargs["quit_res"]),
             text="Quit",
             manager=self.manager,
             object_id="#Quit",
@@ -97,15 +98,25 @@ class EndingScreen:
         return False
 
 
+st = Settings()
+
 pg.init()
 
-width: int = 1920
-height: int = 1080
+# Pega as config que ta no user_settings.json (TA EM FULLHD E CLASSIC)
+width = st.width
+height = st.height
 
-size: tuple = (width, height)
+size = st.size
 screen = pg.display.set_mode(size, pg.FULLSCREEN)
 
 
-data = [10, "Guilherme", 5, "Leonardo"]
-ac = EndingScreen(screen, data, size)
+data = {"Guilherme": 10, "Leonardo": 5}
+ac = EndingScreen(
+    screen,
+    data,
+    res=size,
+    pg_res=st.win_pg,
+    sm_res=st.win_sm,
+    quit_res=st.win_quit,
+)
 ac.scores()
