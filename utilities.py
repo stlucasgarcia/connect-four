@@ -1,16 +1,18 @@
 import pygame as pg
 import numpy as np
 
+from settings import Settings
+
 
 class UtilitiesMain:
     def __init__(self):
+        self.config = Settings()
+
         self.COLUMN_AMOUNT = 7
         self.ROW_AMOUNT = 6
-        self.background_image = pg.image.load(
-            "data/images/game_screens/old_west/game_screen.png"
-        )
-        self.chip_1 = pg.image.load("data/images/game_screens/old_west/chip_1.png")
-        self.chip_2 = pg.image.load("data/images/game_screens/old_west/chip_2.png")
+        self.background_image = self.config.bg_image
+        self.chip_1 = self.config.chip_1
+        self.chip_2 = self.config.chip_2
 
     def create_matrix(self) -> np.ndarray:
         matrix = np.zeros((self.ROW_AMOUNT, self.COLUMN_AMOUNT))
@@ -115,10 +117,6 @@ class UtilitiesMain:
                     and matrix[row - 3][column + 3] == chip
                 ):
                     return True
-        
-    def isTie(matrix:np.ndarray):
-        return (matrix[:][:]!=0).all()
 
-
-
-
+    def isTie(matrix: np.ndarray):
+        return (matrix[:][:] != 0).all()

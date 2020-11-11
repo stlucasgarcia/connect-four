@@ -3,39 +3,45 @@ import sys
 
 from winner_screen import EndingScreen
 from utilities import UtilitiesMain
-from controller import Controller
+
+# from controller import Controller
 from settings import Settings
 from menu import OptionsMenu
 
 
 class MainScreen:
     def __init__(
-        self, screen, is_controller, background_image=None, chip_1=None, chip_2=None
+        self,
+        screen,
+        is_controller,
+        background_image=None,
+        chip_1=None,
+        chip_2=None,
+        volume=None,
     ) -> None:
+        self.config = Settings()
+
         self.screen: pg.Surface = screen
-        self.background_image: pg.Surface = pg.image.load(
-            "data/images/game_screens/christmas/game_screen.png"
-        )
-        self.chip_1: pg.Surface = pg.image.load(
-            "data/images/game_screens/christmas/chip_1.png"
-        )
-        self.chip_2: pg.Surface = pg.image.load(
-            "data/images/game_screens/christmas/chip_2.png"
-        )
+        self.background_image: pg.Surface = self.config.bg_image
+        self.chip_1: pg.Surface = self.config.chip_1
+        self.chip_2: pg.Surface = self.config.chip_2
         self.is_controller = is_controller
-        self.soundstrack = pg.mixer.music.load("data/soundtracks/christmas.mp3")
+        # self.soundtrack = pg.mixer.music.load("data/soundtracks/classic.mp3")
+        self.sound_chip_1 = self.config.sound_chip_1
+        self.sound_chip_2 = self.config.sound_chip_2
+        # self.sound_chip_2 = pg.mixer.Sound("data/sounds/classic/chip_2.mp3")
+        self.volume = self.config.volume
 
     def main_screen(self):
         utilities = UtilitiesMain()
-        config = Settings()
 
         attr = {
-            "res": config.size,
-            "style": config.style,
-            "label": config.op_label,
-            "resume": config.op_resume,
-            "st_menu": config.op_start_menu,
-            "quit": config.op_quit,
+            "res": self.config.size,
+            "style": self.config.style,
+            "label": self.config.op_label,
+            "resume": self.config.op_resume,
+            "st_menu": self.config.op_start_menu,
+            "quit": self.config.op_quit,
         }
         menu = OptionsMenu(**attr)
 
@@ -47,7 +53,7 @@ class MainScreen:
 
         chip: pg.Surface = self.chip_1
 
-        close_game: bool = False
+        close_loop: bool = False
 
         x, y = 0, 0
 
@@ -55,11 +61,13 @@ class MainScreen:
         #     joystick_count = pg.joystick.get_count()
 
         pg.mixer.music.play(loops=-1)
-        pg.mixer.music.set_volume(0.15)
-        while not close_game:
+        pg.mixer.music.set_volume(
+            self.volume
+        )  # 0.25 for classic, 0.35 for halloween, 0.30 for old west, 0.35 for vaporwave, 0.10 for christmas
+        while not close_loop:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    close_game = True
+                    close_loop = True
                     sys.exit()
 
                 if event.type == pg.MOUSEMOTION:
@@ -80,23 +88,26 @@ class MainScreen:
                             column -= 1
 
                             if utilities.is_available(matrix, column):
+                                self.sound_chip_1.play()
                                 row = utilities.get_open_row(matrix, column)
 
                                 utilities.drop_piece(matrix, row, column, 1)
 
                                 if utilities.is_victory(matrix, 1):
-                                    pg.mixer.music.fadeout(5000)
+                                    # pg.mixer.music.fadeout(5000)
 
                                     data = {"Guilherme": 10, "Leonardo": 5}
 
                                     ending = EndingScreen(
                                         self.screen,
                                         data,
-                                        res=config.size,
-                                        pg_res=config.win_pg,
-                                        sm_res=config.win_sm,
-                                        quit_res=config.win_quit,
+                                        res=self.config.size,
+                                        pg_res=self.config.win_pg,
+                                        sm_res=self.config.win_sm,
+                                        quit_res=self.config.win_quit,
                                     )
+
+                                    close_loop = True
 
                                     ending.scores()
 
@@ -108,27 +119,31 @@ class MainScreen:
                             column -= 1
 
                             if utilities.is_available(matrix, column):
+                                self.sound_chip_2.play()
+
                                 row = utilities.get_open_row(matrix, column)
 
                                 utilities.drop_piece(matrix, row, column, 2)
 
                                 if utilities.is_victory(matrix, 2):
-                                    pg.mixer.music.fadeout(5000)
+                                    # pg.mixer.music.fadeout(5000)
 
                                     data = {"Guilherme": 10, "Leonardo": 5}
 
                                     ending = EndingScreen(
                                         self.screen,
                                         data,
-                                        res=config.size,
-                                        pg_res=config.win_pg,
-                                        sm_res=config.win_sm,
-                                        quit_res=config.win_quit,
+                                        res=self.config.size,
+                                        pg_res=self.config.win_pg,
+                                        sm_res=self.config.win_sm,
+                                        quit_res=self.config.win_quit,
                                     )
-
+                                    close_loop = True
                                     ending.scores()
 
-                    if utilities.location_X(pg.mouse.get_pos()[0]) != 0:
+                    if utilities.location_X(
+                        pg.mouse.get_pos()[0]
+                    ) != 0 and utilities.is_available(matrix, column):
                         turn += 1
 
                         turn %= 2

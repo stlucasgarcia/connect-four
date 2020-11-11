@@ -140,5 +140,5 @@ class Settings:
 
     def _config_sound(self):
         pg.mixer.music.load(f"data/soundtracks/{self.theme}.mp3")
-        # self.sound_chip_1 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_1.mp3")
-        # self.sound_chip_2 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_2.mp3")
+        self.sound_chip_1 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_1.mp3")
+        self.sound_chip_2 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_2.mp3")
