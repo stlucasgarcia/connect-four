@@ -1,5 +1,4 @@
 import pygame as pg
-import time
 
 pg.init()
 pg.joystick.init()
@@ -8,7 +7,15 @@ pg.joystick.init()
 class Controller:
     def __init__(self) -> None:
         self.x_axis = 270  # TODO Full HD
-        self.joystick_count = pg.joystick.get_count()
+        if pg.joystick.get_count() > 1:
+            joystick_1 = pg.joystick.Joystick(0)
+            joystick_2 = pg.joystick.Joystick(1)
+            joystick_1.init()
+            joystick_2.init()
+
+        else:
+            joystick = pg.joystick.Joystick(0)
+            joystick.init()
 
     def controllerStick(self, axisX):
         if (
@@ -83,8 +90,9 @@ class Controller:
     #         print(f"Botão B or Start: {joystick.get_button(1)}, {joystick.get_button(7)}")
 
     def joystickRun(self):
-        close = True
+        joystickType = self.joystick.get_name()
 
+        close = True
         while close:
             for event in pg.event.get():  # User did something.
                 if event.type == pg.QUIT:  # If user clicked close.
@@ -107,6 +115,3 @@ class Controller:
             Controller().controllerDpad(dpad)
             Controller().controllerStick(axisX)
             # Controller.pressButtons()
-
-
-Controller().joystickRun()

@@ -1,24 +1,29 @@
-import sys
-from winner_screen import EndingScreen
 import pygame as pg
+import sys
 
+from winner_screen import EndingScreen
 from utilities import UtilitiesMain
+from controller import Controller
 from settings import Settings
 from menu import OptionsMenu
 
 
 class MainScreen:
-    def __init__(self, screen, background_image=None, chip_1=None, chip_2=None) -> None:
+    def __init__(
+        self, screen, is_controller, background_image=None, chip_1=None, chip_2=None
+    ) -> None:
         self.screen: pg.Surface = screen
         self.background_image: pg.Surface = pg.image.load(
-            "data/images/game_screens/vaporwave/game_screen.png"
+            "data/images/game_screens/christmas/game_screen.png"
         )
         self.chip_1: pg.Surface = pg.image.load(
-            "data/images/game_screens/vaporwave/chip_1.png"
+            "data/images/game_screens/christmas/chip_1.png"
         )
         self.chip_2: pg.Surface = pg.image.load(
-            "data/images/game_screens/vaporwave/chip_2.png"
+            "data/images/game_screens/christmas/chip_2.png"
         )
+        self.is_controller = is_controller
+        self.soundstrack = pg.mixer.music.load("data/soundtracks/christmas.mp3")
 
     def main_screen(self):
         utilities = UtilitiesMain()
@@ -49,6 +54,8 @@ class MainScreen:
         # try:
         #     joystick_count = pg.joystick.get_count()
 
+        pg.mixer.music.play(loops=-1)
+        pg.mixer.music.set_volume(0.15)
         while not close_game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -78,7 +85,8 @@ class MainScreen:
                                 utilities.drop_piece(matrix, row, column, 1)
 
                                 if utilities.is_victory(matrix, 1):
-                                    # Insert winning_screen here
+                                    pg.mixer.music.fadeout(5000)
+
                                     data = {"Guilherme": 10, "Leonardo": 5}
 
                                     ending = EndingScreen(
@@ -105,7 +113,8 @@ class MainScreen:
                                 utilities.drop_piece(matrix, row, column, 2)
 
                                 if utilities.is_victory(matrix, 2):
-                                    # Insert winning_screen here
+                                    pg.mixer.music.fadeout(5000)
+
                                     data = {"Guilherme": 10, "Leonardo": 5}
 
                                     ending = EndingScreen(

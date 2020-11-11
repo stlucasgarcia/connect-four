@@ -25,8 +25,16 @@ pg.mouse.set_visible(0)
 
 pg.mouse.set_pos(963, 63)
 
+is_controller: bool = False
+
+try:
+    joystick = pg.joystick.Joystick(0)
+    is_controller = True
+except pg.error:
+    pass
+
 InitScreen_object: object = InitScreen(screen)
 InitScreen_object.starter_screen()
 
-MainScreen_object: object = MainScreen(screen)
+MainScreen_object: object = MainScreen(screen, is_controller)
 MainScreen_object.main_screen()

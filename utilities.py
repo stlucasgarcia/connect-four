@@ -7,10 +7,10 @@ class UtilitiesMain:
         self.COLUMN_AMOUNT = 7
         self.ROW_AMOUNT = 6
         self.background_image = pg.image.load(
-            "data/images/game_screens/vaporwave/game_screen.png"
+            "data/images/game_screens/christmas/game_screen.png"
         )
-        self.chip_1 = pg.image.load("data/images/game_screens/vaporwave/chip_1.png")
-        self.chip_2 = pg.image.load("data/images/game_screens/vaporwave/chip_2.png")
+        self.chip_1 = pg.image.load("data/images/game_screens/christmas/chip_1.png")
+        self.chip_2 = pg.image.load("data/images/game_screens/christmas/chip_2.png")
 
     def create_matrix(self) -> np.ndarray:
         matrix = np.zeros((self.ROW_AMOUNT, self.COLUMN_AMOUNT))
