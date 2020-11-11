@@ -1,8 +1,8 @@
-from sys import exit
 import pygame as pg
 import pygame_gui
 
 from typing import Any
+from sys import exit
 
 
 class OptionsMenu:
@@ -62,6 +62,7 @@ class OptionsMenu:
         options = True
 
         while options:
+            pg.mouse.set_visible(1)
             for event in pg.event.get():
                 self.manager.process_events(event)
 
@@ -85,5 +86,7 @@ class OptionsMenu:
 
             self.manager.update(time_delta)
             self.manager.draw_ui(screen)
+
+            pg.mouse.set_visible(0)
 
             pg.display.update()

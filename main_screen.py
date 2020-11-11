@@ -104,8 +104,6 @@ class MainScreen:
 
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
-                        pg.mouse.set_visible(1)
-
                         config = Settings()
 
                         attr = {
@@ -119,6 +117,7 @@ class MainScreen:
 
                         menu = OptionsMenu(**attr)
                         menu.run(self.screen, Clock)
+                        
 
             pg.display.update()
 

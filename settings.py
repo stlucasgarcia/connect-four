@@ -1,6 +1,6 @@
-import os
-import json
 import pygame as pg
+import json
+import os
 
 from typing import Tuple, Any
 
