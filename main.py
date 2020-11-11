@@ -1,7 +1,7 @@
 import pygame as pg
 
-from init_screen import initScreen
-from main_screen import mainScreen
+from init_screen import InitScreen
+from main_screen import MainScreen
 
 pg.init()
 
@@ -22,11 +22,11 @@ pg.mouse.set_visible(0)
 
 pg.mouse.set_pos(963, 63)
 
-initScreen_object: object = initScreen(screen)
-initScreen_object.starter_screen()
+InitScreen_object: object = InitScreen(screen)
+InitScreen_object.starter_screen()
 
-mainScreen_object: object = mainScreen(screen)
-mainScreen_object.main_screen()
+MainScreen_object: object = MainScreen(screen)
+MainScreen_object.main_screen()
 
 
 # close_game: bool = False

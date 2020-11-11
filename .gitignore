@@ -155,3 +155,6 @@ tempCodeRunnerFile.py
 
 # DB files
 *.db
+
+# Json settings
+user_settings.json

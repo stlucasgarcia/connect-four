@@ -2,7 +2,7 @@ import pygame as pg
 import numpy as np
 
 
-class utilitiesMain:
+class UtilitiesMain:
     def __init__(self, matrix: list = None) -> None:
         self.COLUMN_AMOUNT = 7
         self.ROW_AMOUNT = 6

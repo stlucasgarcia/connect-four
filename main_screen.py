@@ -1,10 +1,10 @@
 import sys
 import pygame as pg
 
-from utilities import utilitiesMain
+from utilities import UtilitiesMain
 
 
-class mainScreen:
+class MainScreen:
     def __init__(self, screen, background_image=None, chip_1=None, chip_2=None) -> None:
         self.screen: pg.Surface = screen
         self.background_image: pg.Surface = pg.image.load(
@@ -18,7 +18,7 @@ class mainScreen:
         )
 
     def main_screen(self) -> list:
-        utilities: object = utilitiesMain()
+        utilities: object = UtilitiesMain()
 
         matrix: list = utilities.create_matrix()
 
@@ -34,7 +34,6 @@ class mainScreen:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     close_game = True
-
                     sys.exit()
 
                 if event.type == pg.MOUSEMOTION:
@@ -86,12 +85,15 @@ class mainScreen:
                                     print("Won")
                                     sys.exit()
 
-                    turn += 1
-                    turn %= 2
-
                     pg.display.update()
 
-                    if turn == 0:
-                        chip = self.chip_1
-                    else:
-                        chip = self.chip_2
+                    if utilities.location_X(None, pg.mouse.get_pos()[0]) != 0:
+                        turn += 1
+
+                        turn %= 2
+
+                        if turn == 0:
+                            chip = self.chip_1
+
+                        else:
+                            chip = self.chip_2

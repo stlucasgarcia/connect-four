@@ -4,7 +4,7 @@ import os
 from itertools import cycle
 
 
-class initScreen:
+class InitScreen:
     def __init__(self, screen) -> None:
         self.screen = screen
 
