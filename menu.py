@@ -81,7 +81,7 @@ class OptionsMenu:
             time_delta = clock.tick(60) / 1000.0
 
             screen.blit(self.img, (0, 0))
-            pg.display.flip()
+            # pg.display.flip()
 
             self.manager.update(time_delta)
             self.manager.draw_ui(screen)

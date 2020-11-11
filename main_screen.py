@@ -2,6 +2,8 @@ import sys
 import pygame as pg
 
 from utilities import UtilitiesMain
+from settings import Settings
+from menu import OptionsMenu
 
 
 class MainScreen:
@@ -20,6 +22,8 @@ class MainScreen:
     def main_screen(self) -> list:
         utilities: object = UtilitiesMain()
 
+        Clock = pg.time.Clock()
+
         matrix: list = utilities.create_matrix()
 
         turn: int = 0
@@ -31,6 +35,7 @@ class MainScreen:
         x, y = 0, 0
 
         while not close_game:
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     close_game = True
@@ -94,6 +99,27 @@ class MainScreen:
 
                         if turn == 0:
                             chip = self.chip_1
-
                         else:
                             chip = self.chip_2
+
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        pg.mouse.set_visible(1)
+
+                        config = Settings()
+
+                        attr = {
+                            "res": (config.width, config.height),
+                            "style": config.style,
+                            "label": config.op_label,
+                            "resume": config.op_resume,
+                            "st_menu": config.op_start_menu,
+                            "quit": config.op_quit,
+                        }
+
+                        menu = OptionsMenu(**attr)
+                        menu.run(self.screen, Clock)
+
+            pg.display.update()
+
+            Clock.tick(60)
