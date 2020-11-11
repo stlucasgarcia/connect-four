@@ -2,10 +2,10 @@ import sqlite3
 
 
 class ScoreboardData:
-    def __init__(self, data):
-        self.score_1, self.score_2 = data.values()
-        self.name_1, self.name_2 = data.keys()
-        self.winner = (self.name_1, self.score_1) if self.score_1 >= self.score_2 else (self.name_2, self.score_2)
+    def __init__(self, data:dict):
+        self.score_1:int, self.score_2:int = data.values()
+        self.name_1:str, self.name_2:str = data.keys()
+        self.winner:tuple = (self.name_1, self.score_1) if self.score_1 >= self.score_2 else (self.name_2, self.score_2)
     
     def connect(self):
         try:
