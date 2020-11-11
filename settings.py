@@ -16,6 +16,7 @@ class Settings:
         self.size: Tuple[int, int]
         self.font: Any
         self.style: str = "data/styles/"
+        self.volume: float
         self.op_label = Tuple[int, int, int, int]
         self.op_resume = Tuple[Tuple[int, int], Tuple[int, int]]
         self.op_start_menu = Tuple[Tuple[int, int], Tuple[int, int]]
@@ -26,6 +27,7 @@ class Settings:
         getattr(self, self.res)()
         self._config_theme()
         self._config_font()
+        self._config_sound()
 
     def _full_hd(self):
         self.width = 1920
@@ -49,6 +51,7 @@ class Settings:
         if self.theme == "classic":
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 75)
             self.style += "options_menu_classic.json"
+            self.volume = 0.25
             self.op_label = (
                 (840, 260, 250, 160) if self.fullhd else (520, 100, 250, 160)
             )
@@ -65,6 +68,7 @@ class Settings:
         elif self.theme == "halloween":
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\halloween.otf", 75)
             self.style += "options_menu_halloween.json"
+            self.volume = 0.35
             self.op_label = (
                 (840, 260, 270, 160) if self.fullhd else (500, 100, 280, 160)
             )
@@ -81,6 +85,7 @@ class Settings:
         elif self.theme == "old_west":
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\old_west.otf", 75)
             self.style += "options_menu_old_west.json"
+            self.volume = 0.30
             self.op_label = (
                 (820, 260, 270, 160) if self.fullhd else (515, 100, 250, 160)
             )
@@ -97,6 +102,7 @@ class Settings:
         elif self.theme == "vaporwave":
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\\vaporwave.otf", 75)
             self.style += "options_menu_vaporwave.json"
+            self.volume = 0.35
             self.op_label = (
                 (840, 260, 290, 160) if self.fullhd else (500, 100, 290, 160)
             )
@@ -113,6 +119,7 @@ class Settings:
         elif self.theme == "christmas":
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\christmas.ttf", 75)
             self.style += "options_menu_christmas.json"
+            self.volume = 0.10
             self.op_label = (740, 220, 470, 210) if self.fullhd else (445, 60, 400, 210)
             self.op_resume = (
                 ((880, 440), (180, 80)) if self.fullhd else ((555, 280), (180, 80))
@@ -128,7 +135,10 @@ class Settings:
         self.bg_image = pg.image.load(
             f"data/images/game_screens/{self.theme}/game_screen.png"
         )
-
         self.chip_1 = pg.image.load(f"data/images/game_screens/{self.theme}/chip_1.png")
-
         self.chip_2 = pg.image.load(f"data/images/game_screens/{self.theme}/chip_2.png")
+
+    def _config_sound(self):
+        pg.mixer.music.load(f"data/soundtracks/{self.theme}.mp3")
+        # self.sound_chip_1 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_1.mp3")
+        # self.sound_chip_2 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_2.mp3")
