@@ -41,7 +41,7 @@
         {
             "name": "old_west",
             "size": "50",
-            "regular_path": "fonts/old_west.otf"
+            "regular_path": "data/fonts/old_west.otf"
         }
     },
 
@@ -56,7 +56,7 @@
         {
             "name": "old_west",
             "size": "150",
-            "regular_path": "fonts/old_west.otf"
+            "regular_path": "data/fonts/old_west.otf"
         }
     }
 }

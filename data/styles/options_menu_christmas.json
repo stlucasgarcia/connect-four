@@ -41,7 +41,7 @@
         {
             "name": "christmas",
             "size": "50",
-            "regular_path": "fonts/christmas.ttf"
+            "regular_path": "data/fonts/christmas.ttf"
         }
     },
 
@@ -56,7 +56,7 @@
         {
             "name": "christmas",
             "size": "150",
-            "regular_path": "fonts/christmas.ttf"
+            "regular_path": "data/fonts/christmas.ttf"
         }
     }
 }

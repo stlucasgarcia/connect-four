@@ -41,7 +41,7 @@
         {
             "name": "classic",
             "size": "50",
-            "regular_path": "fonts/classic.ttf"
+            "regular_path": "data/fonts/classic.ttf"
         }
     },
 
@@ -56,7 +56,7 @@
         {
             "name": "JustMyType",
             "size": "150",
-            "regular_path": "fonts/classic.ttf"
+            "regular_path": "data/fonts/classic.ttf"
         }
     }
 }

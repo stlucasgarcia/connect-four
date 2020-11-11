@@ -1,0 +1,139 @@
+{
+    "#PlayAgain":
+    {
+        "colours":
+        {
+             "normal_bg": "#25292e",
+             "hovered_bg": "#5f606a",
+             "disabled_bg": "#25292e",
+             "selected_bg": "#25292e",
+             "active_bg": "#efd600",
+             "normal_text": "#c5cbd8",
+             "hovered_text": "#FFFFFF",
+             "selected_text": "#FFFFFF",
+             "disabled_text": "#6d736f",
+             "active_text": "#6d736f",
+             "normal_border": "#AAAAAA",
+             "hovered_border": "#B0B0B0",
+             "disabled_border": "#808080",
+             "selected_border": "#8080B0",
+             "active_border": "#8080B0"
+         },
+
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "18",
+            "border_width": "1",
+            "shadow_width": "2",
+            "tool_tip_delay": "1.0",
+            "text_horiz_alignment": "center",
+            "text_vert_alignment": "center",
+            "text_horiz_alignment_padding": "10",
+            "text_vert_alignment_padding": "5",
+            "state_transitions": {
+                "normal_hovered": "0.1",
+                "hovered_normal": "0.1"
+            }
+         },
+
+        "font":
+        {
+            "name": "classic",
+            "size": "50",
+            "regular_path": "data/fonts/classic.ttf"
+        }
+    },
+
+    "#StarterMenu":
+    {
+        "colours":
+        {
+             "normal_bg": "#25292e",
+             "hovered_bg": "#5f606a",
+             "disabled_bg": "#25292e",
+             "selected_bg": "#25292e",
+             "active_bg": "#efd600",
+             "normal_text": "#c5cbd8",
+             "hovered_text": "#FFFFFF",
+             "selected_text": "#FFFFFF",
+             "disabled_text": "#6d736f",
+             "active_text": "#6d736f",
+             "normal_border": "#AAAAAA",
+             "hovered_border": "#B0B0B0",
+             "disabled_border": "#808080",
+             "selected_border": "#8080B0",
+             "active_border": "#8080B0"
+         },
+
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "18",
+            "border_width": "1",
+            "shadow_width": "2",
+            "tool_tip_delay": "1.0",
+            "text_horiz_alignment": "center",
+            "text_vert_alignment": "center",
+            "text_horiz_alignment_padding": "10",
+            "text_vert_alignment_padding": "5",
+            "state_transitions": {
+                "normal_hovered": "0.1",
+                "hovered_normal": "0.1"
+            }
+         },
+
+        "font":
+        {
+            "name": "classic",
+            "size": "50",
+            "regular_path": "data/fonts/classic.ttf"
+        }
+    },
+
+    "#Quit":
+    {
+        "colours":
+        {
+             "normal_bg": "#25292e",
+             "hovered_bg": "#5f606a",
+             "disabled_bg": "#25292e",
+             "selected_bg": "#25292e",
+             "active_bg": "#efd600",
+             "normal_text": "#c5cbd8",
+             "hovered_text": "#FFFFFF",
+             "selected_text": "#FFFFFF",
+             "disabled_text": "#6d736f",
+             "active_text": "#6d736f",
+             "normal_border": "#AAAAAA",
+             "hovered_border": "#B0B0B0",
+             "disabled_border": "#808080",
+             "selected_border": "#8080B0",
+             "active_border": "#8080B0"
+         },
+
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "18",
+            "border_width": "1",
+            "shadow_width": "2",
+            "tool_tip_delay": "1.0",
+            "text_horiz_alignment": "center",
+            "text_vert_alignment": "center",
+            "text_horiz_alignment_padding": "10",
+            "text_vert_alignment_padding": "5",
+            "state_transitions": {
+                "normal_hovered": "0.1",
+                "hovered_normal": "0.1"
+            }
+         },
+
+        "font":
+        {
+            "name": "classic",
+            "size": "50",
+            "regular_path": "data/fonts/classic.ttf"
+        }
+    }
+}
