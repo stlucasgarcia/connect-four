@@ -6,9 +6,9 @@
 [![Build Status][travis-image]][travis-url]
 [![Downloads Stats][npm-downloads]][npm-url] -->
 
-Connect Four game which you can play with your friends, alone against the artificial intelligence or just watch two AIs playing the game for you. (currently in development) We have different themes which you can choose on and other customizations.
+Connect Four game which you can play with your friends, against the artificial intelligence or just watch two AIs playing the game for you. (currently in development) We have different themes which you can choose as well as other customizations.
 
-![](data/images/readme/readme_.gif)
+![Gif showing different themes](data/images/readme/readme_.gif)
 
 <!-- https://ezgif.com/maker - 2 - 0 - 20 -->
 <!-- 
@@ -16,13 +16,13 @@ Connect Four game which you can play with your friends, alone against the artifi
 
 To install the game you need to -->
 
-## How to play
+## 🎮 How to play
 
 On the starter menu, select the mode in which you want to play. If the mode selected is AI vs AI you won't need to type a name and other settings won't appear. If you select other modes you can select a name but it's not required to play the game. You can play it using a controller or your own keyboard.
 
 <!-- _For more examples and usage, please refer to the [Wiki][wiki]._ -->
 
-## Development setup
+## 💻 Development setup
 
 To install all the dependencies you must have python 3.9 installed; then you need to create a virtual environment, running the following code:
 
@@ -36,9 +36,9 @@ After creating the virtual environment you must install the libraries which are 
 pip install -r requirements.txt
 ```
 
-## Meta
+## 👨🏻‍💻 Meta
 
-If you need any help, contact the developers and we will help you if you ran through any issue or have any ideas, don't hesitate to contact us.  
+If you need any help, contact the developers and we will help you if you run through any issue or have any ideas, don't hesitate to contact us.  
 
 Lucas Garcia – [@lsglucass](https://twitter.com/lsglucass) – lsglucas@pm.me  
 
