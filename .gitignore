@@ -152,3 +152,6 @@ test.py
 
 # Temp files
 tempCodeRunnerFile.py
+
+# DB files
+*.db
