@@ -1,4 +1,3 @@
-import sys
 import pygame as pg
 
 from init_screen import initScreen
