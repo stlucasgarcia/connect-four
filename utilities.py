@@ -3,7 +3,7 @@ import numpy as np
 
 
 class UtilitiesMain:
-    def __init__(self, matrix: list = None) -> None:
+    def __init__(self):
         self.COLUMN_AMOUNT = 7
         self.ROW_AMOUNT = 6
         self.background_image = pg.image.load(
@@ -12,17 +12,17 @@ class UtilitiesMain:
         self.chip_1 = pg.image.load("data/images/game_screens/classic/chip_1.png")
         self.chip_2 = pg.image.load("data/images/game_screens/classic/chip_2.png")
 
-    def create_matrix(self) -> list:
+    def create_matrix(self) -> np.ndarray:
         matrix = np.zeros((self.ROW_AMOUNT, self.COLUMN_AMOUNT))
         return matrix
 
-    def drop_piece(self, matrix: list, row: int, column: int, piece: int) -> None:
+    def drop_piece(self, matrix: np.ndarray, row: int, column: int, piece: int) -> None:
         matrix[row][column] = piece
 
-    def is_available(self, matrix: list, column: int) -> bool:
+    def is_available(self, matrix: np.ndarray, column: int) -> bool:
         return matrix[self.ROW_AMOUNT - 1][column] == 0
 
-    def location_X(self, matrix: list, click_loc: int) -> None:
+    def location_X(self, click_loc: int) -> int:
         # First location (X)
         if 357 <= click_loc <= 551:
             return 1
@@ -48,7 +48,7 @@ class UtilitiesMain:
         else:
             return 0
 
-    def draw_board(self, matrix: list, screen) -> None:
+    def draw_board(self, matrix: np.ndarray, screen) -> None:
         screen.blit(self.background_image, (0, 0))
 
         for column in range(self.COLUMN_AMOUNT):
@@ -66,12 +66,12 @@ class UtilitiesMain:
                     elif matrix[row][column] == 2:
                         screen.blit(self.chip_2, (x, y))
 
-    def get_open_row(self, matrix: list, column: int) -> int:
+    def get_open_row(self, matrix: np.ndarray, column: int) -> int:
         for row in range(self.ROW_AMOUNT):
             if matrix[row][column] == 0:
                 return row
 
-    def is_victory(self, matrix: list, chip: int) -> bool:
+    def is_victory(self, matrix: np.ndarray, chip: int) -> bool:
         # Check horizontal
         for column in range(self.COLUMN_AMOUNT - 3):
             for row in range(self.ROW_AMOUNT):

@@ -19,12 +19,23 @@ class MainScreen:
             "data/images/game_screens/classic/chip_2.png"
         )
 
-    def main_screen(self) -> list:
-        utilities: object = UtilitiesMain()
+    def main_screen(self):
+        utilities = UtilitiesMain()
+        config = Settings()
 
-        Clock = pg.time.Clock()
+        attr = {
+            "res": config.size,
+            "style": config.style,
+            "label": config.op_label,
+            "resume": config.op_resume,
+            "st_menu": config.op_start_menu,
+            "quit": config.op_quit,
+        }
+        menu = OptionsMenu(**attr)
 
-        matrix: list = utilities.create_matrix()
+        clock = pg.time.Clock()
+
+        matrix = utilities.create_matrix()
 
         turn: int = 0
 
@@ -50,13 +61,10 @@ class MainScreen:
 
                 self.screen.blit(chip, (x, y))
 
-                pg.display.update()
-
                 if event.type == pg.MOUSEBUTTONDOWN:
-                    print(pg.mouse.get_pos())
                     if turn == 0:
                         # Player 1 input
-                        column = utilities.location_X(None, pg.mouse.get_pos()[0])
+                        column = utilities.location_X(pg.mouse.get_pos()[0])
 
                         if column != 0:
                             column -= 1
@@ -74,7 +82,7 @@ class MainScreen:
 
                     else:
                         # Player 2 input
-                        column = utilities.location_X(None, pg.mouse.get_pos()[0])
+                        column = utilities.location_X(pg.mouse.get_pos()[0])
 
                         if column != 0:
                             column -= 1
@@ -90,9 +98,7 @@ class MainScreen:
                                     print("Won")
                                     sys.exit()
 
-                    pg.display.update()
-
-                    if utilities.location_X(None, pg.mouse.get_pos()[0]) != 0:
+                    if utilities.location_X(pg.mouse.get_pos()[0]) != 0:
                         turn += 1
 
                         turn %= 2
@@ -104,21 +110,8 @@ class MainScreen:
 
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
-                        config = Settings()
-
-                        attr = {
-                            "res": (config.width, config.height),
-                            "style": config.style,
-                            "label": config.op_label,
-                            "resume": config.op_resume,
-                            "st_menu": config.op_start_menu,
-                            "quit": config.op_quit,
-                        }
-
-                        menu = OptionsMenu(**attr)
-                        menu.run(self.screen, Clock)
-                        
+                        menu.run(self.screen, clock)
 
             pg.display.update()
 
-            Clock.tick(60)
+            clock.tick(60)

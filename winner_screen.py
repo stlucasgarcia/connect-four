@@ -67,7 +67,6 @@ class EndingScreen:
             # score1_rec = score1.get_rect().width//2
             # score2_rec = score2.get_rect().width//2
 
-            print(a, b)
             self.screen.blit(players, [a - players_rec, b // 3])
             self.screen.blit(score1, [a - players_rec + players_rec // 3, b // 3 + 150])
             self.screen.blit(score2, [a + players_rec - players_rec // 2, b // 3 + 150])
