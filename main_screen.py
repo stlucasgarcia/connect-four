@@ -10,13 +10,13 @@ class MainScreen:
     def __init__(self, screen, background_image=None, chip_1=None, chip_2=None) -> None:
         self.screen: pg.Surface = screen
         self.background_image: pg.Surface = pg.image.load(
-            "data/images/game_screens/classic/game_screen.png"
+            "data/images/game_screens/vaporwave/game_screen.png"
         )
         self.chip_1: pg.Surface = pg.image.load(
-            "data/images/game_screens/classic/chip_1.png"
+            "data/images/game_screens/vaporwave/chip_1.png"
         )
         self.chip_2: pg.Surface = pg.image.load(
-            "data/images/game_screens/classic/chip_2.png"
+            "data/images/game_screens/vaporwave/chip_2.png"
         )
 
     def main_screen(self):
@@ -45,8 +45,10 @@ class MainScreen:
 
         x, y = 0, 0
 
-        while not close_game:
+        # try:
+        #     joystick_count = pg.joystick.get_count()
 
+        while not close_game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     close_game = True
