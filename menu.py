@@ -213,7 +213,6 @@ class StarterMenu:
             )
 
         self.next.disable()
-        self.p1.set_visual_debug_mode(True)
 
     def run(self):
         pg.mixer.music.stop()
@@ -299,11 +298,6 @@ class StarterMenu:
             pg.display.update()
 
         change_res = StarterMenu._export(data)
-        if change_res:
-            self.p1.kill()
-            self.manager.clear_and_reset()
-            # pg.quit()
-            # self.p2.kill()
         return self.name1, self.name2, change_res
 
     @staticmethod
