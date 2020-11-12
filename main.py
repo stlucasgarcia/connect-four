@@ -72,6 +72,7 @@ def game_run():
         if changes_res:
             pg.quit()
             re_exec()
+            break
 
         pg.mouse.set_visible(False)
 
