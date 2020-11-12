@@ -28,6 +28,8 @@ class MainScreen:
     def main_screen(self):
         utilities = UtilitiesMain()
 
+        start_time = pg.time.get_ticks()
+
         attr = {
             "res": self.config.size,
             "style": self.config.style,
@@ -50,6 +52,8 @@ class MainScreen:
         close_loop: bool = False
 
         x, y = 0, 0
+
+        seconds, minutes = 0, 0
 
         # try:
         #     joystick_count = pg.joystick.get_count()
@@ -161,6 +165,22 @@ class MainScreen:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         menu.run(self.screen, clock)
+
+            seconds = pg.time.get_ticks() - start_time
+            if seconds >= 59900 and seconds <= 60100:
+                start_time = pg.time.get_ticks()
+                seconds = 0
+                minutes += 1
+
+            timeF = f"{seconds // 1000}"
+
+            if minutes > 0:
+                timeF = f"{minutes} : {seconds // 1000}"
+            else:
+                pass
+
+            textTime = font.render(timeF, True, font_color)
+            screen.blit(textTime, (50, 50))
 
             pg.display.update()
 
