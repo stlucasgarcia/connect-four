@@ -1,7 +1,6 @@
 import pygame as pg
+import math
 import sys
-
-from pygame.image import save
 
 from ending_screens import EndingScreen
 from utilities import UtilitiesMain
@@ -26,9 +25,11 @@ class MainScreen:
         self.sound_chip_1 = self.config.sound_chip_1
         self.sound_chip_2 = self.config.sound_chip_2
         self.volume = self.config.volume
+        self.chip_1 = self.config.chip_1
         self.chip_2 = self.config.chip_2
+        self.ai_chip = 2
 
-    def main_screen(self, usernames: list):
+    def main_screen(self, usernames: list, option="AI"):
         utilities = UtilitiesMain(self.screen)
 
         start_time = pg.time.get_ticks()
@@ -48,7 +49,7 @@ class MainScreen:
 
         matrix = utilities.create_matrix()
 
-        chip = self.chip_2
+        chip = self.chip_1
 
         close_loop: bool = False
 
@@ -56,7 +57,7 @@ class MainScreen:
 
         seconds, minutes = 0, 0
 
-        player_turn: int = 1
+        player_turn: int = 1  # if not option else option
         # try:
         #     joystick_count = pg.joystick.get_count()
 
@@ -76,10 +77,10 @@ class MainScreen:
 
                 if event.type == pg.MOUSEBUTTONDOWN:
                     save_chip = chip
-                    print(x, y)
+
                     column = utilities.location_X(pg.mouse.get_pos()[0])
                     if column != 0:
-                        play_again, player_turn, chip = utilities.playerTurn(
+                        play_again, player_turn, chip = utilities.playersTurn(
                             column,
                             matrix,
                             player_turn,
@@ -88,7 +89,10 @@ class MainScreen:
                             usernames,
                             start_time,
                             clock,
+                            option,
                         )
+
+                        print(player_turn)
 
                         if play_again != None:
                             return play_again
@@ -102,8 +106,42 @@ class MainScreen:
                         if not play_again:
                             return play_again
 
-            # start_time = utilities.timer(start_time, clock)  # TODO FIX THIS
-            # self.screen.blit(chip, (x, y))
+            if option == "AI" and player_turn % 2 == 1:
+                print(player_turn)
+
+                column, minimax_score = utilities.minimaxTree(
+                    matrix, 5, -math.inf, math.inf, True
+                )
+
+                if utilities.is_available(matrix, column):
+                    row = utilities.get_open_row(matrix, column)
+                    utilities.drop_piece(matrix, row, column, self.ai_chip)
+
+                    print(matrix)
+                    if utilities.is_victory(matrix, self.ai_chip):
+                        utilities.draw_board(matrix, start_time, clock)
+
+                        pg.time.wait(500)
+
+                        data = {usernames[0]: 10, usernames[1]: 5}
+
+                        ending = EndingScreen(
+                            self.screen,
+                            data,
+                            res=self.config.size,
+                            pg_res=self.config.win_pg,
+                            sm_res=self.config.win_sm,
+                            quit_res=self.config.win_quit,
+                            lb_res=self.config.win_ld,
+                        )
+
+                        play_again = ending.scores()
+
+                        return play_again
+
+                    player_turn += 1
+                    player_turn = player_turn % 2
+
             pg.display.update()
 
-            clock.tick(60)
+            clock.tick(75)
