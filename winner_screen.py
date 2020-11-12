@@ -101,7 +101,6 @@ class EndingScreen:
                     return True
 
                 if self.starter_menu.check_pressed():
-
                     return False
 
                 if self.quit.check_pressed():

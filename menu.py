@@ -293,10 +293,18 @@ class StarterMenu:
 
             pg.display.update()
 
-        StarterMenu._export(data)
-        return self.name1, self.name2
+        change_res = StarterMenu._export(data)
+        return self.name1, self.name2, change_res
 
     @staticmethod
     def _export(data: dict):
+        change_res = False
+
+        res = open("user_settings.json", "r+").readlines()
+        if res:
+            change_res = True if data["resolution"] != res[2].split('"')[-2] else False
+
         with open("user_settings.json", "w+") as user:
             dump(data, user, indent=4)
+
+        return change_res

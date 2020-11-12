@@ -44,7 +44,7 @@ def game_run():
             pass
 
         if not play_again:
-            name1, name2 = StarterMenu(
+            name1, name2, changes_res = StarterMenu(
                 res=config.size,
                 sm_res=[
                     config.sm_title,
