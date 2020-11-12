@@ -52,6 +52,10 @@ class Settings:
         self.win_sm = ((835, 700), (250, 80))
         self.win_quit = ((1185, 700), (150, 80))
         self.win_ld = ((835, 900), (250, 80))
+        self.lb_back = ((885, 985), (150, 70))
+        self.lb_player = [550, 65, 400, 200]
+        self.lb_score = [975, 65, 400, 200]
+        self.lb_mult = 94.8
         self.fullhd = True
 
     def _hd(self):
@@ -62,6 +66,10 @@ class Settings:
         self.win_sm = ((515, 550), (250, 80))
         self.win_quit = ((850, 550), (150, 80))
         self.win_ld = ((515, 640), (250, 80))
+        self.lb_back = ((565, 645), (150, 70))
+        self.lb_player = [300, 8.55, 400, 200]
+        self.lb_score = [590, 8.55, 400, 200]
+        self.lb_mult = 63.35
         self.fullhd = False
 
     def _config_font(self):

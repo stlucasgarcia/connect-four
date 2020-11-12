@@ -40,7 +40,7 @@ def game_run():
     play_again = False
     name1, name2 = None, None
     while isRunning:
-        pg.mouse.set_visible(0)
+        pg.mouse.set_visible(False)
 
         try:
             joystick = pg.joystick.Joystick(0)
@@ -71,13 +71,24 @@ def game_run():
 
         if changes_res:
             pg.quit()
-            isRunning = False
-            game_run()
+            re_exec()
 
-        pg.mouse.set_visible(0)
+        pg.mouse.set_visible(False)
 
         MainScreen_object = MainScreen(screen, is_controller)
         play_again = MainScreen_object.main_screen(usernames=[name1, name2])
+
+
+def re_exec():
+    import os, sys, subprocess
+
+    subprocess.call(
+        [
+            f"{sys.path[0]}\\venv\Scripts\python.exe",
+            os.path.join(sys.path[0], __file__),
+        ]
+        + sys.argv[1:]
+    )
 
 
 if __name__ == "__main__":

@@ -5,18 +5,27 @@ from sys import exit
 
 from typing import Any
 from settings import Settings
-
-# from database import ScoreboardData
+from database import ScoreboardData
 
 
 class EndingScreen:
     def __init__(self, screen: Any, data: dict, **kwargs):
         self.screen = screen
+        self.data = data
         self.score_1, self.score_2 = data.values()
         self.name_1, self.name_2 = data.keys()
-        self.width = Settings().width
+        self.st = Settings()
+        self.size = self.st.size
+        self.width = self.st.width
 
-        pg.display.set_mode(kwargs["res"], pg.FULLSCREEN)
+        self._createUI(kwargs)
+
+        self.sb = ScoreboardData(data)
+        self.sb.updateTable()
+        self.sb.winnerUpdate()
+
+    def _createUI(self, kwargs):
+        # pg.display.set_mode(kwargs["res"], pg.FULLSCREEN)
         self.manager = pygame_gui.UIManager(
             kwargs["res"], "data/styles/winner_menu.json"
         )
@@ -63,7 +72,6 @@ class EndingScreen:
         clock = pg.time.Clock()
 
         bg_image = pg.image.load(f"data\images\menu\score_screen.png")
-        self.screen.blit(bg_image, (0, 0))
 
         ending = True
         while ending:
@@ -76,8 +84,6 @@ class EndingScreen:
             text = FONT.render("SCORE SCREEN", True, (GREY))
             text_rec = text.get_rect().width // 2
 
-            self.screen.blit(text, [a - text_rec, 20])
-
             players = FONT.render(
                 f"{str(self.name_1)}  X  {str(self.name_2)}", True, (GREY)
             )
@@ -85,14 +91,7 @@ class EndingScreen:
             score2 = FONT.render(f"{str(self.score_2)}", True, (GREY))
             players_rec = players.get_rect().width // 2
 
-            self.screen.blit(players, [a - players_rec, b // 3])
-            self.screen.blit(score1, [a - players_rec + players_rec // 3, b // 3 + 150])
-            self.screen.blit(score2, [a + players_rec - players_rec // 2, b // 3 + 150])
-
             time_delta = clock.tick(60) / 1000.0
-
-            self.manager.update(time_delta)
-            self.manager.draw_ui(self.screen)
 
             for event in pg.event.get():
                 self.manager.process_events(event)
@@ -104,46 +103,110 @@ class EndingScreen:
                     return False
 
                 if self.leaderboard.check_pressed():
-                    LeaderBoard()
+                    self.leaderboard.disable()
+                    LeaderBoard(
+                        self.sb,
+                        self.screen,
+                        self.size,
+                        (
+                            self.st.lb_back,
+                            self.st.lb_player,
+                            self.st.lb_score,
+                            self.st.lb_mult,
+                        ),
+                    ).run()
+                    self.leaderboard.enable()
 
                 if self.quit.check_pressed():
                     exit()
 
+            self.screen.blit(bg_image, (0, 0))
+            self.screen.blit(text, [a - text_rec, 20])
+            self.screen.blit(players, [a - players_rec, b // 3])
+            self.screen.blit(score1, [a - players_rec + players_rec // 3, b // 3 + 150])
+            self.screen.blit(score2, [a + players_rec - players_rec // 2, b // 3 + 150])
+
+            self.manager.update(time_delta)
+            self.manager.draw_ui(self.screen)
+
             pg.display.update()
 
-        pg.mouse.set_visible(0)
+        pg.mouse.set_visible(False)
 
         return False
 
 
 class LeaderBoard:
-    def __init__(self):
-        pass
+    def __init__(self, sb, screen, size, lb_res):
+        self.screen = screen
+        self.res = size
+        self.style = "data/styles/winner_menu.json"
+
+        self.lb_back, self.lb_player, self.lb_score, self.lb_mult = lb_res
+        self.object_id = "#Text" if size[0] == 1920 else "#Text2"
+
+        self.sb = sb
+        self.scores = self._get_scores()
+        self._show_lb()
 
     def _get_scores(self):
-        # ScoreboardData()
-        pass
+        return self.sb.getData(9)
 
+    def _show_lb(self):
+        self.manager = pygame_gui.UIManager(self.res, self.style)
 
-# st = Settings()
+        self.back = pygame_gui.elements.UIButton(
+            relative_rect=pg.Rect(*self.lb_back),
+            text="Back",
+            manager=self.manager,
+            object_id="#Button",
+        )
 
-# pg.init()
+        for i in range(len(self.scores)):
+            add = self.lb_mult * i
+            cont_p = list(
+                elem + add if self.lb_player.index(elem) == 1 else elem
+                for elem in self.lb_player
+            )
+            cont_s = list(
+                elem + add if self.lb_score.index(elem) == 1 else elem
+                for elem in self.lb_score
+            )
 
-# # Pega as config que ta no user_settings.json (TA EM FULLHD E CLASSIC)
-# width = st.width
-# height = st.height
+            pygame_gui.elements.UILabel(
+                pg.Rect(cont_p),
+                text=self.scores[i][0],
+                manager=self.manager,
+                object_id=self.object_id,
+            )
 
-# size = st.size
-# screen = pg.display.set_mode(size, pg.FULLSCREEN)
+            pygame_gui.elements.UILabel(
+                pg.Rect(cont_s),
+                text=str(self.scores[i][1]),
+                manager=self.manager,
+                object_id=self.object_id,
+            )
 
+    def run(self):
+        is_running = True
+        clock = pg.time.Clock()
 
-# data = {"Guilherme": 10, "Leonardo": 5}
-# ac = EndingScreen(
-#     screen,
-#     data,
-#     res=size,
-#     pg_res=st.win_pg,
-#     sm_res=st.win_sm,
-#     quit_res=st.win_quit,
-# )
-# ac.scores()
+        img = pg.image.load("data/images/menu/leaderboard.png")
+
+        if self.res == (1280, 720):
+            img = pg.transform.scale(img, self.res)
+
+        while is_running:
+            time_delta = clock.tick(60) / 1000.0
+
+            for event in pg.event.get():
+                self.manager.process_events(event)
+
+                if event.type == pg.USEREVENT and self.back.check_pressed():
+                    is_running = False
+
+            self.manager.update(time_delta)
+            self.screen.blit(img, (0, 0))
+            self.manager.draw_ui(self.screen)
+
+            pg.display.update()

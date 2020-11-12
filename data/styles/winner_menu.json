@@ -43,5 +43,36 @@
             "size": "50",
             "regular_path": "data/fonts/classic.ttf"
         }
+    },
+
+    "#Text_prototype": {
+        "colours":
+        {
+            "dark_bg": "#1C00ff00",
+            "normal_text": "#25292e"
+         }
+    },
+
+    "#Text": {
+
+        "prototype": "#Text_prototype",
+
+        "font":
+        {
+            "name": "classic",
+            "size": "70",
+            "regular_path": "data/fonts/classic.ttf"
+        }
+    },
+
+    "#Text2": {
+        "prototype": "#Text_prototype",
+
+        "font":
+        {
+            "name": "classic",
+            "size": "50",
+            "regular_path": "data/fonts/classic.ttf"
+        }
     }
 }
