@@ -96,7 +96,7 @@ class UtilitiesMain:
                         X_CONST = 140
                         Y_CONST = 128.5
 
-                        x = 402.25 + ((X_CONST * column) + (22.75 * (column)))
+                        x = 402.25 + ((X_CONST * column) + (22.78 * (column)))
                         y = 923.75 - (Y_CONST * (row) + (17.43 * (row)))
 
                     if matrix[row][column] == 1:

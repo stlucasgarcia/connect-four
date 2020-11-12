@@ -1,13 +1,16 @@
-import pygame_gui
 import pygame as pg
-from json import dump
+import pygame_gui
 
-from sys import exit
 from typing import Any, Tuple
+from settings import Settings
+from json import dump
+from sys import exit
 
 
 class OptionsMenu:
     def __init__(self, **attr):
+        self.config = Settings()
+
         self.res = attr["res"]
         self.manager: Any
         self.label: Any
@@ -77,7 +80,21 @@ class OptionsMenu:
                     options = False
 
                 if self.starter_menu.check_pressed():
-                    pass
+                    StarterMenu(
+                        res=self.config.size,
+                        sm_res=[
+                            self.config.sm_title,
+                            self.config.sm_mode_txt,
+                            self.config.sm_mode,
+                            self.config.sm_theme_text,
+                            self.config.sm_theme,
+                            self.config.sm_res_text,
+                            self.config.sm_res,
+                            self.config.sm_next,
+                            self.config.sm_quit,
+                        ],
+                        screen=screen,
+                    ).run()
 
                 if self.quit.check_pressed():
                     exit()
