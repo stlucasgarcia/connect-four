@@ -1,118 +1,251 @@
-import pygame as pg
+import pygame
+from pygame.locals import *
+from menu import OptionsMenu
 
-pg.init()
-pg.joystick.init()
+pygame.init()
+display = pygame.display.set_mode((600, 600))
 
 
 class Controller:
-    def __init__(self) -> None:
-        self.x_axis = 270  # TODO Full HD
-        if pg.joystick.get_count() > 1:
-            joystick_1 = pg.joystick.Joystick(0)
-            joystick_2 = pg.joystick.Joystick(1)
-            joystick_1.init()
-            joystick_2.init()
+    def __init__(self):
+
+        self.joysticks = []
+        self.type = []
+        self.x_hd = 596  # initial position of the chip
+
+        for i in range(pygame.joystick.get_count()):
+            self.joysticks.append(pygame.joystick.Joystick(i))
+            self.joysticks[-1].init()
+            self.type.append(self.joysticks[i].get_name())
+
+            axes = self.joysticks[i].get_numaxes()
+            print(axes)
+
+        print(self.type)
+        print(self.joysticks)
+
+    def checkController(self):
+        if self.joysticks:
+            return True
+        else:
+            return False
+
+    def isControllerEvent(self, event):
+        return (
+            event.type == JOYBUTTONDOWN
+            or event.type == JOYAXISMOTION
+            or event.type == JOYHATMOTION
+        )
+
+    def isControllerDropEvent(self, event):
+        if self.type[0] == "PS4 Controller":
+            if event.type == JOYBUTTONDOWN:
+                return (event.button == 12 or event.button == 0)
+            if event.type == JOYAXISMOTION:
+                return (abs(event.axis) == 5 and event.value == 1)
+        
+        else:
+            if event.type == JOYBUTTONDOWN:
+                return event.button == 0
+            if event.type == JOYHATMOTION:
+                return event.value[1] == -1
+            if event.type == JOYAXISMOTION:
+                return (abs(event.axis) == 5 and event.value == 1)
+
+
+    def get_x_pos(self, event):
+        px_diff_hd = 109  # how much the  chip will move each time
+        max_px_hd = 931  # max x position of the chip
+        min_px_hd = 269  # min x position of the chip
+
+        if self.type[0] == "PS4 Controller":
+            if event.type == JOYBUTTONDOWN:
+                if event.button == 13 or event.button == 9:
+                    print("Move left")
+                    self.x_hd -= (
+                        px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    )
+
+                if event.button == 14 or event.button == 10:
+                    print("Move right")
+                    self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
+
+            if event.type == JOYAXISMOTION:
+                if abs(event.axis) == 0:
+                    if event.value > 0.7:
+                        print("Move Right")
+                        self.x_hd += 5 if self.x_hd + 5 < max_px_hd else 0
+
+                    if event.value < -0.7:
+                        print("Move Left")
+                        self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
 
         else:
-            joystick = pg.joystick.Joystick(0)
-            joystick.init()
+            if event.type == JOYBUTTONDOWN:
+                if event.button == 4:
+                    print("Move left")
+                    self.x_hd -= (
+                        px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    )
 
-    def controllerStick(self, axisX):
-        if (
-            self.x_axis >= 280 and self.x_axis <= 912
-        ):  # Joystick to move it horizontally
-            if axisX > 0.5:
-                self.x_axis += 10
+                if event.button == 5:
+                    print("Move right")
+                    self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
 
-            elif axisX < -0.5:
-                self.x_axis -= 10
+            if event.type == JOYHATMOTION:
+                if event.value[0] == 1:
+                    print("Move right")
+                    self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
 
-            elif self.x_axis == 270:
-                if axisX > 0.5:
-                    self.x_axis += 10
+                if event.value[0] == -1:
+                    print("Move left")
+                    self.x_hd -= (
+                        px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    )
 
-            elif self.x_axis == 922:
-                if axisX < -0.5:
-                    self.x_axis -= 10
+            if event.type == JOYAXISMOTION:
+                if abs(event.axis) == 0:
+                    if event.value > 0.7:
+                        print("Move Right")
+                        self.x_hd += 5 if self.x_hd + 5 < max_px_hd else 0
 
-    def controllerDpad(self):
-        if self.x_axis >= 270 and self.x_axis < 380:
-            if dpad == (-1, 0):
-                self.x_axis = 270
+                    if event.value < -0.7:
+                        print("Move Left")
+                        self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
 
-            elif dpad == (1, 0):
-                self.x_axis = 380
+        return self.x_hd
 
-        elif self.x_axis >= 380 and self.x_axis < 490:
-            if dpad == (1, 0):
-                self.x_axis = 490
+    def menu_action(self, event):
+        if self.type[0] == "PS4 Controller":
+            if event.type == JOYBUTTONDOWN:
+                if event.button == 1 or event.button == 6:
+                    self.Esc()
 
-            elif dpad == (-1, 0):
-                self.x_axis = 270
+            if event.type == JOYAXISMOTION:
+                if abs(event.axis) == 4:
+                    if event.value == 1:
+                        self.Esc()
 
-        elif self.x_axis >= 490 and self.x_axis < 595:
-            if dpad == (-1, 0):
-                self.x_axis = 380
+        else:
+            if event.type == JOYBUTTONDOWN:
+                if event.button == 0:
+                    self.DropChip()
 
-            elif dpad == (1, 0):
-                self.x_axis = 595
+            if event.type == JOYHATMOTION:
+                if event.value[1] == -1:
+                    self.DropChip()
 
-        elif self.x_axis >= 595 and self.x_axis < 705:
-            if dpad == (-1, 0):
-                self.x_axis = 490
+            if event.type == JOYAXISMOTION:
+                if abs(event.axis) == 4:
+                    if event.value == 1:
+                        self.Esc()
 
-            elif dpad == (1, 0):
-                self.x_axis = 705
+    def check_event(self, event, menu:object,screen, clock):
+        px_diff_hd = 109  # how much the  chip will move each time
+        max_px_hd = 931  # max x position of the chip
+        min_px_hd = 269  # min x position of the chip
 
-        elif self.x_axis >= 705 and self.x_axis < 812:
-            if dpad == (-1, 0):
-                self.x_axis = 595
+        if self.type[0] == "PS4 Controller":
+            
+            # Press Buttons
+            if event.type == JOYBUTTONDOWN:
+                if event.button == 1 or event.button == 6: 
+                    play_again = menu.run(screen,clock)
+                    if not play_again:
+                        return play_again
 
-            elif dpad == (1, 0):
-                self.x_axis = 812
+                # if event.button == 12 or event.button == 0: 
+                #     self.DropChip() 
 
-        elif self.x_axis >= 812 and self.x_axis < 922:
-            if dpad == (-1, 0):
-                self.x_axis = 705
+                if event.button == 13 or event.button == 9:
+                    print("Move left")
+                    self.x_hd -= px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    return self.x_hd
+                    
 
-            elif dpad == (1, 0):
-                self.x_axis = 922
-
-        elif self.x_axis == 922:
-            if dpad == (-1, 0):
-                self.x_axis = 812
-
-    # def pressButtons(self):
-    #     if joystick.get_button(0) or right_trigger > 0.5:  # A or Right Trigger
-    #         print(f"A or Right Trigger: {joystick.get_button(0)}, {right_trigger}")
-
-    #     if joystick.get_button(1) or joystick.get_button(7):  # B or start
-    #         print(f"Botão B or Start: {joystick.get_button(1)}, {joystick.get_button(7)}")
-
-    def joystickRun(self):
-        # joystickType = self.joystick.get_name()
-
-        c = Controller()
-
-        close = True
-        while close:
-
-            for event in pg.event.get():  # User did something.
-                pass
-
-            joystick = pg.joystick.Joystick(0)
-            joystick.init()
-
-            dpad = joystick.get_hat(0)
-            axisX = joystick.get_axis(0)  # Horizontal Axis of left joystick
-
-            # right_trigger = joystick.get_axis(5)
-
-            c.controllerDpad(dpad)
-            c.controllerStick(axisX)
-            print(dpad)
-            print(axisX)
-            # Controller.pressButtons()
+                if event.button == 14 or event.button == 10:
+                    print("Move right")
+                    self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
+                    return self.x_hd
 
 
-Controller().joystickRun()
+            # Sticks   PS4
+            if event.type == JOYAXISMOTION:
+                if abs(event.axis) == 0:
+                    if event.value > .7:
+                        print("Move Right")
+    
+                        self.x_hd += 5 if self.x_hd + 5 < max_px_hd else 0
+                        return self.x_hd
+                        
+                    
+                    if event.value < -.7:
+                        print("Move Left")
+            
+                        self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
+                        return self.x_hd
+
+                if abs(event.axis) == 4:
+                    if event.value == 1:
+                        play_again = menu.run(screen,clock)
+                        if not play_again:
+                            return play_again
+
+        # Xbox and other
+        else:
+
+            # Press buttons
+            if event.type == JOYBUTTONDOWN:
+
+                if event.button == 1 or event.button == 7: 
+                    play_again = menu.run(screen,clock)
+                    if not play_again:
+                        return play_again
+
+                if event.button == 4:
+                    print("Move left")
+                    self.x_hd -= px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    return self.x_hd
+        
+
+                if event.button == 5:
+                    print("Move right")
+                    self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
+                    return self.x_hd
+    
+            
+            # D-pad Xbox
+            if event.type == JOYHATMOTION:
+                if event.value[0] == 1:
+                    print("Move right")
+                    self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
+                    return self.x_hd
+    
+                
+                if event.value[0] == -1:
+                    print("Move left")
+                    self.x_hd -= px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    return self.x_hd
+
+
+
+            if event.type == JOYAXISMOTION:
+                if abs(event.axis) == 0:
+                    if event.value > .7:
+                        print("Move Right")
+                        self.x_hd += 5 if self.x_hd + 5 < max_px_hd else 0
+                        return self.x_hd
+    
+        
+                    
+                    if event.value < -.7:
+                        print("Move Left")
+                        self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
+                        return self.x_hd
+
+                if abs(event.axis) == 4:
+                    if event.value == 1:
+                        play_again = menu.run(screen,clock)
+                        if not play_again:
+                            return play_again
+  
