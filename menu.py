@@ -302,7 +302,7 @@ class StarterMenu:
 
         res = open("user_settings.json", "r+").readlines()
         if res:
-            change_res = True if data["resolution"] != res[2].split('"')[-2] else False
+            change_res = True if data["resolution"] != res[1].split('"')[-2] else False
 
         with open("user_settings.json", "w+") as user:
             dump(data, user, indent=4)

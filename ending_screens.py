@@ -6,6 +6,8 @@ from sys import exit
 from typing import Any
 from settings import Settings
 
+# from database import ScoreboardData
+
 
 class EndingScreen:
     def __init__(self, screen: Any, data: dict, **kwargs):
@@ -82,8 +84,6 @@ class EndingScreen:
             score1 = FONT.render(f"{str(self.score_1)}", True, (GREY))
             score2 = FONT.render(f"{str(self.score_2)}", True, (GREY))
             players_rec = players.get_rect().width // 2
-            # score1_rec = score1.get_rect().width//2
-            # score2_rec = score2.get_rect().width//2
 
             self.screen.blit(players, [a - players_rec, b // 3])
             self.screen.blit(score1, [a - players_rec + players_rec // 3, b // 3 + 150])
@@ -103,6 +103,9 @@ class EndingScreen:
                 if self.starter_menu.check_pressed():
                     return False
 
+                if self.leaderboard.check_pressed():
+                    LeaderBoard()
+
                 if self.quit.check_pressed():
                     exit()
 
@@ -111,6 +114,15 @@ class EndingScreen:
         pg.mouse.set_visible(0)
 
         return False
+
+
+class LeaderBoard:
+    def __init__(self):
+        pass
+
+    def _get_scores(self):
+        # ScoreboardData()
+        pass
 
 
 # st = Settings()
