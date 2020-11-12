@@ -1,6 +1,6 @@
-import pygame as pg
-import json
 import os
+import json
+import pygame as pg
 
 from typing import Tuple, Any
 
@@ -51,6 +51,7 @@ class Settings:
         self.win_pg = ((530, 700), (200, 80))
         self.win_sm = ((835, 700), (250, 80))
         self.win_quit = ((1185, 700), (150, 80))
+        self.win_ld = ((835, 900), (250, 80))
         self.fullhd = True
 
     def _hd(self):
@@ -60,6 +61,7 @@ class Settings:
         self.win_pg = ((230, 550), (200, 80))
         self.win_sm = ((515, 550), (250, 80))
         self.win_quit = ((850, 550), (150, 80))
+        self.win_ld = ((515, 640), (250, 80))
         self.fullhd = False
 
     def _config_font(self):

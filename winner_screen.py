@@ -34,7 +34,7 @@ class EndingScreen:
         )
 
         self.leaderboard = pygame_gui.elements.UIButton(
-            relative_rect=pg.Rect((845, 900), (230, 80)),  # TODO: ARRUMAR RES
+            relative_rect=pg.Rect(*kwargs["lb_res"]),
             text="Leaderboard",
             manager=self.manager,
             object_id="#Button",

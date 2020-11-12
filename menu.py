@@ -298,5 +298,5 @@ class StarterMenu:
 
     @staticmethod
     def _export(data: dict):
-        with open("user_settings.json", "w") as user:
+        with open("user_settings.json", "w+") as user:
             dump(data, user, indent=4)

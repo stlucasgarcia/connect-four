@@ -115,6 +115,7 @@ class MainScreen:
                                         pg_res=self.config.win_pg,
                                         sm_res=self.config.win_sm,
                                         quit_res=self.config.win_quit,
+                                        lb_res=self.config.win_ld,
                                     )
 
                                     play_again = ending.scores()
@@ -159,6 +160,7 @@ class MainScreen:
                                         pg_res=self.config.win_pg,
                                         sm_res=self.config.win_sm,
                                         quit_res=self.config.win_quit,
+                                        lb_res=self.config.win_ld,
                                     )
 
                                     close_loop = True
