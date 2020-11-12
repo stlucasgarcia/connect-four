@@ -1,9 +1,9 @@
-import pygame as pg
 import pygame_gui
+import pygame as pg
 
-from typing import Any, Tuple
-from json import dump
 from sys import exit
+from json import dump
+from typing import Any, Tuple
 
 
 class OptionsMenu:
@@ -119,8 +119,26 @@ class StarterMenu:
         self.name1: str = "AI"
         self.name2: str = "AI"
 
+        self.last_mode: str = ""
+        self.last_theme: str = ""
+        self.last_res: str = ""
+
         self.clock = pg.time.Clock()
+        self._read_json()
         self._create_first_UI()
+
+    def _read_json(self):
+        with open("user_settings.json", "r") as user:
+            data = user.readlines()
+
+            if self.res == (1920, 1080):
+                prep = "1920x1080 - "
+            else:
+                prep = "1280x720 - "
+
+            self.last_mode = data[1].split('"')[-2]
+            self.last_theme = data[2].split('"')[-2].capitalize()
+            self.last_res = prep + data[3].split('"')[-2]
 
     def _create_first_UI(self):
         self.manager = pygame_gui.UIManager(self.res, self.style)
@@ -141,7 +159,7 @@ class StarterMenu:
 
         self.mode = pygame_gui.elements.UIDropDownMenu(
             ["Player vs AI", "Player vs Player", "AI vs AI"],
-            "",
+            self.last_mode,
             pg.Rect(*self.sm_mode),
             manager=self.manager,
             object_id="#Mode",
@@ -156,7 +174,7 @@ class StarterMenu:
 
         self.theme_selector = pygame_gui.elements.UIDropDownMenu(
             ["Classic", "Halloween", "Old_West", "VaporWave", "Christmas"],
-            "",
+            self.last_theme,
             pg.Rect(*self.sm_theme),
             manager=self.manager,
             object_id="#Mode",
@@ -171,7 +189,7 @@ class StarterMenu:
 
         self.res_selector = pygame_gui.elements.UIDropDownMenu(
             ["1280x720 - HD", "1920x1080 - FULLHD"],
-            "",  # TODO Select lastest resolution
+            self.last_res,
             pg.Rect(*self.sm_res),
             manager=self.manager,
             object_id="#Mode",
@@ -244,8 +262,9 @@ class StarterMenu:
                     if self.next.check_pressed():
 
                         data = {
-                            "resolution": self.res_selector.selected_option.split()[-1],
+                            "mode": self.mode.selected_option,
                             "theme": self.theme_selector.selected_option.lower(),
+                            "resolution": self.res_selector.selected_option.split()[-1],
                         }
 
                         if self.mode.selected_option == "Player vs AI":
@@ -306,7 +325,7 @@ class StarterMenu:
 
         res = open("user_settings.json", "r+").readlines()
         if res:
-            change_res = True if data["resolution"] != res[1].split('"')[-2] else False
+            change_res = True if data["resolution"] != res[3].split('"')[-2] else False
 
         with open("user_settings.json", "w+") as user:
             dump(data, user, indent=4)
