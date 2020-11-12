@@ -1,6 +1,6 @@
 import pygame as pg
 
-from init_screen import InitScreen
+from starter_screen import InitScreen
 from main_screen import MainScreen
 from settings import Settings
 
