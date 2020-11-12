@@ -138,6 +138,12 @@ class Settings:
         self.chip_1 = pg.image.load(f"data/images/game_screens/{self.theme}/chip_1.png")
         self.chip_2 = pg.image.load(f"data/images/game_screens/{self.theme}/chip_2.png")
 
+        if self.size == (1280, 720):
+            self.bg_image = pg.transform.scale(self.bg_image, (1280, 720))
+            res = 86
+            self.chip_1 = pg.transform.scale(self.chip_1, (res, res))
+            self.chip_2 = pg.transform.scale(self.chip_2, (res, res))
+
     def _config_sound(self):
         pg.mixer.music.load(f"data/soundtracks/{self.theme}.mp3")
         self.sound_chip_1 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_1.mp3")

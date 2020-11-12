@@ -14,23 +14,16 @@ class MainScreen:
         self,
         screen,
         is_controller,
-        background_image=None,
-        chip_1=None,
-        chip_2=None,
-        volume=None,
     ) -> None:
         self.config = Settings()
 
         self.screen: pg.Surface = screen
         self.background_image: pg.Surface = self.config.bg_image
-        self.chip_1: pg.Surface = self.config.chip_1
-        self.chip_2: pg.Surface = self.config.chip_2
         self.is_controller = is_controller
-        # self.soundtrack = pg.mixer.music.load("data/soundtracks/classic.mp3")
         self.sound_chip_1 = self.config.sound_chip_1
         self.sound_chip_2 = self.config.sound_chip_2
-        # self.sound_chip_2 = pg.mixer.Sound("data/sounds/classic/chip_2.mp3")
         self.volume = self.config.volume
+        self.chip_1 = self.config.chip_1
 
     def main_screen(self):
         utilities = UtilitiesMain()
@@ -61,9 +54,7 @@ class MainScreen:
         #     joystick_count = pg.joystick.get_count()
 
         pg.mixer.music.play(loops=-1)
-        pg.mixer.music.set_volume(
-            self.volume
-        )  # 0.25 for classic, 0.35 for halloween, 0.30 for old west, 0.35 for vaporwave, 0.10 for christmas
+        pg.mixer.music.set_volume(self.volume)
         while not close_loop:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -74,7 +65,6 @@ class MainScreen:
                     x = event.pos[0]
 
                     y = event.pos[1]
-
                 utilities.draw_board(matrix, self.screen)
 
                 self.screen.blit(chip, (x, y))
@@ -87,13 +77,26 @@ class MainScreen:
                         if column != 0:
                             column -= 1
 
-                            if utilities.is_available(matrix, column):
+                            is_pos_available = utilities.is_available(matrix, column)
+
+                            if is_pos_available:
                                 self.sound_chip_1.play()
+
                                 row = utilities.get_open_row(matrix, column)
+
+                                try:
+                                    turn, chip = utilities.is_valid(
+                                        column + 1, is_pos_available, turn
+                                    )
+                                except TypeError:
+                                    pass
 
                                 utilities.drop_piece(matrix, row, column, 1)
 
-                                if utilities.is_victory(matrix, 1):
+                                if utilities.is_victory(matrix, 1) or utilities.is_tie(
+                                    matrix
+                                ):
+                                    utilities.draw_board(matrix, self.screen)
                                     # pg.mixer.music.fadeout(5000)
 
                                     data = {"Guilherme": 10, "Leonardo": 5}
@@ -118,14 +121,27 @@ class MainScreen:
                         if column != 0:
                             column -= 1
 
+                            is_pos_available = utilities.is_available(matrix, column)
+
                             if utilities.is_available(matrix, column):
                                 self.sound_chip_2.play()
 
                                 row = utilities.get_open_row(matrix, column)
 
+                                try:
+                                    turn, chip = utilities.is_valid(
+                                        column + 1, is_pos_available, turn
+                                    )
+                                except TypeError:
+                                    pass
+
                                 utilities.drop_piece(matrix, row, column, 2)
 
-                                if utilities.is_victory(matrix, 2):
+                                if utilities.is_victory(matrix, 2) or utilities.is_tie(
+                                    matrix
+                                ):
+                                    utilities.draw_board(matrix, self.screen)
+
                                     # pg.mixer.music.fadeout(5000)
 
                                     data = {"Guilherme": 10, "Leonardo": 5}
@@ -140,18 +156,6 @@ class MainScreen:
                                     )
                                     close_loop = True
                                     ending.scores()
-
-                    if utilities.location_X(
-                        pg.mouse.get_pos()[0]
-                    ) != 0 and utilities.is_available(matrix, column):
-                        turn += 1
-
-                        turn %= 2
-
-                        if turn == 0:
-                            chip = self.chip_1
-                        else:
-                            chip = self.chip_2
 
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:

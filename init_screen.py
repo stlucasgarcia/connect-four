@@ -7,9 +7,24 @@ from itertools import cycle
 class InitScreen:
     def __init__(self, screen) -> None:
         self.screen = screen
+        self.bg_classic = pg.image.load(
+            "data\images\starter\classic\starter_screen.png"
+        )
+        self.bg_halloween = pg.image.load(
+            "data\images\starter\halloween\starter_screen.png"
+        )
+        self.bg_vaporwave = pg.image.load(
+            "data\images\starter\\vaporwave\starter_screen.png"
+        )
+        self.bg_christmas = pg.image.load(
+            "data\images\starter\christmas\starter_screen.png"
+        )
+        self.bg_old_west = pg.image.load(
+            "data\images\starter\old_west\starter_screen.png"
+        )
 
     def starter_screen(self):
-        background = pg.image.load("data\images\starter\starterclassic.png")
+        background = pg.image.load("data\images\starter\classic\starter_screen.png")
 
         FONT = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 125)
 

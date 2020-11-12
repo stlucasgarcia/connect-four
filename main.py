@@ -30,6 +30,7 @@ is_controller: bool = False
 try:
     joystick = pg.joystick.Joystick(0)
     is_controller = True
+
 except pg.error:
     pass
 
