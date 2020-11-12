@@ -21,7 +21,6 @@ class Controller:
             axes = self.joysticks[i].get_numaxes()
             print(axes)
 
-        print(self.type)
         print(self.joysticks)
 
     def checkController(self):
@@ -38,20 +37,20 @@ class Controller:
         )
 
     def isControllerDropEvent(self, event):
-        if self.type[0] == "PS4 Controller":
-            if event.type == JOYBUTTONDOWN:
-                return (event.button == 12 or event.button == 0)
-            if event.type == JOYAXISMOTION:
-                return (abs(event.axis) == 5 and event.value == 1)
-        
-        else:
-            if event.type == JOYBUTTONDOWN:
-                return event.button == 0
-            if event.type == JOYHATMOTION:
-                return event.value[1] == -1
-            if event.type == JOYAXISMOTION:
-                return (abs(event.axis) == 5 and event.value == 1)
+        if len(self.type) > 0:
+            if self.type[0] == "PS4 Controller":
+                if event.type == JOYBUTTONDOWN:
+                    return event.button == 12 or event.button == 0
+                if event.type == JOYAXISMOTION:
+                    return abs(event.axis) == 5 and event.value == 1
 
+            else:
+                if event.type == JOYBUTTONDOWN:
+                    return event.button == 0
+                if event.type == JOYHATMOTION:
+                    return event.value[1] == -1
+                if event.type == JOYAXISMOTION:
+                    return abs(event.axis) == 5 and event.value == 1
 
     def get_x_pos(self, event):
         px_diff_hd = 109  # how much the  chip will move each time
@@ -140,54 +139,53 @@ class Controller:
                     if event.value == 1:
                         self.Esc()
 
-    def check_event(self, event, menu:object,screen, clock):
+    def check_event(self, event, menu: object, screen, clock):
         px_diff_hd = 109  # how much the  chip will move each time
         max_px_hd = 931  # max x position of the chip
         min_px_hd = 269  # min x position of the chip
 
         if self.type[0] == "PS4 Controller":
-            
+
             # Press Buttons
             if event.type == JOYBUTTONDOWN:
-                if event.button == 1 or event.button == 6: 
-                    play_again = menu.run(screen,clock)
+                if event.button == 1 or event.button == 6:
+                    play_again = menu.run(screen, clock)
                     if not play_again:
                         return play_again
 
-                # if event.button == 12 or event.button == 0: 
-                #     self.DropChip() 
+                # if event.button == 12 or event.button == 0:
+                #     self.DropChip()
 
                 if event.button == 13 or event.button == 9:
                     print("Move left")
-                    self.x_hd -= px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    self.x_hd -= (
+                        px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    )
                     return self.x_hd
-                    
 
                 if event.button == 14 or event.button == 10:
                     print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
                     return self.x_hd
 
-
             # Sticks   PS4
             if event.type == JOYAXISMOTION:
                 if abs(event.axis) == 0:
-                    if event.value > .7:
+                    if event.value > 0.7:
                         print("Move Right")
-    
+
                         self.x_hd += 5 if self.x_hd + 5 < max_px_hd else 0
                         return self.x_hd
-                        
-                    
-                    if event.value < -.7:
+
+                    if event.value < -0.7:
                         print("Move Left")
-            
+
                         self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
                         return self.x_hd
 
                 if abs(event.axis) == 4:
                     if event.value == 1:
-                        play_again = menu.run(screen,clock)
+                        play_again = menu.run(screen, clock)
                         if not play_again:
                             return play_again
 
@@ -197,55 +195,51 @@ class Controller:
             # Press buttons
             if event.type == JOYBUTTONDOWN:
 
-                if event.button == 1 or event.button == 7: 
-                    play_again = menu.run(screen,clock)
+                if event.button == 1 or event.button == 7:
+                    play_again = menu.run(screen, clock)
                     if not play_again:
                         return play_again
 
                 if event.button == 4:
                     print("Move left")
-                    self.x_hd -= px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    self.x_hd -= (
+                        px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    )
                     return self.x_hd
-        
 
                 if event.button == 5:
                     print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
                     return self.x_hd
-    
-            
+
             # D-pad Xbox
             if event.type == JOYHATMOTION:
                 if event.value[0] == 1:
                     print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
                     return self.x_hd
-    
-                
+
                 if event.value[0] == -1:
                     print("Move left")
-                    self.x_hd -= px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    self.x_hd -= (
+                        px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
+                    )
                     return self.x_hd
-
-
 
             if event.type == JOYAXISMOTION:
                 if abs(event.axis) == 0:
-                    if event.value > .7:
+                    if event.value > 0.7:
                         print("Move Right")
                         self.x_hd += 5 if self.x_hd + 5 < max_px_hd else 0
                         return self.x_hd
-    
-        
-                    
-                    if event.value < -.7:
+
+                    if event.value < -0.7:
                         print("Move Left")
                         self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
                         return self.x_hd
 
                 if abs(event.axis) == 4:
                     if event.value == 1:
-                        play_again = menu.run(screen,clock)
+                        play_again = menu.run(screen, clock)
                         if not play_again:
                             return play_again
-  

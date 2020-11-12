@@ -196,7 +196,7 @@ class UtilitiesMain:
             turn += 1
 
             if turn % 2 == 0:
-                chip = self.chip_1
+                chip = self.chip_2
 
                 turn = 2
 
@@ -205,7 +205,7 @@ class UtilitiesMain:
                 return turn, chip
 
             elif turn % 2 == 1:
-                chip = self.chip_2
+                chip = self.chip_1
 
                 turn = 1
 

@@ -99,8 +99,6 @@ class MainScreen:
                             option,
                         )
 
-                        print(player_turn)
-
                         if play_again != None:
                             return play_again
 
@@ -124,8 +122,6 @@ class MainScreen:
                             option,
                         )
 
-                        print(player_turn)
-
                         if play_again != None:
                             return play_again
 
@@ -143,8 +139,6 @@ class MainScreen:
                     control.check_event(event, menu, screen, clock)
 
             if option == "AI" and player_turn % 2 == 1:
-                print(player_turn)
-
                 column, minimax_score = utilities.minimaxTree(
                     matrix, 5, -math.inf, math.inf, True
                 )
@@ -153,7 +147,6 @@ class MainScreen:
                     row = utilities.get_open_row(matrix, column)
                     utilities.drop_piece(matrix, row, column, self.ai_chip)
 
-                    print(matrix)
                     if utilities.is_victory(matrix, self.ai_chip):
                         utilities.draw_board(matrix, start_time, clock)
 
