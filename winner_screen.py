@@ -23,25 +23,32 @@ class EndingScreen:
             relative_rect=pg.Rect(*kwargs["pg_res"]),
             text="Play Again",
             manager=self.manager,
-            object_id="#PlayAgain",
+            object_id="#Button",
         )
 
         self.starter_menu = pygame_gui.elements.UIButton(
             relative_rect=pg.Rect(*kwargs["sm_res"]),
             text="Starter Menu",
             manager=self.manager,
-            object_id="#StarterMenu",
+            object_id="#Button",
+        )
+
+        self.leaderboard = pygame_gui.elements.UIButton(
+            relative_rect=pg.Rect((845, 900), (230, 80)),  # TODO: ARRUMAR RES
+            text="Leaderboard",
+            manager=self.manager,
+            object_id="#Button",
         )
 
         self.quit = pygame_gui.elements.UIButton(
             relative_rect=pg.Rect(*kwargs["quit_res"]),
             text="Quit",
             manager=self.manager,
-            object_id="#Quit",
+            object_id="#Button",
         )
 
     def scores(self) -> bool:
-        pg.mouse.set_visible(1)
+        pg.mouse.set_visible(True)
 
         a = self.screen.get_width() // 2
         b = self.screen.get_height()
