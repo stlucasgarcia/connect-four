@@ -53,24 +53,28 @@ class EndingScreen:
         a = self.screen.get_width() // 2
         b = self.screen.get_height()
 
-        WHITE = (255, 255, 255)
+        # WHITE = (255, 255, 255)
+        GREY = (37, 41, 46)  # 2529
 
         FONT = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 125)
 
         clock = pg.time.Clock()
 
+        bg_image = pg.image.load(f"data\images\menu\score_screen.png")
+        self.screen.blit(bg_image, (0, 0))
+
         ending = True
         while ending:
-            text = FONT.render("SCORE SCREEN", True, (WHITE))
+            text = FONT.render("SCORE SCREEN", True, (GREY))
             text_rec = text.get_rect().width // 2
 
             self.screen.blit(text, [a - text_rec, 20])
 
             players = FONT.render(
-                f"{str(self.name_1)}  X  {str(self.name_2)}", True, (WHITE)
+                f"{str(self.name_1)}  X  {str(self.name_2)}", True, (GREY)
             )
-            score1 = FONT.render(f"{str(self.score_1)}", True, (WHITE))
-            score2 = FONT.render(f"{str(self.score_2)}", True, (WHITE))
+            score1 = FONT.render(f"{str(self.score_1)}", True, (GREY))
+            score2 = FONT.render(f"{str(self.score_2)}", True, (GREY))
             players_rec = players.get_rect().width // 2
             # score1_rec = score1.get_rect().width//2
             # score2_rec = score2.get_rect().width//2
@@ -87,15 +91,11 @@ class EndingScreen:
             for event in pg.event.get():
                 self.manager.process_events(event)
 
-                if event.type == pg.KEYDOWN:
-                    ending = False
-                    return False
-
                 if self.play_again.check_pressed():
-                    pass
+                    return True
 
                 if self.starter_menu.check_pressed():
-                    pass
+                    return False
 
                 if self.quit.check_pressed():
                     exit()

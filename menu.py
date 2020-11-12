@@ -2,15 +2,12 @@ import pygame as pg
 import pygame_gui
 
 from typing import Any, Tuple
-from settings import Settings
 from json import dump
 from sys import exit
 
 
 class OptionsMenu:
     def __init__(self, **attr):
-        self.config = Settings()
-
         self.res = attr["res"]
         self.manager: Any
         self.label: Any
@@ -24,8 +21,6 @@ class OptionsMenu:
         self.starter_res = attr["st_menu"]
         self.quit_res = attr["quit"]
 
-        # pg.init()
-        # pg.display.set_mode(self.res, pg.FULLSCREEN)
         self.img = pg.image.load(
             f"data\images\\background\\{attr['theme']}\esc_image.png"
         )
@@ -80,21 +75,7 @@ class OptionsMenu:
                     options = False
 
                 if self.starter_menu.check_pressed():
-                    StarterMenu(
-                        res=self.config.size,
-                        sm_res=[
-                            self.config.sm_title,
-                            self.config.sm_mode_txt,
-                            self.config.sm_mode,
-                            self.config.sm_theme_text,
-                            self.config.sm_theme,
-                            self.config.sm_res_text,
-                            self.config.sm_res,
-                            self.config.sm_next,
-                            self.config.sm_quit,
-                        ],
-                        screen=screen,
-                    ).run()
+                    return False
 
                 if self.quit.check_pressed():
                     exit()
@@ -102,7 +83,6 @@ class OptionsMenu:
             time_delta = clock.tick(60) / 1000.0
 
             screen.blit(self.img, (0, 0))
-            # pg.display.flip()
 
             self.manager.update(time_delta)
             self.manager.draw_ui(screen)
@@ -186,7 +166,7 @@ class StarterMenu:
 
         self.res_selector = pygame_gui.elements.UIDropDownMenu(
             ["1280x720 - HD", "1920x1080 - FULLHD"],
-            "",
+            "",  # TODO Select lastest resolution
             pg.Rect(*self.sm_res),
             manager=self.manager,
             object_id="#Mode",

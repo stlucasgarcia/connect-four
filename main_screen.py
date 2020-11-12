@@ -116,9 +116,10 @@ class MainScreen:
                                         quit_res=self.config.win_quit,
                                     )
 
-                                    close_loop = True
+                                    play_again = ending.scores()
 
-                                    ending.scores()
+                                    print(play_again)
+                                    return play_again
 
                     else:
                         # Player 2 input
@@ -160,12 +161,17 @@ class MainScreen:
                                         sm_res=self.config.win_sm,
                                         quit_res=self.config.win_quit,
                                     )
+
                                     close_loop = True
-                                    ending.scores()
+                                    play_again = ending.scores()
+
+                                    print(play_again)
+                                    return play_again
 
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         menu.run(self.screen, clock)
+                        return False
 
             # utilities.timer(self.screen, start_time, clock) #TODO FIX THIS
 
