@@ -75,6 +75,7 @@ class MainScreen:
                 self.screen.blit(chip, (x, y))
 
                 if event.type == pg.MOUSEBUTTONDOWN:
+                    print(x, y)
                     if turn == 0:
                         # Player 1 input
                         column = utilities.location_X(pg.mouse.get_pos()[0])
@@ -166,21 +167,7 @@ class MainScreen:
                     if event.key == pg.K_ESCAPE:
                         menu.run(self.screen, clock)
 
-            seconds = pg.time.get_ticks() - start_time
-            if seconds >= 59900 and seconds <= 60100:
-                start_time = pg.time.get_ticks()
-                seconds = 0
-                minutes += 1
-
-            timeF = f"{seconds // 1000}"
-
-            if minutes > 0:
-                timeF = f"{minutes} : {seconds // 1000}"
-            else:
-                pass
-
-            textTime = font.render(timeF, True, font_color)
-            screen.blit(textTime, (50, 50))
+            # utilities.timer(self.screen, start_time, clock) #TODO FIX THIS
 
             pg.display.update()
 

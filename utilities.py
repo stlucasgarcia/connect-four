@@ -1,6 +1,5 @@
-import pygame as pg
 import numpy as np
-
+import pygame as pg
 from settings import Settings
 
 
@@ -10,10 +9,11 @@ class UtilitiesMain:
 
         self.COLUMN_AMOUNT = 7
         self.ROW_AMOUNT = 6
-
+        self.font = self.config.font
         self.background_image = self.config.bg_image
         self.chip_1 = self.config.chip_1
         self.chip_2 = self.config.chip_2
+        self.width = self.config.width
         self.width = self.config.width
 
     def create_matrix(self) -> np.ndarray:
@@ -96,8 +96,8 @@ class UtilitiesMain:
                         X_CONST = 140
                         Y_CONST = 128.5
 
-                        x = 403 + ((X_CONST * column) + (23 * (column)))
-                        y = 924 - (Y_CONST * (row) + (17 * (row)))
+                        x = 402.25 + ((X_CONST * column) + (22.75 * (column)))
+                        y = 923.75 - (Y_CONST * (row) + (17.43 * (row)))
 
                     if matrix[row][column] == 1:
                         screen.blit(self.chip_1, (x, y))
@@ -170,3 +170,26 @@ class UtilitiesMain:
                 chip = self.chip_2
 
             return turn, chip
+
+    def timer(self, screen: pg.Surface, start_time, clock):
+        seconds = pg.time.get_ticks() - start_time
+        minutes = 0
+
+        if seconds >= 59900 and seconds <= 60100:
+            start_time *= pg.time.get_ticks()
+            seconds = 0
+            minutes += 1
+
+        timeF = f"{seconds // 1000}"
+
+        if minutes > 0:
+            timeF = f"{minutes} : {seconds // 1000}"
+        else:
+            pass
+
+        textTime = self.font.render(timeF, True, (255, 255, 255))
+
+        screen.blit(textTime, (self.width // 2, 15))
+        clock.tick(60)
+
+        return start_time

@@ -1,5 +1,5 @@
 import pygame as pg
-import os
+import sys
 import time
 
 from itertools import cycle
@@ -47,17 +47,20 @@ class InitScreen:
             ]
         )
 
-        intro = True
-        while intro == True:
+        startGame = True
+        while startGame == True:
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
-                    intro = False
+                    if event.key == pg.K_ESCAPE:
+                        sys.exit()
+
+                    startGame = False
                     return
 
             self.screen.blit(next(backgrounds), (0, 0))
 
             pg.display.update()
 
-            time.sleep(1)
+            time.sleep(1.5)
 
             Clock.tick(60)
