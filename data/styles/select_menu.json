@@ -150,5 +150,30 @@
             "size": "80",
             "regular_path": "data/fonts/classic.ttf"
         }
+    },
+
+    "#PlayerName":
+    {
+        "colours":
+        {
+            "normal_text": "#202020",
+            "normal_border": "#202020",
+            "dark_bg": "#A0A0A0",
+            "link_text": "#C0E0FF"
+        },
+
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "15",
+            "border_width": "3"
+        },
+
+        "font":
+        {
+            "name": "classic",
+            "size": "40",
+            "regular_path": "data/fonts/classic.ttf"
+        }
     }
 }

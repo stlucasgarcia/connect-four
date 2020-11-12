@@ -35,6 +35,7 @@ class MainScreen:
             "resume": self.config.op_resume,
             "st_menu": self.config.op_start_menu,
             "quit": self.config.op_quit,
+            "theme": self.config.theme,
         }
         menu = OptionsMenu(**attr)
 

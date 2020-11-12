@@ -4,6 +4,9 @@ import os
 
 from typing import Tuple, Any
 
+T = Tuple[int, int, int, int]
+S = Tuple[Tuple[int, int], Tuple[int, int]]
+
 
 class Settings:
     def __init__(self):
@@ -17,10 +20,21 @@ class Settings:
         self.font: Any
         self.style: str = "data/styles/"
         self.volume: float
-        self.op_label = Tuple[int, int, int, int]
-        self.op_resume = Tuple[Tuple[int, int], Tuple[int, int]]
-        self.op_start_menu = Tuple[Tuple[int, int], Tuple[int, int]]
-        self.op_quit = Tuple[Tuple[int, int], Tuple[int, int]]
+
+        self.sm_title = T
+        self.sm_mode_txt = T
+        self.sm_mode = S
+        self.sm_theme_text = T
+        self.sm_theme = S
+        self.sm_res_text = T
+        self.sm_res = S
+        self.sm_next = S
+        self.sm_quit = S
+
+        self.op_label = T
+        self.op_resume = S
+        self.op_start_menu = S
+        self.op_quit = S
 
         pg.init()
 
@@ -28,6 +42,7 @@ class Settings:
         self._config_theme()
         self._config_font()
         self._config_sound()
+        self._config_start_menu()
 
     def _full_hd(self):
         self.width = 1920
@@ -52,6 +67,7 @@ class Settings:
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 75)
             self.style += "options_menu_classic.json"
             self.volume = 0.25
+
             self.op_label = (
                 (840, 260, 250, 160) if self.fullhd else (520, 100, 250, 160)
             )
@@ -69,6 +85,7 @@ class Settings:
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\halloween.otf", 75)
             self.style += "options_menu_halloween.json"
             self.volume = 0.35
+
             self.op_label = (
                 (840, 260, 270, 160) if self.fullhd else (500, 100, 280, 160)
             )
@@ -86,6 +103,7 @@ class Settings:
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\old_west.otf", 75)
             self.style += "options_menu_old_west.json"
             self.volume = 0.30
+
             self.op_label = (
                 (820, 260, 270, 160) if self.fullhd else (515, 100, 250, 160)
             )
@@ -103,6 +121,7 @@ class Settings:
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\\vaporwave.otf", 75)
             self.style += "options_menu_vaporwave.json"
             self.volume = 0.35
+
             self.op_label = (
                 (840, 260, 290, 160) if self.fullhd else (500, 100, 290, 160)
             )
@@ -120,6 +139,7 @@ class Settings:
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\christmas.ttf", 75)
             self.style += "options_menu_christmas.json"
             self.volume = 0.10
+
             self.op_label = (740, 220, 470, 210) if self.fullhd else (445, 60, 400, 210)
             self.op_resume = (
                 ((880, 440), (180, 80)) if self.fullhd else ((555, 280), (180, 80))
@@ -140,11 +160,25 @@ class Settings:
 
         if self.size == (1280, 720):
             self.bg_image = pg.transform.scale(self.bg_image, (1280, 720))
-            res = 86
-            self.chip_1 = pg.transform.scale(self.chip_1, (res, res))
-            self.chip_2 = pg.transform.scale(self.chip_2, (res, res))
+            self.chip_1 = pg.transform.scale(self.chip_1, (86, 86))
+            self.chip_2 = pg.transform.scale(self.chip_2, (86, 86))
 
     def _config_sound(self):
         pg.mixer.music.load(f"data/soundtracks/{self.theme}.mp3")
         self.sound_chip_1 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_1.mp3")
         self.sound_chip_2 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_2.mp3")
+
+    def _config_start_menu(self):
+        self.sm_title = (660, 20, 600, 300) if self.fullhd else (520, 100, 250, 160)
+        self.sm_mode_txt = (460, 260, 200, 300) if self.fullhd else (520, 100, 250, 160)
+        self.sm_mode = ((470, 460), (200, 40)) if self.fullhd else (520, 100, 250, 160)
+        self.sm_theme_text = (
+            (860, 260, 200, 300) if self.fullhd else (520, 100, 250, 160)
+        )
+        self.sm_theme = ((870, 460), (200, 40)) if self.fullhd else (520, 100, 250, 160)
+        self.sm_res_text = (
+            (1260, 260, 250, 300) if self.fullhd else (520, 100, 250, 160)
+        )
+        self.sm_res = ((1240, 460), (290, 40)) if self.fullhd else (520, 100, 250, 160)
+        self.sm_next = ((875, 600), (170, 70)) if self.fullhd else (520, 100, 250, 160)
+        self.sm_quit = ((885, 850), (150, 70)) if self.fullhd else (520, 100, 250, 160)
