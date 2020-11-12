@@ -82,9 +82,9 @@ class UtilitiesMain:
             else:
                 return 0
 
-    def draw_board(self, matrix: np.ndarray) -> None:
+    def draw_board(self, matrix: np.ndarray, start_time, clock) -> None:
         self.screen.blit(self.background_image, (0, 0))
-
+        start_time = self.timer(start_time, clock)
         for column in range(self.COLUMN_AMOUNT):
             for row in range(self.ROW_AMOUNT):
 
@@ -108,6 +108,7 @@ class UtilitiesMain:
 
                     elif matrix[row][column] == 2:
                         self.screen.blit(self.chip_2, (x, y))
+        return start_time
 
     def get_open_row(self, matrix: np.ndarray, column: int) -> int:
         for row in range(self.ROW_AMOUNT):
@@ -196,7 +197,7 @@ class UtilitiesMain:
     def timer(self, start_time, clock):
         seconds = pg.time.get_ticks() - start_time
         minutes = 0
-
+        print(start_time)
         if seconds >= 59900 and seconds <= 60100:
             start_time *= pg.time.get_ticks()
             seconds = 0
@@ -212,8 +213,8 @@ class UtilitiesMain:
         textTime = self.font.render(timeF, True, (255, 255, 255))
 
         self.screen.blit(textTime, (self.width // 2, 15))
-        clock.tick(60)
 
+        clock.tick(60)
         return start_time
 
     def playerTurn(
@@ -224,6 +225,8 @@ class UtilitiesMain:
         sound_chip_1,
         sound_chip_2,
         usernames,
+        start_time,
+        clock,
     ):
         turn = player_turn
         play_again = None
@@ -242,7 +245,7 @@ class UtilitiesMain:
 
             if self.is_victory(matrix, turn) or self.is_tie(matrix):
 
-                self.draw_board(matrix)
+                self.draw_board(matrix, start_time, clock)
 
                 data = {usernames[0]: 10, usernames[1]: 5}
 

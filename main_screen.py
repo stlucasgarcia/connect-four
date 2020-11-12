@@ -48,23 +48,23 @@ class MainScreen:
 
         matrix = utilities.create_matrix()
 
-        turn: int = 0
-
         chip = self.chip_2
 
         close_loop: bool = False
 
-        x, y = 0, 0
+        x, y = 950, 15
 
         seconds, minutes = 0, 0
 
-        player_turn = 1
+        player_turn: int = 1
         # try:
         #     joystick_count = pg.joystick.get_count()
 
         pg.mixer.music.play(loops=-1)
         pg.mixer.music.set_volume(self.volume)
         while not close_loop:
+            start_time = utilities.draw_board(matrix, start_time, clock)
+            self.screen.blit(chip, (x, y))
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     close_loop = True
@@ -73,10 +73,6 @@ class MainScreen:
                 if event.type == pg.MOUSEMOTION:
                     x = event.pos[0]
                     y = event.pos[1]
-
-                utilities.draw_board(matrix)
-
-                self.screen.blit(chip, (x, y))
 
                 if event.type == pg.MOUSEBUTTONDOWN:
                     save_chip = chip
@@ -90,9 +86,10 @@ class MainScreen:
                             self.sound_chip_1,
                             self.sound_chip_2,
                             usernames,
+                            start_time,
+                            clock,
                         )
 
-                        print(play_again)
                         if play_again != None:
                             return play_again
 
@@ -105,8 +102,8 @@ class MainScreen:
                         if not play_again:
                             return play_again
 
-            # utilities.timer(self.screen, start_time, clock) #TODO FIX THIS
-
+            # start_time = utilities.timer(start_time, clock)  # TODO FIX THIS
+            # self.screen.blit(chip, (x, y))
             pg.display.update()
 
             clock.tick(60)
