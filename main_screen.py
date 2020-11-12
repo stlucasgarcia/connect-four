@@ -9,7 +9,6 @@ from controller import Controller
 from settings import Settings
 from menu import OptionsMenu
 
-control = Controller()
 
 class MainScreen:
     def __init__(
@@ -29,10 +28,9 @@ class MainScreen:
         self.chip_1 = self.config.chip_1
         self.chip_2 = self.config.chip_2
         self.ai_chip = 2
-        
-
 
     def main_screen(self, usernames: list, option="AI"):
+        control = Controller()
         utilities = UtilitiesMain(self.screen)
 
         start_time = pg.time.get_ticks()
@@ -74,13 +72,14 @@ class MainScreen:
                     close_loop = True
                     sys.exit()
 
+                if self.is_controller:
+                    if control.checkController():
+                        x = control.x_hd
+                        y = 8
+
                 if event.type == pg.MOUSEMOTION:
                     x = event.pos[0]
                     y = event.pos[1]
-                
-                if control.checkController():
-                    x = control.x_hd
-                    y = 8
 
                 if event.type == pg.MOUSEBUTTONDOWN:
                     save_chip = chip
@@ -104,36 +103,36 @@ class MainScreen:
 
                         if chip == None:
                             chip = save_chip
-                
-                if control.isControllerDropEvent(event):
-                    save_chip = chip
+                if self.is_controller:
+                    if control.isControllerDropEvent(event):
+                        save_chip = chip
 
-                    column = utilities.location_X(control.get_x_pos(event))
-                    if column != 0:
-                        play_again, player_turn, chip = utilities.playersTurn(
-                            column,
-                            matrix,
-                            player_turn,
-                            self.sound_chip_1,
-                            self.sound_chip_2,
-                            usernames,
-                            start_time,
-                            clock,
-                            option,
-                        )
+                        column = utilities.location_X(control.get_x_pos(event))
+                        if column != 0:
+                            play_again, player_turn, chip = utilities.playersTurn(
+                                column,
+                                matrix,
+                                player_turn,
+                                self.sound_chip_1,
+                                self.sound_chip_2,
+                                usernames,
+                                start_time,
+                                clock,
+                                option,
+                            )
 
-                        if play_again != None:
-                            return play_again
+                            if play_again != None:
+                                return play_again
 
-                        if chip == None:
-                            chip = save_chip
+                            if chip == None:
+                                chip = save_chip
 
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         play_again = menu.run(self.screen, clock)
                         if not play_again:
                             return play_again
-                
+
                 if control.isControllerEvent(event):
                     screen = self.screen
                     control.check_event(event, menu, screen, clock)
