@@ -3,6 +3,7 @@ import pygame as pg
 from starter_screen import InitScreen
 from main_screen import MainScreen
 from settings import Settings
+from menu import StarterMenu
 
 pg.init()
 
@@ -13,7 +14,7 @@ height: int = config.height
 
 size: tuple = (width, height)
 
-screen: pg.Surface = pg.display.set_mode((size), pg.FULLSCREEN)
+screen: pg.Surface = pg.display.set_mode(size, pg.FULLSCREEN)
 
 pg.display.set_caption("Connect Four")
 
@@ -36,6 +37,22 @@ except pg.error:
 
 InitScreen_object: object = InitScreen(screen)
 InitScreen_object.starter_screen()
+
+StarterMenu(
+    res=config.size,
+    sm_res=[
+        config.sm_title,
+        config.sm_mode_txt,
+        config.sm_mode,
+        config.sm_theme_text,
+        config.sm_theme,
+        config.sm_res_text,
+        config.sm_res,
+        config.sm_next,
+        config.sm_quit,
+    ],
+    screen=screen,
+).run()
 
 MainScreen_object: object = MainScreen(screen, is_controller)
 MainScreen_object.main_screen()

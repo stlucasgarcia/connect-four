@@ -21,8 +21,8 @@ class OptionsMenu:
         self.starter_res = attr["st_menu"]
         self.quit_res = attr["quit"]
 
-        pg.init()
-        pg.display.set_mode(self.res, pg.FULLSCREEN)
+        # pg.init()
+        # pg.display.set_mode(self.res, pg.FULLSCREEN)
         self.img = pg.image.load(
             f"data\images\\background\\{attr['theme']}\esc_image.png"
         )
@@ -117,8 +117,6 @@ class StarterMenu:
         self.name1: str = "AI"
         self.name2: str = "AI"
 
-        pg.init()
-        pg.display.set_mode(self.res)
         self.clock = pg.time.Clock()
         self._create_first_UI()
 
@@ -219,16 +217,17 @@ class StarterMenu:
         data: dict = {}
         self.next.disable()
 
+        img = pg.image.load("data/images/menu/select_menu.png")
+
+        if self.res == (1280, 720):
+            img = pg.transform.scale(img, self.res)
+
         while selected:
             pg.mouse.set_visible(True)
             time_delta = self.clock.tick(60) / 1000.0
 
             for event in pg.event.get():
                 self.manager.process_events(event)
-
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE:
-                        selected = False
 
                 if self.window == "select":
                     if (
@@ -286,9 +285,8 @@ class StarterMenu:
                 if self.quit.check_pressed():
                     exit()
 
-            self.screen.fill((255, 255, 255))
-
             self.manager.update(time_delta)
+            self.screen.blit(img, (0, 0))
             self.manager.draw_ui(self.screen)
 
             pg.mouse.set_visible(False)
@@ -302,27 +300,3 @@ class StarterMenu:
     def _export(data: dict):
         with open("user_settings.json", "w") as user:
             dump(data, user, indent=4)
-
-
-# pg.init()
-# screen = pg.display.set_mode((1920, 1080), pg.FULLSCREEN)
-#
-# from settings import Settings
-#
-# st = Settings()
-#
-# StarterMenu(
-#     res=st.size,
-#     sm_res=[
-#         st.sm_title,
-#         st.sm_mode_txt,
-#         st.sm_mode,
-#         st.sm_theme_text,
-#         st.sm_theme,
-#         st.sm_res_text,
-#         st.sm_res,
-#         st.sm_next,
-#         st.sm_quit,
-#     ],
-#     screen=screen,
-# ).run()

@@ -169,16 +169,26 @@ class Settings:
         self.sound_chip_2 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_2.mp3")
 
     def _config_start_menu(self):
-        self.sm_title = (660, 20, 600, 300) if self.fullhd else (520, 100, 250, 160)
-        self.sm_mode_txt = (460, 260, 200, 300) if self.fullhd else (520, 100, 250, 160)
-        self.sm_mode = ((470, 460), (200, 40)) if self.fullhd else (520, 100, 250, 160)
+        self.sm_title = (660, 20, 600, 300) if self.fullhd else (340, 40, 600, 150)
+        self.sm_mode_txt = (460, 260, 200, 300) if self.fullhd else (460, 260, 200, 300)
+        self.sm_mode = (
+            ((470, 460), (200, 40)) if self.fullhd else ((270, 460), (200, 40))
+        )
         self.sm_theme_text = (
-            (860, 260, 200, 300) if self.fullhd else (520, 100, 250, 160)
+            (860, 260, 200, 300) if self.fullhd else (240, 260, 200, 300)
         )
-        self.sm_theme = ((870, 460), (200, 40)) if self.fullhd else (520, 100, 250, 160)
+        self.sm_theme = (
+            ((870, 460), (200, 40)) if self.fullhd else ((540, 460), (200, 40))
+        )
         self.sm_res_text = (
-            (1260, 260, 250, 300) if self.fullhd else (520, 100, 250, 160)
+            (1260, 260, 250, 300) if self.fullhd else (1260, 260, 250, 300)
         )
-        self.sm_res = ((1240, 460), (290, 40)) if self.fullhd else (520, 100, 250, 160)
-        self.sm_next = ((875, 600), (170, 70)) if self.fullhd else (520, 100, 250, 160)
-        self.sm_quit = ((885, 850), (150, 70)) if self.fullhd else (520, 100, 250, 160)
+        self.sm_res = (
+            ((1240, 460), (290, 40)) if self.fullhd else ((1240, 460), (290, 40))
+        )
+        self.sm_next = (
+            ((875, 600), (170, 70)) if self.fullhd else ((875, 600), (170, 70))
+        )
+        self.sm_quit = (
+            ((885, 850), (150, 70)) if self.fullhd else ((885, 850), (150, 70))
+        )
