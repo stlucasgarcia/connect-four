@@ -105,6 +105,9 @@ class StarterMenu:
             self.sm_res,
             self.sm_next,
             self.sm_quit,
+            self.sm_p1,
+            self.sm_p2,
+            self.sm_p1_1,
         ) = attr["sm_res"]
 
         self.style: str = "data/styles/select_menu.json"
@@ -189,20 +192,20 @@ class StarterMenu:
     def _ver(self):
         if self.plrs == (True, True):
             self.p1 = pygame_gui.elements.UITextEntryLine(
-                pg.Rect((430, 460), (250, 150)),
+                pg.Rect(*self.sm_p1),
                 self.manager,
                 object_id="#PlayerName",
             )
 
             self.p2 = pygame_gui.elements.UITextEntryLine(
-                pg.Rect((1260, 460), (250, 150)),
+                pg.Rect(*self.sm_p2),
                 self.manager,
                 object_id="#PlayerName",
             )
 
         elif self.plrs == (True, False):
             self.p1 = pygame_gui.elements.UITextEntryLine(
-                pg.Rect((845, 460), (250, 150)),
+                pg.Rect(*self.sm_p1_1),
                 self.manager,
                 object_id="#PlayerName",
             )

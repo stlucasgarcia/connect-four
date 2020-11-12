@@ -56,6 +56,9 @@ def game_run():
                     config.sm_res,
                     config.sm_next,
                     config.sm_quit,
+                    config.sm_p1,
+                    config.sm_p2,
+                    config.sm_p1_1,
                 ],
                 screen=screen,
             ).run()

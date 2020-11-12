@@ -170,25 +170,35 @@ class Settings:
 
     def _config_start_menu(self):
         self.sm_title = (660, 20, 600, 300) if self.fullhd else (340, 40, 600, 150)
-        self.sm_mode_txt = (460, 260, 200, 300) if self.fullhd else (460, 260, 200, 300)
+        self.sm_mode_txt = (460, 260, 200, 300) if self.fullhd else (140, 150, 200, 300)
         self.sm_mode = (
-            ((470, 460), (200, 40)) if self.fullhd else ((270, 460), (200, 40))
+            ((470, 460), (200, 40)) if self.fullhd else ((150, 350), (200, 40))
         )
         self.sm_theme_text = (
-            (860, 260, 200, 300) if self.fullhd else (240, 260, 200, 300)
+            (860, 260, 200, 300) if self.fullhd else (540, 150, 200, 300)
         )
         self.sm_theme = (
-            ((870, 460), (200, 40)) if self.fullhd else ((540, 460), (200, 40))
+            ((870, 460), (200, 40)) if self.fullhd else ((550, 350), (200, 40))
         )
         self.sm_res_text = (
-            (1260, 260, 250, 300) if self.fullhd else (1260, 260, 250, 300)
+            (1260, 260, 250, 300) if self.fullhd else (940, 150, 250, 300)
         )
         self.sm_res = (
-            ((1240, 460), (290, 40)) if self.fullhd else ((1240, 460), (290, 40))
+            ((1240, 460), (290, 40)) if self.fullhd else ((930, 350), (290, 40))
         )
         self.sm_next = (
-            ((875, 600), (170, 70)) if self.fullhd else ((875, 600), (170, 70))
+            ((875, 600), (170, 70)) if self.fullhd else ((555, 500), (170, 70))
         )
         self.sm_quit = (
-            ((885, 850), (150, 70)) if self.fullhd else ((885, 850), (150, 70))
+            ((885, 850), (150, 70)) if self.fullhd else ((565, 630), (150, 70))
+        )
+
+        self.sm_p1 = (
+            ((430, 460), (250, 150)) if self.fullhd else ((110, 350), (250, 150))
+        )
+        self.sm_p2 = (
+            ((1260, 460), (250, 150)) if self.fullhd else ((940, 350), (250, 150))
+        )
+        self.sm_p1_1 = (
+            ((845, 460), (250, 150)) if self.fullhd else ((515, 350), (250, 150))
         )
