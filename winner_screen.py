@@ -65,6 +65,12 @@ class EndingScreen:
 
         ending = True
         while ending:
+            pg.mixer.music.fadeout(1000)
+
+            # bg_music = pg.mixer.Sound(f"data/soundtracks/classic.mp3")
+            # pg.mixer.music.play(loops=-1)
+            # pg.mixer.music.set_volume(1)
+
             text = FONT.render("SCORE SCREEN", True, (GREY))
             text_rec = text.get_rect().width // 2
 
@@ -95,6 +101,7 @@ class EndingScreen:
                     return True
 
                 if self.starter_menu.check_pressed():
+
                     return False
 
                 if self.quit.check_pressed():

@@ -20,12 +20,13 @@ class MainScreen:
         self.screen: pg.Surface = screen
         self.background_image: pg.Surface = self.config.bg_image
         self.is_controller = is_controller
+
         self.sound_chip_1 = self.config.sound_chip_1
         self.sound_chip_2 = self.config.sound_chip_2
         self.volume = self.config.volume
         self.chip_1 = self.config.chip_1
 
-    def main_screen(self):
+    def main_screen(self, usernames: list):
         utilities = UtilitiesMain()
 
         start_time = pg.time.get_ticks()
@@ -70,6 +71,7 @@ class MainScreen:
                     x = event.pos[0]
 
                     y = event.pos[1]
+
                 utilities.draw_board(matrix, self.screen)
 
                 self.screen.blit(chip, (x, y))
@@ -103,9 +105,8 @@ class MainScreen:
                                     matrix
                                 ):
                                     utilities.draw_board(matrix, self.screen)
-                                    # pg.mixer.music.fadeout(5000)
 
-                                    data = {"Guilherme": 10, "Leonardo": 5}
+                                    data = {f"{usernames[0]}": 10, f"{usernames[1]}": 5}
 
                                     ending = EndingScreen(
                                         self.screen,
@@ -149,9 +150,7 @@ class MainScreen:
                                 ):
                                     utilities.draw_board(matrix, self.screen)
 
-                                    # pg.mixer.music.fadeout(5000)
-
-                                    data = {"Guilherme": 10, "Leonardo": 5}
+                                    data = {f"{usernames[0]}": 10, f"{usernames[1]}": 5}
 
                                     ending = EndingScreen(
                                         self.screen,

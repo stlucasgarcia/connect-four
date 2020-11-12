@@ -31,10 +31,10 @@ def game_run():
     is_controller: bool = False
 
     isRunning = True
-    InitScreen_object: object = InitScreen(screen)
+    InitScreen_object = InitScreen(screen)
     InitScreen_object.starter_screen()
     play_again = False
-
+    name1, name2 = None, None
     while isRunning:
         try:
             joystick = pg.joystick.Joystick(0)
@@ -60,8 +60,10 @@ def game_run():
                 screen=screen,
             ).run()
 
+        pg.mouse.set_visible(0)
+
         MainScreen_object = MainScreen(screen, is_controller)
-        play_again = MainScreen_object.main_screen()
+        play_again = MainScreen_object.main_screen(usernames=[name1, name2])
 
 
 if __name__ == "__main__":
