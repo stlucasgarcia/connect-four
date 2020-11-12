@@ -1,7 +1,9 @@
 import pygame as pg
 import sys
 
-from winner_screen import EndingScreen
+from pygame.image import save
+
+from ending_screens import EndingScreen
 from utilities import UtilitiesMain
 
 # from controller import Controller
@@ -24,10 +26,10 @@ class MainScreen:
         self.sound_chip_1 = self.config.sound_chip_1
         self.sound_chip_2 = self.config.sound_chip_2
         self.volume = self.config.volume
-        self.chip_1 = self.config.chip_1
+        self.chip_2 = self.config.chip_2
 
     def main_screen(self, usernames: list):
-        utilities = UtilitiesMain()
+        utilities = UtilitiesMain(self.screen)
 
         start_time = pg.time.get_ticks()
 
@@ -48,7 +50,7 @@ class MainScreen:
 
         turn: int = 0
 
-        chip: pg.Surface = self.chip_1
+        chip = self.chip_2
 
         close_loop: bool = False
 
@@ -56,6 +58,7 @@ class MainScreen:
 
         seconds, minutes = 0, 0
 
+        player_turn = 1
         # try:
         #     joystick_count = pg.joystick.get_count()
 
@@ -69,110 +72,38 @@ class MainScreen:
 
                 if event.type == pg.MOUSEMOTION:
                     x = event.pos[0]
-
                     y = event.pos[1]
 
-                utilities.draw_board(matrix, self.screen)
+                utilities.draw_board(matrix)
 
                 self.screen.blit(chip, (x, y))
 
                 if event.type == pg.MOUSEBUTTONDOWN:
+                    save_chip = chip
                     print(x, y)
-                    if turn == 0:
-                        # Player 1 input
-                        column = utilities.location_X(pg.mouse.get_pos()[0])
+                    column = utilities.location_X(pg.mouse.get_pos()[0])
+                    if column != 0:
+                        play_again, player_turn, chip = utilities.playerTurn(
+                            column,
+                            matrix,
+                            player_turn,
+                            self.sound_chip_1,
+                            self.sound_chip_2,
+                            usernames,
+                        )
 
-                        if column != 0:
-                            column -= 1
+                        print(play_again)
+                        if play_again != None:
+                            return play_again
 
-                            is_pos_available = utilities.is_available(matrix, column)
-
-                            if is_pos_available:
-                                self.sound_chip_1.play()
-
-                                row = utilities.get_open_row(matrix, column)
-
-                                try:
-                                    turn, chip = utilities.is_valid(
-                                        column + 1, is_pos_available, turn
-                                    )
-                                except TypeError:
-                                    pass
-
-                                utilities.drop_piece(matrix, row, column, 1)
-
-                                if utilities.is_victory(matrix, 1) or utilities.is_tie(
-                                    matrix
-                                ):
-                                    utilities.draw_board(matrix, self.screen)
-
-                                    data = {f"{usernames[0]}": 10, f"{usernames[1]}": 5}
-
-                                    ending = EndingScreen(
-                                        self.screen,
-                                        data,
-                                        res=self.config.size,
-                                        pg_res=self.config.win_pg,
-                                        sm_res=self.config.win_sm,
-                                        quit_res=self.config.win_quit,
-                                        lb_res=self.config.win_ld,
-                                    )
-
-                                    play_again = ending.scores()
-
-                                    print(play_again)
-                                    return play_again
-
-                    else:
-                        # Player 2 input
-                        column = utilities.location_X(pg.mouse.get_pos()[0])
-
-                        if column != 0:
-                            column -= 1
-
-                            is_pos_available = utilities.is_available(matrix, column)
-
-                            if utilities.is_available(matrix, column):
-                                self.sound_chip_2.play()
-
-                                row = utilities.get_open_row(matrix, column)
-
-                                try:
-                                    turn, chip = utilities.is_valid(
-                                        column + 1, is_pos_available, turn
-                                    )
-                                except TypeError:
-                                    pass
-
-                                utilities.drop_piece(matrix, row, column, 2)
-
-                                if utilities.is_victory(matrix, 2) or utilities.is_tie(
-                                    matrix
-                                ):
-                                    utilities.draw_board(matrix, self.screen)
-
-                                    data = {f"{usernames[0]}": 10, f"{usernames[1]}": 5}
-
-                                    ending = EndingScreen(
-                                        self.screen,
-                                        data,
-                                        res=self.config.size,
-                                        pg_res=self.config.win_pg,
-                                        sm_res=self.config.win_sm,
-                                        quit_res=self.config.win_quit,
-                                        lb_res=self.config.win_ld,
-                                    )
-
-                                    close_loop = True
-                                    play_again = ending.scores()
-
-                                    print(play_again)
-                                    return play_again
+                        if chip == None:
+                            chip = save_chip
 
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
-                        menu.run(self.screen, clock)
-                        return False
+                        play_again = menu.run(self.screen, clock)
+                        if not play_again:
+                            return play_again
 
             # utilities.timer(self.screen, start_time, clock) #TODO FIX THIS
 

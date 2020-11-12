@@ -70,9 +70,11 @@ class OptionsMenu:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         options = False
+                        return True
 
                 if self.resume.check_pressed():
                     options = False
+                    return True
 
                 if self.starter_menu.check_pressed():
                     return False
@@ -213,6 +215,8 @@ class StarterMenu:
         self.next.disable()
 
     def run(self):
+        pg.mixer.music.stop()
+
         selected = True
         data: dict = {}
         self.next.disable()

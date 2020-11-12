@@ -30,12 +30,18 @@ def game_run():
 
     is_controller: bool = False
 
+    changes_res = False
+
     isRunning = True
+
     InitScreen_object = InitScreen(screen)
     InitScreen_object.starter_screen()
+
     play_again = False
     name1, name2 = None, None
     while isRunning:
+        pg.mouse.set_visible(0)
+
         try:
             joystick = pg.joystick.Joystick(0)
             is_controller = True
@@ -62,6 +68,11 @@ def game_run():
                 ],
                 screen=screen,
             ).run()
+
+        if changes_res:
+            pg.quit()
+            isRunning = False
+            game_run()
 
         pg.mouse.set_visible(0)
 

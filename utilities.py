@@ -1,14 +1,18 @@
 import numpy as np
+
 import pygame as pg
 from settings import Settings
+from ending_screens import EndingScreen
 
 
 class UtilitiesMain:
-    def __init__(self):
+    def __init__(self, screen: pg.Surface):
         self.config = Settings()
+        self.screen = screen
 
         self.COLUMN_AMOUNT = 7
         self.ROW_AMOUNT = 6
+
         self.font = self.config.font
         self.background_image = self.config.bg_image
         self.chip_1 = self.config.chip_1
@@ -78,8 +82,8 @@ class UtilitiesMain:
             else:
                 return 0
 
-    def draw_board(self, matrix: np.ndarray, screen) -> None:
-        screen.blit(self.background_image, (0, 0))
+    def draw_board(self, matrix: np.ndarray) -> None:
+        self.screen.blit(self.background_image, (0, 0))
 
         for column in range(self.COLUMN_AMOUNT):
             for row in range(self.ROW_AMOUNT):
@@ -100,10 +104,10 @@ class UtilitiesMain:
                         y = 923.75 - (Y_CONST * (row) + (17.43 * (row)))
 
                     if matrix[row][column] == 1:
-                        screen.blit(self.chip_1, (x, y))
+                        self.screen.blit(self.chip_1, (x, y))
 
                     elif matrix[row][column] == 2:
-                        screen.blit(self.chip_2, (x, y))
+                        self.screen.blit(self.chip_2, (x, y))
 
     def get_open_row(self, matrix: np.ndarray, column: int) -> int:
         for row in range(self.ROW_AMOUNT):
@@ -158,20 +162,38 @@ class UtilitiesMain:
     def is_tie(self, matrix: np.ndarray):
         return (matrix[:][:] != 0).all()
 
-    def is_valid(self, column: int, is_position_available: bool, turn: float):
+    def is_valid(
+        self,
+        column: int,
+        is_position_available: bool,
+        turn: int,
+        sound_chip_1,
+        sound_chip_2,
+    ):
+
+        chip = None
         if column != 0 and is_position_available:
             turn += 1
 
-            turn %= 2
-
-            if turn == 0:
+            if turn % 2 == 0:
                 chip = self.chip_1
-            else:
+
+                turn = 2
+
+                sound_chip_1.play()
+
+                return turn, chip
+
+            elif turn % 2 == 1:
                 chip = self.chip_2
 
-            return turn, chip
+                turn = 1
 
-    def timer(self, screen: pg.Surface, start_time, clock):
+                sound_chip_2.play()
+
+                return turn, chip
+
+    def timer(self, start_time, clock):
         seconds = pg.time.get_ticks() - start_time
         minutes = 0
 
@@ -189,7 +211,51 @@ class UtilitiesMain:
 
         textTime = self.font.render(timeF, True, (255, 255, 255))
 
-        screen.blit(textTime, (self.width // 2, 15))
+        self.screen.blit(textTime, (self.width // 2, 15))
         clock.tick(60)
 
         return start_time
+
+    def playerTurn(
+        self,
+        column: int,
+        matrix: np.ndarray,
+        player_turn,
+        sound_chip_1,
+        sound_chip_2,
+        usernames,
+    ):
+        turn = player_turn
+        play_again = None
+        chip = None
+        column -= 1
+        is_pos_available = self.is_available(matrix, column)
+
+        if is_pos_available:
+            turn, chip = self.is_valid(
+                column + 1, is_pos_available, turn, sound_chip_1, sound_chip_2
+            )
+
+            row = self.get_open_row(matrix, column)
+
+            self.drop_piece(matrix, row, column, turn)
+
+            if self.is_victory(matrix, turn) or self.is_tie(matrix):
+
+                self.draw_board(matrix)
+
+                data = {usernames[0]: 10, usernames[1]: 5}
+
+                ending = EndingScreen(
+                    self.screen,
+                    data,
+                    res=self.config.size,
+                    pg_res=self.config.win_pg,
+                    sm_res=self.config.win_sm,
+                    quit_res=self.config.win_quit,
+                    lb_res=self.config.win_ld,
+                )
+
+                play_again = ending.scores()
+
+        return play_again, turn, chip
