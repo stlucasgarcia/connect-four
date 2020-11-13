@@ -155,9 +155,12 @@ class MainScreen:
                     matrix, 5, -math.inf, math.inf, True
                 )
 
+                pg.time.wait(200)
+
                 if utilities.is_available(matrix, column):
                     row = utilities.get_open_row(matrix, column)
                     utilities.drop_piece(matrix, row, column, self.ai_chip)
+                    self.sound_chip_1.play()
 
                     if utilities.is_victory(matrix, self.ai_chip):
                         scores[1] += 1
