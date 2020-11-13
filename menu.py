@@ -300,6 +300,9 @@ class StarterMenu:
 
     def run(self):
         pg.mixer.music.stop()
+        snd = pg.mixer.Sound("data/soundtracks/select_menu.mp3")
+        pg.mixer.Sound.play(snd, -1)
+        pg.mixer.Sound.set_volume(snd, 0.25)
 
         self.next.disable()
 
@@ -339,6 +342,8 @@ class StarterMenu:
             pg.mouse.set_visible(False)
 
             pg.display.update()
+
+        pg.mixer.Sound.stop(snd)
 
         change_res = StarterMenu._export(self.data)
         return self.name1, self.name2, change_res

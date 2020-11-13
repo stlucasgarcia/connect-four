@@ -18,9 +18,6 @@ class Controller:
             self.type.append(self.joysticks[i].get_name())
 
             axes = self.joysticks[i].get_numaxes()
-            print(axes)
-
-        print(self.joysticks)
 
     def checkController(self):
         if self.joysticks:
@@ -50,6 +47,7 @@ class Controller:
                     return event.value[1] == -1
                 if event.type == JOYAXISMOTION:
                     return abs(event.axis) == 5 and event.value == 1
+
     def isControllerEscEvent(self, event):
         if len(self.type) > 0:
             if self.type[0] == "PS4 Controller":
@@ -72,44 +70,36 @@ class Controller:
         if self.type[0] == "PS4 Controller":
             if event.type == JOYBUTTONDOWN:
                 if event.button == 13 or event.button == 9:
-                    print("Move left")
                     self.x_hd -= (
                         px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
                     )
 
                 if event.button == 14 or event.button == 10:
-                    print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
 
             if event.type == JOYAXISMOTION:
                 if abs(event.axis) == 0:
                     if event.value > 0.7:
-                        print("Move Right")
                         self.x_hd += 5 if self.x_hd + 5 < max_px_hd else 0
 
                     if event.value < -0.7:
-                        print("Move Left")
                         self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
 
         else:
             if event.type == JOYBUTTONDOWN:
                 if event.button == 4:
-                    print("Move left")
                     self.x_hd -= (
                         px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
                     )
 
                 if event.button == 5:
-                    print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
 
             if event.type == JOYHATMOTION:
                 if event.value[0] == 1:
-                    print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
 
                 if event.value[0] == -1:
-                    print("Move left")
                     self.x_hd -= (
                         px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
                     )
@@ -117,11 +107,9 @@ class Controller:
             if event.type == JOYAXISMOTION:
                 if abs(event.axis) == 0:
                     if event.value > 0.7:
-                        print("Move Right")
                         self.x_hd += 5 if self.x_hd + 5 < max_px_hd else 0
 
                     if event.value < -0.7:
-                        print("Move Left")
                         self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
 
         return self.x_hd
@@ -136,14 +124,12 @@ class Controller:
             # Press Buttons
             if event.type == JOYBUTTONDOWN:
                 if event.button == 13 or event.button == 9:
-                    print("Move left")
                     self.x_hd -= (
                         px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
                     )
                     return self.x_hd
 
                 if event.button == 14 or event.button == 10:
-                    print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
                     return self.x_hd
 
@@ -151,13 +137,11 @@ class Controller:
             if event.type == JOYAXISMOTION:
                 if abs(event.axis) == 0:
                     if event.value > 0.7:
-                        print("Move Right")
 
                         self.x_hd += 1 if self.x_hd + 1 < max_px_hd else 0
                         return self.x_hd
 
                     if event.value < -0.7:
-                        print("Move Left")
 
                         self.x_hd -= 1 if self.x_hd - 1 >= min_px_hd else 0
                         return self.x_hd
@@ -169,26 +153,22 @@ class Controller:
             if event.type == JOYBUTTONDOWN:
 
                 if event.button == 4:
-                    print("Move left")
                     self.x_hd -= (
                         px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
                     )
                     return self.x_hd
 
                 if event.button == 5:
-                    print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
                     return self.x_hd
 
             # D-pad Xbox
             if event.type == JOYHATMOTION:
                 if event.value[0] == 1:
-                    print("Move right")
                     self.x_hd += px_diff_hd if self.x_hd + px_diff_hd < max_px_hd else 0
                     return self.x_hd
 
                 if event.value[0] == -1:
-                    print("Move left")
                     self.x_hd -= (
                         px_diff_hd if self.x_hd - px_diff_hd >= min_px_hd else 0
                     )
@@ -197,11 +177,9 @@ class Controller:
             if event.type == JOYAXISMOTION:
                 if abs(event.axis) == 0:
                     if event.value > 0.7:
-                        print("Move Right")
                         self.x_hd += 1 if self.x_hd + 1 < max_px_hd else 0
                         return self.x_hd
 
                     if event.value < -0.7:
-                        print("Move Left")
                         self.x_hd -= 1 if self.x_hd - 1 >= min_px_hd else 0
                         return self.x_hd

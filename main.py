@@ -5,6 +5,8 @@ from main_screen import MainScreen
 from settings import Settings
 from menu import StarterMenu
 
+scores = [0, 0]
+
 # Pygame exit to stop initial loop
 def game_run():
     pg.init()
@@ -40,8 +42,6 @@ def game_run():
     play_again = False
     name1, name2 = None, None
 
-    score1, score2 = 0, 0
-
     while isRunning:
         pg.mouse.set_visible(False)
 
@@ -71,6 +71,7 @@ def game_run():
                 ],
                 screen=screen,
             ).run()
+            config = Settings()
 
         if changes_res:
             pg.quit()
@@ -79,10 +80,8 @@ def game_run():
 
         pg.mouse.set_visible(False)
 
-        MainScreen_object = MainScreen(screen, is_controller)
-        play_again = MainScreen_object.main_screen(
-            score1, score2, usernames=[name1, name2]
-        )
+        MainScreen_object = MainScreen(screen, is_controller, config.option)
+        play_again = MainScreen_object.main_screen(scores, usernames=[name1, name2])
 
 
 def re_exec():

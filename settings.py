@@ -13,6 +13,7 @@ class Settings:
         kwargs = json.load(open("user_settings.json", "r"))
         self.res = "_full_hd" if kwargs["resolution"] == "FULLHD" else "_hd"
         self.theme = kwargs["theme"]
+        self.option = kwargs["mode"]
 
         self.height: int
         self.width: int

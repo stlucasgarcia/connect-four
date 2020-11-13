@@ -4,6 +4,7 @@ import random
 import math
 
 from ending_screens import EndingScreen
+from datetime import timedelta
 from settings import Settings
 
 
@@ -87,10 +88,10 @@ class UtilitiesMain:
             else:
                 return 0
 
-    def draw_board(self, matrix: np.ndarray, start_time, clock, usernames) -> None:
+    def draw_board(self, matrix: np.ndarray, start_time, usernames) -> None:
         self.screen.blit(self.background_image, (0, 0))
 
-        start_time = self.timer(start_time, clock)
+        self.timer(start_time)
         self.print_names(usernames)
         for column in range(self.COLUMN_AMOUNT):
             for row in range(self.ROW_AMOUNT):
@@ -115,8 +116,6 @@ class UtilitiesMain:
 
                     elif matrix[row][column] == 2:
                         self.screen.blit(self.chip_2, (x, y))
-
-        return start_time
 
     def get_open_row(self, matrix: np.ndarray, column: int) -> int:
         for row in range(self.ROW_AMOUNT):
@@ -187,6 +186,7 @@ class UtilitiesMain:
         turn: int,
         sound_chip_1,
         sound_chip_2,
+        option,
     ):
 
         chip = None
@@ -194,7 +194,7 @@ class UtilitiesMain:
             turn += 1
 
             if turn % 2 == 0:
-                chip = self.chip_2
+                chip = self.chip_2 if option == "Player vs AI" else self.chip_1
 
                 turn = 2
 
@@ -203,7 +203,7 @@ class UtilitiesMain:
                 return turn, chip
 
             elif turn % 2 == 1:
-                chip = self.chip_1
+                chip = self.chip_1 if option == "Player vs AI" else self.chip_2
 
                 turn = 1
 
@@ -218,29 +218,19 @@ class UtilitiesMain:
             or len(self.get_available_list(matrix)) == 0  # TODO self.is_tie()
         )
 
-    def timer(self, start_time, clock):
-        seconds = pg.time.get_ticks() - start_time
-        minutes = 0
+    def timer(self, start_time):
+        hour, minutes, seconds = str(
+            timedelta(milliseconds=pg.time.get_ticks() - start_time)
+        ).split(":")
+        seconds = seconds.split(".")[0]
 
-        if seconds >= 59900 and seconds <= 60100:
-            start_time *= pg.time.get_ticks()
-            seconds = 0
-            minutes += 1
-
-        timeF = f"{seconds // 1000}"
-
-        if minutes > 0:
-            timeF = f"{minutes} : {seconds // 1000}"
-        else:
-            pass
+        time = f"{minutes} : {seconds}"
 
         y = 41 if self.width != 1280 else 27
 
-        textTime = self.font.render(timeF, True, (255, 255, 255))
+        text_time = self.font.render(time, True, (255, 255, 255))
 
-        self.screen.blit(textTime, (self.width // 2 - 15, y))
-
-        return start_time
+        self.screen.blit(text_time, (self.width // 2 - 80, y))
 
     def playersTurn(
         self,
@@ -251,10 +241,8 @@ class UtilitiesMain:
         sound_chip_2,
         usernames,
         start_time,
-        clock,
-        score1,
-        score2,
-        option="AI",
+        scores,
+        option,
     ):
         turn = player_turn
         play_again = None
@@ -265,7 +253,7 @@ class UtilitiesMain:
 
         if is_pos_available:
             turn, chip = self.is_valid(
-                column + 1, is_pos_available, turn, sound_chip_1, sound_chip_2
+                column + 1, is_pos_available, turn, sound_chip_1, sound_chip_2, option
             )
 
             row = self.get_open_row(matrix, column)
@@ -273,20 +261,20 @@ class UtilitiesMain:
             self.drop_piece(matrix, row, column, turn)
 
             if self.is_victory(matrix, turn) or self.is_tie(matrix):
-                print(score1, turn)
-                print(score2, turn)
-                score1 += 1 if turn % 2 == 0 else score1
-                print(score1, turn)
-                score2 += 1 if turn % 2 == 1 else score2
-                print(score2, turn)
+                print(scores[0], turn)
+                print(scores[1], turn)
+                scores[0] += 1 if turn % 2 == 0 else scores[0]
+                print(scores[0], turn)
+                scores[1] += 1 if turn % 2 == 1 else scores[1]
+                print(scores[1], turn)
 
-                start_time = self.draw_board(matrix, start_time, clock, usernames)
+                self.draw_board(matrix, start_time, usernames)
 
                 pg.display.update()
 
                 pg.time.wait(1500)
 
-                data = {usernames[0]: score1, usernames[1]: score2}
+                data = {usernames[0]: scores[0], usernames[1]: scores[1]}
 
                 ending = EndingScreen(
                     self.screen,
@@ -300,7 +288,7 @@ class UtilitiesMain:
 
                 play_again = ending.scores()
 
-        return play_again, turn, chip, score1, score2
+        return play_again, turn, chip, scores
 
     def evaluate_window(self, window, chip):
         score = 0
