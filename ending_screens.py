@@ -59,13 +59,21 @@ class EndingScreen:
         )
 
     def scores(self) -> bool:
+        snd_win = pg.mixer.Sound("data/sounds/win_effect.mp3")
+        pg.mixer.Sound.play(snd_win)
+        pg.mixer.Sound.set_volume(snd_win, 0.1)
+        pg.time.wait(1000)
+
+        snd = pg.mixer.Sound("data/soundtracks/score.mp3")
+        pg.mixer.Sound.play(snd, -1)
+        pg.mixer.Sound.set_volume(snd, 0.05)
+
         pg.mouse.set_visible(True)
 
         a = self.screen.get_width() // 2
         b = self.screen.get_height()
 
-        # WHITE = (255, 255, 255)
-        GREY = (37, 41, 46)  # 2529
+        GREY = (37, 41, 46)
 
         FONT = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 125)
 
@@ -76,10 +84,6 @@ class EndingScreen:
         ending = True
         while ending:
             pg.mixer.music.fadeout(1000)
-
-            # bg_music = pg.mixer.Sound(f"data/soundtracks/classic.mp3")
-            # pg.mixer.music.play(loops=-1)
-            # pg.mixer.music.set_volume(1)
 
             text = FONT.render("SCORE SCREEN", True, (GREY))
             text_rec = text.get_rect().width // 2
@@ -97,12 +101,15 @@ class EndingScreen:
                 self.manager.process_events(event)
 
                 if self.play_again.check_pressed():
+                    pg.mixer.Sound.stop(snd)
                     return True
 
                 if self.starter_menu.check_pressed():
+                    pg.mixer.Sound.stop(snd)
                     return False
 
                 if self.leaderboard.check_pressed():
+                    pg.mixer.Sound.stop(snd)
                     self.leaderboard.disable()
                     LeaderBoard(
                         self.sb,
@@ -116,6 +123,7 @@ class EndingScreen:
                         ),
                     ).run()
                     self.leaderboard.enable()
+                    pg.mixer.Sound.play(snd, -1)
 
                 if self.quit.check_pressed():
                     exit()
@@ -188,6 +196,10 @@ class LeaderBoard:
             )
 
     def run(self):
+        snd = pg.mixer.Sound(f"data/soundtracks/leaderboard.mp3")
+        pg.mixer.Sound.play(snd, -1)
+        pg.mixer.Sound.set_volume(snd, 0.05)
+
         is_running = True
         clock = pg.time.Clock()
 

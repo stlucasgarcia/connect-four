@@ -272,12 +272,24 @@ class StarterMenu:
                 if self.p1.get_text() and self.p2.get_text():
                     self.name1 = self.p1.get_text()
                     self.name2 = self.p2.get_text()
-                    self.next.enable()
 
             elif self.plrs == (True, False):
                 if self.p1.get_text():
                     self.name1 = self.p1.get_text()
-                    self.next.enable()
+
+        elif self.window == "player":
+            if self.p1.get_text() and self.plrs == (True, False):
+                self.next.enable()
+
+            elif (self.p1.get_text() and self.p2.get_text()) and self.plrs == (
+                True,
+                True,
+            ):
+                self.next.enable()
+                self.next.enable()
+
+            else:
+                self.next.disable()
 
     def run(self):
         pg.mixer.music.stop()

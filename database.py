@@ -23,7 +23,7 @@ class ScoreboardData:
             conn.close()
 
         except sqlite3.DatabaseError:
-            print("Database has already been created.")
+            pass
 
     def updateTable(self):
         try:
@@ -42,7 +42,7 @@ class ScoreboardData:
             conn.close()
 
         except sqlite3.IntegrityError:
-            print("Player names has already been created.")
+            pass
 
     def winnerUpdate(self):
         conn = sqlite3.connect("scores.db")
