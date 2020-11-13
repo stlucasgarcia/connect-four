@@ -114,31 +114,6 @@ class Controller:
 
         return self.x_hd
 
-    def menu_action(self, event):
-        if self.type[0] == "PS4 Controller":
-            if event.type == JOYBUTTONDOWN:
-                if event.button == 1 or event.button == 6:
-                    self.Esc()
-
-            if event.type == JOYAXISMOTION:
-                if abs(event.axis) == 4:
-                    if event.value == 1:
-                        self.Esc()
-
-        else:
-            if event.type == JOYBUTTONDOWN:
-                if event.button == 0:
-                    self.DropChip()
-
-            if event.type == JOYHATMOTION:
-                if event.value[1] == -1:
-                    self.DropChip()
-
-            if event.type == JOYAXISMOTION:
-                if abs(event.axis) == 4:
-                    if event.value == 1:
-                        self.Esc()
-
     def check_event(self, event, menu: object, screen, clock):
         px_diff_hd = 109  # how much the  chip will move each time
         max_px_hd = 931  # max x position of the chip
@@ -183,7 +158,7 @@ class Controller:
                         self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
                         return self.x_hd
 
-                if abs(event.axis) == 4:
+                if abs(event.axis) == 2:
                     if event.value == 1:
                         play_again = menu.run(screen, clock)
                         if not play_again:
@@ -238,7 +213,7 @@ class Controller:
                         self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
                         return self.x_hd
 
-                if abs(event.axis) == 4:
+                if abs(event.axis) == 3:
                     if event.value == 1:
                         play_again = menu.run(screen, clock)
                         if not play_again:
