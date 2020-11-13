@@ -63,6 +63,8 @@ class ScoreboardData:
         cursor.execute(query)
         rows = cursor.fetchall()
 
+        amount = amount if len(rows) < 10 else len(rows)
+
         leader_board = []
         for i in range(amount):
             leader_board.append(rows[i])
