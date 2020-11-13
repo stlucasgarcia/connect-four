@@ -29,7 +29,7 @@ class MainScreen:
         self.chip_2 = self.config.chip_2
         self.ai_chip = 2
 
-    def main_screen(self, usernames: list, option="AI"):
+    def main_screen(self, score1: int, score2: int, usernames: list, option="AI"):
         control = Controller()
         utilities = UtilitiesMain(self.screen)
 
@@ -64,6 +64,7 @@ class MainScreen:
 
         pg.mixer.music.play(loops=-1)
         pg.mixer.music.set_volume(self.volume)
+
         while not close_loop:
             start_time = utilities.draw_board(matrix, start_time, clock, usernames)
 
@@ -83,14 +84,20 @@ class MainScreen:
                     x = event.pos[0]
                     y = event.pos[1]
 
-                print(x, y)
+                # print(x, y)
 
                 if event.type == pg.MOUSEBUTTONDOWN:
                     save_chip = chip
 
                     column = utilities.location_X(pg.mouse.get_pos()[0])
                     if column != 0:
-                        play_again, player_turn, chip = utilities.playersTurn(
+                        (
+                            play_again,
+                            player_turn,
+                            chip,
+                            score1,
+                            score2,
+                        ) = utilities.playersTurn(
                             column,
                             matrix,
                             player_turn,
@@ -99,6 +106,8 @@ class MainScreen:
                             usernames,
                             start_time,
                             clock,
+                            score1,
+                            score2,
                             option,
                         )
 
@@ -114,7 +123,13 @@ class MainScreen:
 
                         column = utilities.location_X(control.get_x_pos(event))
                         if column != 0:
-                            play_again, player_turn, chip = utilities.playersTurn(
+                            (
+                                play_again,
+                                player_turn,
+                                chip,
+                                score1,
+                                score2,
+                            ) = utilities.playersTurn(
                                 column,
                                 matrix,
                                 player_turn,
@@ -123,6 +138,8 @@ class MainScreen:
                                 usernames,
                                 start_time,
                                 clock,
+                                score1,
+                                score2,
                                 option,
                             )
 
@@ -152,11 +169,20 @@ class MainScreen:
                     utilities.drop_piece(matrix, row, column, self.ai_chip)
 
                     if utilities.is_victory(matrix, self.ai_chip):
-                        utilities.draw_board(matrix, start_time, clock, usernames)
+                        print(score2, player_turn)
+                        print(score1, player_turn)
+                        score2 += 1
+                        print(score2, player_turn)
 
-                        pg.time.wait(500)
+                        start_time = utilities.draw_board(
+                            matrix, start_time, clock, usernames
+                        )
 
-                        data = {usernames[0]: 10, usernames[1]: 5}
+                        pg.display.update()
+
+                        pg.time.wait(1500)
+
+                        data = {usernames[0]: score1, usernames[1]: score2}
 
                         ending = EndingScreen(
                             self.screen,

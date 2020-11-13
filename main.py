@@ -39,6 +39,9 @@ def game_run():
 
     play_again = False
     name1, name2 = None, None
+
+    score1, score2 = 0, 0
+
     while isRunning:
         pg.mouse.set_visible(False)
 
@@ -77,7 +80,9 @@ def game_run():
         pg.mouse.set_visible(False)
 
         MainScreen_object = MainScreen(screen, is_controller)
-        play_again = MainScreen_object.main_screen(usernames=[name1, name2])
+        play_again = MainScreen_object.main_screen(
+            score1, score2, usernames=[name1, name2]
+        )
 
 
 def re_exec():

@@ -252,6 +252,8 @@ class UtilitiesMain:
         usernames,
         start_time,
         clock,
+        score1,
+        score2,
         option="AI",
     ):
         turn = player_turn
@@ -271,12 +273,20 @@ class UtilitiesMain:
             self.drop_piece(matrix, row, column, turn)
 
             if self.is_victory(matrix, turn) or self.is_tie(matrix):
+                print(score1, turn)
+                print(score2, turn)
+                score1 += 1 if turn % 2 == 0 else score1
+                print(score1, turn)
+                score2 += 1 if turn % 2 == 1 else score2
+                print(score2, turn)
 
-                self.draw_board(matrix, start_time, clock, usernames)
+                start_time = self.draw_board(matrix, start_time, clock, usernames)
 
-                pg.time.wait(500)
+                pg.display.update()
 
-                data = {usernames[0]: 10, usernames[1]: 5}
+                pg.time.wait(1500)
+
+                data = {usernames[0]: score1, usernames[1]: score2}
 
                 ending = EndingScreen(
                     self.screen,
@@ -290,7 +300,7 @@ class UtilitiesMain:
 
                 play_again = ending.scores()
 
-        return play_again, turn, chip
+        return play_again, turn, chip, score1, score2
 
     def evaluate_window(self, window, chip):
         score = 0

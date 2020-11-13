@@ -61,12 +61,12 @@ class EndingScreen:
     def scores(self) -> bool:
         snd_win = pg.mixer.Sound("data/sounds/win_effect.mp3")
         pg.mixer.Sound.play(snd_win)
-        pg.mixer.Sound.set_volume(snd_win, 0.1)
+        pg.mixer.Sound.set_volume(snd_win, 0.25)
         pg.time.wait(1000)
 
         snd = pg.mixer.Sound("data/soundtracks/score.mp3")
         pg.mixer.Sound.play(snd, -1)
-        pg.mixer.Sound.set_volume(snd, 0.05)
+        pg.mixer.Sound.set_volume(snd, 0.25)
 
         pg.mouse.set_visible(True)
 
@@ -198,7 +198,7 @@ class LeaderBoard:
     def run(self):
         snd = pg.mixer.Sound(f"data/soundtracks/leaderboard.mp3")
         pg.mixer.Sound.play(snd, -1)
-        pg.mixer.Sound.set_volume(snd, 0.05)
+        pg.mixer.Sound.set_volume(snd, 0.35)
 
         is_running = True
         clock = pg.time.Clock()
