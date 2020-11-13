@@ -158,7 +158,7 @@ class Controller:
                         self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
                         return self.x_hd
 
-                if abs(event.axis) == 2:
+                if abs(event.axis) == 4:
                     if event.value == 1:
                         play_again = menu.run(screen, clock)
                         if not play_again:
@@ -213,7 +213,7 @@ class Controller:
                         self.x_hd -= 5 if self.x_hd - 5 >= min_px_hd else 0
                         return self.x_hd
 
-                if abs(event.axis) == 3:
+                if abs(event.axis) == 2:
                     if event.value == 1:
                         play_again = menu.run(screen, clock)
                         if not play_again:
