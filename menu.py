@@ -111,6 +111,8 @@ class StarterMenu:
             self.sm_p2,
             self.sm_p1_1,
         ) = attr["sm_res"]
+        self.data: dict = {}
+        self.selected = True
 
         self.style: str = "data/styles/select_menu.json"
         self.screen = attr["screen"]
@@ -232,11 +234,54 @@ class StarterMenu:
 
         self.next.disable()
 
+    def _check_next(self, enter):
+        if self.window == "select" and (self.next.check_pressed() or enter):
+            self.data = {
+                "mode": self.mode.selected_option,
+                "theme": self.theme_selector.selected_option.lower(),
+                "resolution": self.res_selector.selected_option.split()[-1],
+            }
+
+            if self.mode.selected_option == "Player vs AI":
+                self.mode_text.kill()
+                self.res_text.kill()
+                self.theme_text.set_text("Name")
+                self.theme_text.set_dimensions((220, 300))
+                self.plrs = (True, False)
+
+            elif self.mode.selected_option == "Player vs Player":
+                self.theme_text.kill()
+                self.mode_text.set_text("Player 1")
+                self.res_text.set_text("Player 2")
+                self.plrs = (True, True)
+
+            else:
+                self.selected = False
+
+            self.mode.kill()
+            self.res_selector.kill()
+            self.theme_selector.kill()
+
+            self._ver()
+            self.window = "player"
+
+        elif self.window == "player" and (self.next.check_pressed() or enter):
+            self.selected = False
+
+            if self.plrs == (True, True):
+                if self.p1.get_text() and self.p2.get_text():
+                    self.name1 = self.p1.get_text()
+                    self.name2 = self.p2.get_text()
+                    self.next.enable()
+
+            elif self.plrs == (True, False):
+                if self.p1.get_text():
+                    self.name1 = self.p1.get_text()
+                    self.next.enable()
+
     def run(self):
         pg.mixer.music.stop()
 
-        selected = True
-        data: dict = {}
         self.next.disable()
 
         img = pg.image.load("data/images/menu/select_menu.png")
@@ -244,66 +289,26 @@ class StarterMenu:
         if self.res == (1280, 720):
             img = pg.transform.scale(img, self.res)
 
-        while selected:
+        while self.selected:
+            enter = False
             pg.mouse.set_visible(True)
             time_delta = self.clock.tick(60) / 1000.0
 
             for event in pg.event.get():
                 self.manager.process_events(event)
 
-                if self.window == "select":
-                    if (
-                        self.mode.selected_option
-                        and self.theme_selector.selected_option
-                        and self.res_selector.selected_option
-                    ):
-                        self.next.enable()
+                if (
+                    self.mode.selected_option
+                    and self.theme_selector.selected_option
+                    and self.res_selector.selected_option
+                ):
+                    self.next.enable()
 
-                    if self.next.check_pressed():
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_RETURN:
+                        enter = True
 
-                        data = {
-                            "mode": self.mode.selected_option,
-                            "theme": self.theme_selector.selected_option.lower(),
-                            "resolution": self.res_selector.selected_option.split()[-1],
-                        }
-
-                        if self.mode.selected_option == "Player vs AI":
-                            self.mode_text.kill()
-                            self.res_text.kill()
-                            self.theme_text.set_text("Name")
-                            self.theme_text.set_dimensions((220, 300))
-                            self.plrs = (True, False)
-
-                        elif self.mode.selected_option == "Player vs Player":
-                            self.theme_text.kill()
-                            self.mode_text.set_text("Player 1")
-                            self.res_text.set_text("Player 2")
-                            self.plrs = (True, True)
-
-                        else:
-                            selected = False
-
-                        self.mode.kill()
-                        self.res_selector.kill()
-                        self.theme_selector.kill()
-
-                        self._ver()
-                        self.window = "player"
-
-                else:
-                    if self.next.check_pressed():
-                        selected = False
-
-                    if self.plrs == (True, True):
-                        if self.p1.get_text() and self.p2.get_text():
-                            self.name1 = self.p1.get_text()
-                            self.name2 = self.p2.get_text()
-                            self.next.enable()
-
-                    elif self.plrs == (True, False):
-                        if self.p1.get_text():
-                            self.name1 = self.p1.get_text()
-                            self.next.enable()
+                self._check_next(enter)
 
                 if self.quit.check_pressed():
                     exit()
@@ -316,7 +321,7 @@ class StarterMenu:
 
             pg.display.update()
 
-        change_res = StarterMenu._export(data)
+        change_res = StarterMenu._export(self.data)
         return self.name1, self.name2, change_res
 
     @staticmethod
