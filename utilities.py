@@ -1,11 +1,10 @@
+import pygame as pg
 import numpy as np
 import random
 import math
-import time
 
-import pygame as pg
-from settings import Settings
 from ending_screens import EndingScreen
+from settings import Settings
 
 
 class UtilitiesMain:
@@ -20,7 +19,6 @@ class UtilitiesMain:
         self.background_image = self.config.bg_image
         self.chip_1 = self.config.chip_1
         self.chip_2 = self.config.chip_2
-        self.width = self.config.width
         self.width = self.config.width
         self.font = self.config.font
         self.zero = 0
@@ -89,11 +87,11 @@ class UtilitiesMain:
             else:
                 return 0
 
-    def draw_board(self, matrix: np.ndarray, start_time, clock) -> None:
+    def draw_board(self, matrix: np.ndarray, start_time, clock, usernames) -> None:
         self.screen.blit(self.background_image, (0, 0))
 
         start_time = self.timer(start_time, clock)
-
+        self.print_names(usernames)
         for column in range(self.COLUMN_AMOUNT):
             for row in range(self.ROW_AMOUNT):
 
@@ -236,16 +234,18 @@ class UtilitiesMain:
         else:
             pass
 
+        y = 41 if self.width != 1280 else 27
+
         textTime = self.font.render(timeF, True, (255, 255, 255))
 
-        self.screen.blit(textTime, (self.width // 2, 15 - 15))
+        self.screen.blit(textTime, (self.width // 2 - 15, y))
 
         return start_time
 
     def playersTurn(
         self,
         column: int,
-        matrix: np.ndarray,
+        matrix,
         player_turn,
         sound_chip_1,
         sound_chip_2,
@@ -272,7 +272,7 @@ class UtilitiesMain:
 
             if self.is_victory(matrix, turn) or self.is_tie(matrix):
 
-                self.draw_board(matrix, start_time, clock)
+                self.draw_board(matrix, start_time, clock, usernames)
 
                 pg.time.wait(500)
 
@@ -292,59 +292,59 @@ class UtilitiesMain:
 
         return play_again, turn, chip
 
-    def evaluate_window(self, window, piece):
+    def evaluate_window(self, window, chip):
         score = 0
-        opp_piece = self.player_chip
+        opp_chip = self.player_chip
 
-        if piece == self.player_chip:
-            opp_piece = self.ai_chip
+        if chip == self.player_chip:
+            opp_chip = self.ai_chip
 
-        if window.count(piece) == 4:
+        if window.count(chip) == 4:
             score += 100
 
-        elif window.count(piece) == 3 and window.count(self.zero) == 1:
+        elif window.count(chip) == 3 and window.count(self.zero) == 1:
             score += 5
 
-        elif window.count(piece) == 2 and window.count(self.zero) == 2:
+        elif window.count(chip) == 2 and window.count(self.zero) == 2:
             score += 2
 
-        if window.count(opp_piece) == 3 and window.count(self.zero) == 1:
+        if window.count(opp_chip) == 3 and window.count(self.zero) == 1:
             score -= 4
 
         return score
 
-    def score_position(self, board, piece):
+    def score_position(self, matrix, chip):
         score = 0
 
         ## Score center column
-        center_array = [int(i) for i in list(board[:, self.COLUMN_AMOUNT // 2])]
-        center_count = center_array.count(piece)
+        center_array = [int(i) for i in list(matrix[:, self.COLUMN_AMOUNT // 2])]
+        center_count = center_array.count(chip)
         score += center_count * 3
 
         ## Score Horizontal
         for r in range(self.ROW_AMOUNT):
-            row_array = [int(i) for i in list(board[r, :])]
+            row_array = [int(i) for i in list(matrix[r, :])]
             for c in range(self.COLUMN_AMOUNT - 3):
                 window = row_array[c : c + self.WINDOWS_LENGHT]
-                score += self.evaluate_window(window, piece)
+                score += self.evaluate_window(window, chip)
 
         ## Score Vertical
         for c in range(self.COLUMN_AMOUNT):
-            col_array = [int(i) for i in list(board[:, c])]
+            col_array = [int(i) for i in list(matrix[:, c])]
             for r in range(self.ROW_AMOUNT - 3):
                 window = col_array[r : r + self.WINDOWS_LENGHT]
-                score += self.evaluate_window(window, piece)
+                score += self.evaluate_window(window, chip)
 
         ## Score positive sloped diagonal
         for r in range(self.ROW_AMOUNT - 3):
             for c in range(self.COLUMN_AMOUNT - 3):
-                window = [board[r + i][c + i] for i in range(self.WINDOWS_LENGHT)]
-                score += self.evaluate_window(window, piece)
+                window = [matrix[r + i][c + i] for i in range(self.WINDOWS_LENGHT)]
+                score += self.evaluate_window(window, chip)
 
         for r in range(self.ROW_AMOUNT - 3):
             for c in range(self.COLUMN_AMOUNT - 3):
-                window = [board[r + 3 - i][c + i] for i in range(self.WINDOWS_LENGHT)]
-                score += self.evaluate_window(window, piece)
+                window = [matrix[r + 3 - i][c + i] for i in range(self.WINDOWS_LENGHT)]
+                score += self.evaluate_window(window, chip)
 
         return score
 
@@ -412,3 +412,19 @@ class UtilitiesMain:
                     break
 
             return column, value
+
+    def print_names(self, usernames):
+        name_1 = usernames[0]
+        name_2 = "AI" if len(usernames) == 1 else usernames[1]
+
+        name_1 = name_1[:10] if len(name_1) > 10 else name_1
+        name_2 = name_2[:10] if len(name_2) > 10 else name_2
+
+        x_2 = 1610 if self.width != 1280 else 1000
+        y = 41 if self.width != 1280 else 30
+
+        name_text_1 = self.font.render(name_1, True, (255, 255, 255))
+        name_text_2 = self.font.render(name_2, True, (255, 255, 255))
+
+        self.screen.blit(name_text_1, (43, y))
+        self.screen.blit(name_text_2, (x_2, y))

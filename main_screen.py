@@ -65,8 +65,10 @@ class MainScreen:
         pg.mixer.music.play(loops=-1)
         pg.mixer.music.set_volume(self.volume)
         while not close_loop:
-            start_time = utilities.draw_board(matrix, start_time, clock)
+            start_time = utilities.draw_board(matrix, start_time, clock, usernames)
+
             self.screen.blit(chip, (x, y))
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     close_loop = True
@@ -80,6 +82,8 @@ class MainScreen:
                 if event.type == pg.MOUSEMOTION:
                     x = event.pos[0]
                     y = event.pos[1]
+
+                print(x, y)
 
                 if event.type == pg.MOUSEBUTTONDOWN:
                     save_chip = chip
@@ -103,6 +107,7 @@ class MainScreen:
 
                         if chip == None:
                             chip = save_chip
+
                 if self.is_controller:
                     if control.isControllerDropEvent(event):
                         save_chip = chip
@@ -147,7 +152,7 @@ class MainScreen:
                     utilities.drop_piece(matrix, row, column, self.ai_chip)
 
                     if utilities.is_victory(matrix, self.ai_chip):
-                        utilities.draw_board(matrix, start_time, clock)
+                        utilities.draw_board(matrix, start_time, clock, usernames)
 
                         pg.time.wait(500)
 
