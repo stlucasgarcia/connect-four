@@ -302,7 +302,7 @@ class StarterMenu:
         pg.mixer.music.stop()
         snd = pg.mixer.Sound("data/soundtracks/select_menu.mp3")
         pg.mixer.Sound.play(snd, -1)
-        pg.mixer.Sound.set_volume(snd, 0.25)
+        pg.mixer.Sound.set_volume(snd, 0.35)
 
         self.next.disable()
 

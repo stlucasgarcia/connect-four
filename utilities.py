@@ -261,12 +261,8 @@ class UtilitiesMain:
             self.drop_piece(matrix, row, column, turn)
 
             if self.is_victory(matrix, turn) or self.is_tie(matrix):
-                print(scores[0], turn)
-                print(scores[1], turn)
                 scores[0] += 1 if turn % 2 == 0 else scores[0]
-                print(scores[0], turn)
                 scores[1] += 1 if turn % 2 == 1 else scores[1]
-                print(scores[1], turn)
 
                 self.draw_board(matrix, start_time, usernames)
 
