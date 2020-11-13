@@ -141,9 +141,14 @@ class MainScreen:
                         if not play_again:
                             return play_again
 
+                if control.isControllerEscEvent(event):
+                    play_again = menu.run(self.screen, clock)
+                    if not play_again:
+                        return play_again
+
                 if control.isControllerEvent(event):
                     screen = self.screen
-                    control.check_event(event, menu, screen, clock)
+                    control.check_event(event)
 
             if self.option == "Player vs AI" and player_turn % 2 == 1:
                 column, minimax_score = utilities.minimaxTree(
@@ -155,10 +160,7 @@ class MainScreen:
                     utilities.drop_piece(matrix, row, column, self.ai_chip)
 
                     if utilities.is_victory(matrix, self.ai_chip):
-                        print(scores[1], player_turn)
-                        print(scores[1], player_turn)
                         scores[1] += 1
-                        print(scores[1], player_turn)
 
                         utilities.draw_board(matrix, start_time, usernames)
 
