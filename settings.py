@@ -36,7 +36,7 @@ class Settings:
         self.op_start_menu = S
         self.op_quit = S
 
-        pg.init()
+        pg.mixer.init(44100, -16, 2, 64)
 
         getattr(self, self.res)()
         self._config_theme()
