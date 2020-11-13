@@ -1,10 +1,6 @@
 import pygame
 from pygame.locals import *
 
-pygame.init()
-display = pygame.display.set_mode((600, 600))
-
-
 class Controller:
     def __init__(self):
 
