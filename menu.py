@@ -5,6 +5,8 @@ from sys import exit
 from json import dump
 from typing import Any, Tuple
 
+from controller import Controller
+
 
 class OptionsMenu:
     def __init__(self, **attr):
@@ -60,12 +62,17 @@ class OptionsMenu:
         )
 
     def run(self, screen, clock):
+        control = Controller()
         options = True
 
         while options:
             pg.mouse.set_visible(True)
             for event in pg.event.get():
                 self.manager.process_events(event)
+
+                if control.isControllerEscEvent(event):
+                    options = False
+                    return True
 
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
