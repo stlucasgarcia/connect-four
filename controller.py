@@ -1,9 +1,11 @@
 import pygame
 from pygame.locals import *
 
-class Controller:
-    def __init__(self):
 
+class Controller:
+    """Class created to manage all the controllers features """
+
+    def __init__(self):
         self.joysticks = []
         self.type = []
         self.x_hd = 596  # initial position of the chip
@@ -16,12 +18,14 @@ class Controller:
             axes = self.joysticks[i].get_numaxes()
 
     def checkController(self):
+        """Check if there's a connected controller"""
         if self.joysticks:
             return True
         else:
             return False
 
     def isControllerEvent(self, event):
+        """Used later to manage controller events"""
         return (
             event.type == JOYBUTTONDOWN
             or event.type == JOYAXISMOTION
@@ -29,6 +33,7 @@ class Controller:
         )
 
     def isControllerDropEvent(self, event):
+        """Drop piece using the controllers available option"""
         if len(self.type) > 0:
             if self.type[0] == "PS4 Controller":
                 if event.type == JOYBUTTONDOWN:
@@ -45,6 +50,7 @@ class Controller:
                     return abs(event.axis) == 5 and event.value == 1
 
     def isControllerEscEvent(self, event):
+        """Check for the esc menu event for controller"""
         if len(self.type) > 0:
             if self.type[0] == "PS4 Controller":
                 if event.type == JOYBUTTONDOWN:

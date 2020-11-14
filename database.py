@@ -2,6 +2,8 @@ import sqlite3
 
 
 class ScoreboardData:
+    """Class to manage Database features"""
+
     def __init__(self, data: dict):
         self.score_1, self.score_2 = data.values()
         self.name_1, self.name_2 = data.keys()
@@ -13,6 +15,8 @@ class ScoreboardData:
         self.connect()
 
     def connect(self):
+        """Creates the connetion with the database"""
+        
         try:
             conn = sqlite3.connect("scores.db")
 
@@ -26,6 +30,8 @@ class ScoreboardData:
             pass
 
     def updateTable(self):
+        """Updates the database table"""
+
         try:
             conn = sqlite3.connect("scores.db")
 
@@ -45,6 +51,8 @@ class ScoreboardData:
             pass
 
     def winnerUpdate(self):
+        """"Exports the winner of the match to the database"""
+
         conn = sqlite3.connect("scores.db")
 
         query = f"UPDATE scores SET wins = wins + 1 WHERE name = '{self.winner[0]}';"
@@ -54,6 +62,8 @@ class ScoreboardData:
         conn.close()
 
     def getData(self, amount=0):
+        """Import the data from the databse"""
+
         conn = sqlite3.connect("scores.db")
 
         cursor = conn.cursor()

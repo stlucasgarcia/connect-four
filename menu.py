@@ -9,6 +9,8 @@ from controller import Controller
 
 
 class OptionsMenu:
+    """ Creates a menu when esc is pressed during the game, it has 3 options, resume, starter menu and quit"""
+
     def __init__(self, **attr):
         self.res = attr["res"]
         self.manager: Any

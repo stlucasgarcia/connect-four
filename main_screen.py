@@ -9,11 +9,17 @@ from controller import Controller
 from settings import Settings
 from menu import OptionsMenu
 
+"""
+The second most important file, it creates the game itself (board, esc menu, check who is the winner and so on),
+and calls important classes and functions like the esc menu which pauses the game when pressed esc,
+as well as most utilities functions
+"""
+
 
 class MainScreen:
     def __init__(
         self,
-        screen,
+        screen, 
         is_controller,
         option: str,
     ) -> None:
@@ -22,20 +28,22 @@ class MainScreen:
 
         self.screen: pg.Surface = screen
         self.background_image: pg.Surface = self.config.bg_image
-        self.is_controller = is_controller
+        self.is_controller : bool = is_controller
 
         self.sound_chip_1 = self.config.sound_chip_1
         self.sound_chip_2 = self.config.sound_chip_2
         self.volume = self.config.volume
         self.chip_1 = self.config.chip_1
         self.chip_2 = self.config.chip_2
-        self.ai_chip = 2
+        self.ai_chip: int = 2
 
     def main_screen(self, scores: list, usernames: list):
+        """Main function to call the game screen"""
+
         control = Controller()
         utilities = UtilitiesMain(self.screen)
 
-        start_time = pg.time.get_ticks()
+        start_time = pg.time.get_ticks() # Used for timer
 
         attr = {
             "res": self.config.size,
@@ -46,7 +54,7 @@ class MainScreen:
             "quit": self.config.op_quit,
             "theme": self.config.theme,
         }
-        menu = OptionsMenu(**attr)
+        menu = OptionsMenu(**attr) # Initializes the Options Menu class which is used to create the esc menu
 
         clock = pg.time.Clock()
 

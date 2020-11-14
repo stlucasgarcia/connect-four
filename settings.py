@@ -9,6 +9,8 @@ S = Tuple[Tuple[int, int], Tuple[int, int]]
 
 
 class Settings:
+    """Class created to organize the different options and variables"""
+
     def __init__(self):
         kwargs = json.load(open("user_settings.json", "r"))
         self.res = "_full_hd" if kwargs["resolution"] == "FULLHD" else "_hd"
@@ -45,7 +47,9 @@ class Settings:
         self._config_sound()
         self._config_start_menu()
 
-    def _full_hd(self):
+    def _full_hd(self) -> None:
+        """Full hd settings and pixels locations which are used around the code"""
+
         self.width = 1920
         self.height = 1080
         self.size = (1920, 1080)
@@ -59,7 +63,9 @@ class Settings:
         self.lb_mult = 94.8
         self.fullhd = True
 
-    def _hd(self):
+    def _hd(self) -> None:
+        """Hd settings and pixels locations which are used around the code"""
+        
         self.width = 1280
         self.height = 720
         self.size = (1280, 720)
@@ -73,7 +79,9 @@ class Settings:
         self.lb_mult = 63.35
         self.fullhd = False
 
-    def _config_font(self):
+    def _config_font(self) -> None:
+        """Gets the respective theme's font"""
+
         if self.theme == "classic":
             self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 75)
             self.style += "options_menu_classic.json"
@@ -162,7 +170,9 @@ class Settings:
                 ((910, 640), (110, 80)) if self.fullhd else ((585, 480), (110, 80))
             )
 
-    def _config_theme(self):
+    def _config_theme(self) -> None:
+        """Gets the respective theme's images, like the board and each chips, it also resizes them for HD"""
+
         self.bg_image = pg.image.load(
             f"data/images/game_screens/{self.theme}/game_screen.png"
         )
@@ -174,12 +184,16 @@ class Settings:
             self.chip_1 = pg.transform.scale(self.chip_1, (86, 86))
             self.chip_2 = pg.transform.scale(self.chip_2, (86, 86))
 
-    def _config_sound(self):
+    def _config_sound(self) -> None:
+        """Gets the respective theme's sounds for the chips and background song"""
+
         pg.mixer.music.load(f"data/soundtracks/{self.theme}.mp3")
         self.sound_chip_1 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_1.mp3")
         self.sound_chip_2 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_2.mp3")
 
     def _config_start_menu(self):
+        """Configures the start/select menu for both resolutions"""
+
         self.sm_title = (660, 20, 600, 300) if self.fullhd else (340, 40, 600, 150)
         self.sm_mode_txt = (460, 260, 200, 300) if self.fullhd else (140, 150, 200, 300)
         self.sm_mode = (

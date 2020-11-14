@@ -9,6 +9,8 @@ from database import ScoreboardData
 
 
 class EndingScreen:
+    """Creates the Final screen of the game where it shows the scores and a couple options"""
+
     def __init__(self, screen: Any, data: dict, **kwargs):
         self.screen = screen
         self.data = data
@@ -25,6 +27,8 @@ class EndingScreen:
         self.sb.winnerUpdate()
 
     def _createUI(self, kwargs):
+        """Creates the menu UI and the style of ita"""
+
         # pg.display.set_mode(kwargs["res"], pg.FULLSCREEN)
         self.manager = pygame_gui.UIManager(
             kwargs["res"], "data/styles/winner_menu.json"
@@ -59,6 +63,8 @@ class EndingScreen:
         )
 
     def scores(self) -> bool:
+        """Function containing the loop of the score screen"""
+
         snd_win = pg.mixer.Sound("data/sounds/win_effect.mp3")
         pg.mixer.Sound.play(snd_win)
         pg.mixer.Sound.set_volume(snd_win, 0.25)
@@ -145,6 +151,8 @@ class EndingScreen:
 
 
 class LeaderBoard:
+    """Class used to manage the leaderboard screen and its assets"""
+
     def __init__(self, sb, screen, size, lb_res):
         self.screen = screen
         self.res = size
@@ -196,6 +204,8 @@ class LeaderBoard:
             )
 
     def run(self):
+        """Function to run the Leaderboard while"""
+
         snd = pg.mixer.Sound(f"data/soundtracks/leaderboard.mp3")
         pg.mixer.Sound.play(snd, -1)
         pg.mixer.Sound.set_volume(snd, 0.35)

@@ -9,6 +9,8 @@ from settings import Settings
 
 
 class UtilitiesMain:
+    """Utilities class used to organize the main screen loop"""
+
     def __init__(self, screen: pg.Surface):
         self.config = Settings()
         self.screen = screen
@@ -27,16 +29,24 @@ class UtilitiesMain:
         self.ai_chip = 2
 
     def create_matrix(self) -> np.ndarray:
+        """Creates and returns the matrix"""
+
         matrix = np.zeros((self.ROW_AMOUNT, self.COLUMN_AMOUNT))
         return matrix
 
     def drop_piece(self, matrix: np.ndarray, row: int, column: int, piece: int) -> None:
+        """Drops the piece on the matrix"""
+
         matrix[row][column] = piece
 
     def is_available(self, matrix: np.ndarray, column: int) -> bool:
+        """Check if the chips position is available on the matrix"""
+
         return matrix[self.ROW_AMOUNT - 1][column] == 0
 
     def location_X(self, click_loc: int) -> int:
+        """'Hit Box of the chip' this function is used to defines the place in which the chip will be placed by the player"""
+
         # First location (X)
         if self.width == 1280:
             if 240 < click_loc < 364:
@@ -89,6 +99,8 @@ class UtilitiesMain:
                 return 0
 
     def draw_board(self, matrix: np.ndarray, start_time, usernames) -> None:
+        """Print the board on the screen with all features"""
+
         self.screen.blit(self.background_image, (0, 0))
 
         self.timer(start_time)
@@ -118,11 +130,15 @@ class UtilitiesMain:
                         self.screen.blit(self.chip_2, (x, y))
 
     def get_open_row(self, matrix: np.ndarray, column: int) -> int:
+        """gets the open row on the matrix"""
+
         for row in range(self.ROW_AMOUNT):
             if matrix[row][column] == 0:
                 return row
 
     def get_available_list(self, matrix):
+        """Creates a list with all the available positions on the list"""
+
         available_slots = []
 
         for column in range(self.COLUMN_AMOUNT):
@@ -132,6 +148,8 @@ class UtilitiesMain:
         return available_slots
 
     def is_victory(self, matrix: np.ndarray, chip: int) -> bool:
+        """Check if the player won using the matrix"""
+
         # Check horizontal
         for column in range(self.COLUMN_AMOUNT - 3):
             for row in range(self.ROW_AMOUNT):
@@ -177,6 +195,8 @@ class UtilitiesMain:
                     return True
 
     def is_tie(self, matrix: np.ndarray):
+        """Check if it's a tie to end the game on PlayersTurn function"""
+
         return (matrix[:][:] != 0).all()
 
     def is_valid(
@@ -188,6 +208,7 @@ class UtilitiesMain:
         sound_chip_2,
         option,
     ):
+        """Verify if the desired position is available in the matrix"""
 
         chip = None
         if column != 0 and is_position_available:
@@ -212,13 +233,17 @@ class UtilitiesMain:
                 return turn, chip
 
     def is_terminal(self, matrix):
+        """Check if the position will end the game, is used on the AI"""
+
         return (
             self.is_victory(matrix, self.player_chip)
             or self.is_victory(matrix, self.ai_chip)
             or len(self.get_available_list(matrix)) == 0  # TODO self.is_tie()
         )
 
-    def timer(self, start_time):
+    def timer(self, start_time) -> None:
+        """Creates a timer that's shown on the screen"""
+
         hour, minutes, seconds = str(
             timedelta(milliseconds=pg.time.get_ticks() - start_time)
         ).split(":")
@@ -244,6 +269,8 @@ class UtilitiesMain:
         scores,
         option,
     ):
+        """Main function of utilities, it makes the players turn and call other function to create the difference between turns and check for win"""
+
         turn = player_turn
         play_again = None
         chip = None
@@ -286,7 +313,9 @@ class UtilitiesMain:
 
         return play_again, turn, chip, scores
 
-    def evaluate_window(self, window, chip):
+    def evaluate_window(self, window, chip) -> int:
+        """Evaluate the window and returns the score, it's used by the AI"""
+
         score = 0
         opp_chip = self.player_chip
 
@@ -307,7 +336,9 @@ class UtilitiesMain:
 
         return score
 
-    def score_position(self, matrix, chip):
+    def score_position(self, matrix, chip) -> int:
+        """Check the windows and return the scores"""
+
         score = 0
 
         ## Score center column
@@ -343,6 +374,8 @@ class UtilitiesMain:
         return score
 
     def minimaxTree(self, matrix, depth, alpha, beta, maximizingPlayer):
+        """Main function of the AI, it calls the other AI functions to create a move"""
+
         valid_locations = self.get_available_list(matrix)
 
         is_terminal = self.is_terminal(matrix)
@@ -407,7 +440,9 @@ class UtilitiesMain:
 
             return column, value
 
-    def print_names(self, usernames):
+    def print_names(self, usernames) -> None:
+        """Print the names of the user's on the screen"""
+
         name_1 = usernames[0]
         name_2 = "AI" if len(usernames) == 1 else usernames[1]
 

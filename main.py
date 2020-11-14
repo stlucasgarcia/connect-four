@@ -7,6 +7,9 @@ from menu import StarterMenu
 
 scores = [0, 0]
 
+"""
+Main file, it's used to create the main loop and call other function, as well as initialize classes and initial settings/menus.
+"""
 # Pygame exit to stop initial loop
 def game_run():
     pg.init()
@@ -18,7 +21,7 @@ def game_run():
 
     size: tuple = (width, height)
 
-    screen: pg.Surface = pg.display.set_mode(size, pg.FULLSCREEN)
+    screen: pg.Surface = pg.display.set_mode(size)
 
     pg.display.set_caption("Connect Four")
 

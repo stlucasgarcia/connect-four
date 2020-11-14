@@ -7,6 +7,8 @@ from settings import Settings
 
 
 class InitScreen:
+    """Starter loop which emulates a gif"""
+
     def __init__(self, screen) -> None:
         self.config = Settings()
         self.screen = screen
@@ -35,6 +37,8 @@ class InitScreen:
             self.bg_old_west = pg.transform.scale(self.bg_old_west, (1280, 720))
 
     def starter_screen(self):
+        """Starter screen loop"""
+
         Clock = pg.time.Clock()
 
         backgrounds = cycle(
