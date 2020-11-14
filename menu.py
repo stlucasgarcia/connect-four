@@ -33,6 +33,8 @@ class OptionsMenu:
         self._setup()
 
     def _setup(self):
+        """Creates the GUI for the esc menu"""
+
         self.manager = pygame_gui.UIManager(self.res, self.style)
 
         self.label = pygame_gui.elements.UILabel(
@@ -64,6 +66,8 @@ class OptionsMenu:
         )
 
     def run(self, screen, clock):
+        """While loop for the esc menu"""
+
         control = Controller()
         options = True
 
@@ -104,7 +108,9 @@ class OptionsMenu:
 
 
 class StarterMenu:
-    def __init__(self, **attr):
+    """Class used to create the starter/select menu"""
+
+    def __init__(self, **attr) -> None:
         self.res: Tuple[int, int] = attr["res"]
         (
             self.sm_title,
@@ -139,6 +145,8 @@ class StarterMenu:
         self._create_first_UI()
 
     def _read_json(self):
+        """Opens, close and reads the user_settings json"""
+
         with open("user_settings.json", "r") as user:
             data = user.readlines()
 
@@ -152,6 +160,8 @@ class StarterMenu:
             self.last_res = prep + data[3].split('"')[-2]
 
     def _create_first_UI(self):
+        """Creates the select menu UI"""
+
         self.manager = pygame_gui.UIManager(self.res, self.style)
 
         self.title = pygame_gui.elements.UILabel(
@@ -221,6 +231,8 @@ class StarterMenu:
         )
 
     def _ver(self):
+        """Used to create the UI with the box to type the player`s name"""
+
         if self.plrs == (True, True):
             self.p1 = pygame_gui.elements.UITextEntryLine(
                 pg.Rect(*self.sm_p1),
@@ -244,6 +256,8 @@ class StarterMenu:
         self.next.disable()
 
     def _check_next(self, enter):
+        """Creates the next UI on the next button"""
+
         if self.window == "select" and (self.next.check_pressed() or enter):
             self.data = {
                 "mode": self.mode.selected_option,
@@ -301,6 +315,8 @@ class StarterMenu:
                 self.next.disable()
 
     def run(self):
+        """Runs the select menu loop"""
+
         pg.mixer.music.stop()
         snd = pg.mixer.Sound("data/soundtracks/select_menu.mp3")
         pg.mixer.Sound.play(snd, -1)
@@ -352,6 +368,8 @@ class StarterMenu:
 
     @staticmethod
     def _export(data: dict):
+        """Exports the data to the json"""
+
         change_res = False
 
         res = open("user_settings.json", "r+").readlines()
