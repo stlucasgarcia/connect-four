@@ -8,7 +8,7 @@
 
 Connect Four game which you can play with your friends, against the artificial intelligence or just watch two AIs playing the game for you. (currently in development) We have different themes which you can choose as well as other customizations.
 
-![Gif showing different themes](data/images/readme/readme_.gif)
+![Gif showing different themes](resources/images/readme/readme_.gif)
 
 <!-- https://ezgif.com/maker - 2 - 0 - 20 -->
 <!-- 
