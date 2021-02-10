@@ -4,8 +4,9 @@ import pygame as pg
 from sys import exit
 
 from typing import Any
-from settings import Settings
-from database import ScoreboardData
+from os import sep
+from utils.settings import Settings
+from db import ScoreboardData
 
 
 class EndingScreen:
@@ -19,6 +20,7 @@ class EndingScreen:
         self.st = Settings()
         self.size = self.st.size
         self.width = self.st.width
+        self.resources = "resources" + sep
 
         self._createUI(kwargs)
 
@@ -31,7 +33,7 @@ class EndingScreen:
 
         # pg.display.set_mode(kwargs["res"], pg.FULLSCREEN)
         self.manager = pygame_gui.UIManager(
-            kwargs["res"], "data/styles/winner_menu.json"
+            kwargs["res"], f"{self.resources}styles{sep}winner_menu.json"
         )
 
         self.play_again = pygame_gui.elements.UIButton(
@@ -65,12 +67,12 @@ class EndingScreen:
     def scores(self) -> bool:
         """Function containing the loop of the score screen"""
 
-        snd_win = pg.mixer.Sound("data/sounds/win_effect.mp3")
+        snd_win = pg.mixer.Sound(f"{self.resources}sounds{sep}win_effect.mp3")
         pg.mixer.Sound.play(snd_win)
         pg.mixer.Sound.set_volume(snd_win, 0.25)
         pg.time.wait(1000)
 
-        snd = pg.mixer.Sound("data/soundtracks/score.mp3")
+        snd = pg.mixer.Sound(f"{self.resources}soundtracks{sep}score.mp3")
         pg.mixer.Sound.play(snd, -1)
         pg.mixer.Sound.set_volume(snd, 0.25)
 
@@ -81,11 +83,11 @@ class EndingScreen:
 
         GREY = (37, 41, 46)
 
-        FONT = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 125)
+        FONT = pg.font.Font(f"{os.getcwd()}\{self.resources}{sep}fonts{sep}classic.ttf", 125)
 
         clock = pg.time.Clock()
 
-        bg_image = pg.image.load(f"data\images\menu\score_screen.png")
+        bg_image = pg.image.load(f"{self.resources}images{sep}menu{sep}score_screen.png")
 
         ending = True
         while ending:
@@ -156,10 +158,11 @@ class LeaderBoard:
     def __init__(self, sb, screen, size, lb_res):
         self.screen = screen
         self.res = size
-        self.style = "data/styles/winner_menu.json"
-
+        self.style = f"resources{sep}styles{sep}winner_menu.json"
+        self.resources = "resources" + sep
         self.lb_back, self.lb_player, self.lb_score, self.lb_mult = lb_res
         self.object_id = "#Text" if size[0] == 1920 else "#Text2"
+
 
         self.sb = sb
         self.scores = self._get_scores()
@@ -206,14 +209,14 @@ class LeaderBoard:
     def run(self):
         """Function to run the Leaderboard while"""
 
-        snd = pg.mixer.Sound(f"data/soundtracks/leaderboard.mp3")
+        snd = pg.mixer.Sound(f"{self.resources}soundtracks{sep}leaderboard.mp3")
         pg.mixer.Sound.play(snd, -1)
         pg.mixer.Sound.set_volume(snd, 0.35)
 
         is_running = True
         clock = pg.time.Clock()
 
-        img = pg.image.load("data/images/menu/leaderboard.png")
+        img = pg.image.load(f"{self.resources}images{sep}menu{sep}leaderboard.png")
 
         if self.res == (1280, 720):
             img = pg.transform.scale(img, self.res)

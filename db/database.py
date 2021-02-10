@@ -14,7 +14,8 @@ class ScoreboardData:
         )
         self.connect()
 
-    def connect(self):
+    @staticmethod
+    def connect():
         """Creates the connetion with the database"""
         
         try:
@@ -61,7 +62,8 @@ class ScoreboardData:
         conn.commit()
         conn.close()
 
-    def getData(self, amount=0):
+    @staticmethod
+    def getData(amount=0):
         """Import the data from the databse"""
 
         conn = sqlite3.connect("scores.db")

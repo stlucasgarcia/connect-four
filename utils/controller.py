@@ -24,7 +24,8 @@ class Controller:
         else:
             return False
 
-    def isControllerEvent(self, event):
+    @staticmethod
+    def isControllerEvent(event):
         """Used later to manage controller events"""
         return (
             event.type == JOYBUTTONDOWN

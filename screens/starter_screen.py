@@ -3,7 +3,7 @@ import sys
 import time
 
 from itertools import cycle
-from settings import Settings
+from utils.settings import Settings
 
 
 class InitScreen:
@@ -12,20 +12,21 @@ class InitScreen:
     def __init__(self, screen) -> None:
         self.config = Settings()
         self.screen = screen
+        self.resources_images = "resources\images\starter"
         self.bg_classic = pg.image.load(
-            "data\images\starter\classic\starter_screen.png"
+            f"{self.resources_images}\classic\starter_screen.png"
         )
         self.bg_halloween = pg.image.load(
-            "data\images\starter\halloween\starter_screen.png"
+            f"{self.resources_images}\halloween\starter_screen.png"
         )
         self.bg_vaporwave = pg.image.load(
-            "data\images\starter\\vaporwave\starter_screen.png"
+            f"{self.resources_images}\\vaporwave\starter_screen.png"
         )
         self.bg_christmas = pg.image.load(
-            "data\images\starter\christmas\starter_screen.png"
+            f"{self.resources_images}\christmas\starter_screen.png"
         )
         self.bg_old_west = pg.image.load(
-            "data\images\starter\old_west\starter_screen.png"
+            f"{self.resources_images}\old_west\starter_screen.png"
         )
         self.size = self.config.size
 

@@ -4,8 +4,8 @@ import pygame as pg
 from sys import exit
 from json import dump
 from typing import Any, Tuple
-
-from controller import Controller
+from os import sep
+from utils.controller import Controller
 
 
 class OptionsMenu:
@@ -26,7 +26,7 @@ class OptionsMenu:
         self.quit_res = attr["quit"]
 
         self.img = pg.image.load(
-            f"data\images\\background\\{attr['theme']}\esc_image.png"
+            f"resources{sep}images{sep}background{sep}{attr['theme']}{sep}esc_image.png"
         )
         self.img.set_alpha(100)
 
@@ -129,7 +129,7 @@ class StarterMenu:
         self.data: dict = {}
         self.selected = True
 
-        self.style: str = "data/styles/select_menu.json"
+        self.style: str = f"resources{sep}styles{sep}select_menu.json"
         self.screen = attr["screen"]
         self.window = "select"
         self.plrs = (False, False)
@@ -318,13 +318,13 @@ class StarterMenu:
         """Runs the select menu loop"""
 
         pg.mixer.music.stop()
-        snd = pg.mixer.Sound("data/soundtracks/select_menu.mp3")
+        snd = pg.mixer.Sound(f"resources{sep}soundtracks{sep}select_menu.mp3")
         pg.mixer.Sound.play(snd, -1)
         pg.mixer.Sound.set_volume(snd, 0.35)
 
         self.next.disable()
 
-        img = pg.image.load("data/images/menu/select_menu.png")
+        img = pg.image.load(f"resources{sep}images{sep}menu{sep}select_menu.png")
 
         if self.res == (1280, 720):
             img = pg.transform.scale(img, self.res)

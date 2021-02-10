@@ -3,9 +3,9 @@ import numpy as np
 import random
 import math
 
-from ending_screens import EndingScreen
+from screens.ending_screens import EndingScreen
 from datetime import timedelta
-from settings import Settings
+from utils.settings import Settings
 
 
 class UtilitiesMain:

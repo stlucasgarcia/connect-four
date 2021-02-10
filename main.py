@@ -1,10 +1,11 @@
 import pygame as pg
 
-from starter_screen import InitScreen
-from main_screen import MainScreen
-from settings import Settings
-from menu import StarterMenu
+from screens.starter_screen import InitScreen
+from screens.main_screen import MainScreen
+from utils.settings import Settings
+from screens.menu import StarterMenu
 
+from os import sep
 scores = [0, 0]
 
 """
@@ -92,7 +93,7 @@ def re_exec():
 
     subprocess.call(
         [
-            f"{sys.path[0]}\\venv\Scripts\python.exe",
+            f"{sys.path[0]}{sep}venv{sep}bin{sep}python.exe",
             os.path.join(sys.path[0], __file__),
         ]
         + sys.argv[1:]

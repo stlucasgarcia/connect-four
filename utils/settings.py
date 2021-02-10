@@ -3,6 +3,7 @@ import json
 import pygame as pg
 
 from typing import Tuple, Any
+from os import sep
 
 T = Tuple[int, int, int, int]
 S = Tuple[Tuple[int, int], Tuple[int, int]]
@@ -16,12 +17,16 @@ class Settings:
         self.res = "_full_hd" if kwargs["resolution"] == "FULLHD" else "_hd"
         self.theme = kwargs["theme"]
         self.option = kwargs["mode"]
+        self.resources = "resources" + sep
+        self.resources_images = self.resources + f"images{sep}"
+        self.resources_sounds = self.resources + f"sounds{sep}"
+        self.resources_soundtracks = self.resources + f"soundtracks{sep}"
 
         self.height: int
         self.width: int
         self.size: Tuple[int, int]
         self.font: Any
-        self.style: str = "data/styles/"
+        self.style: str = f"resources{sep}styles{sep}"
         self.volume: float
 
         self.sm_title = T
@@ -65,7 +70,7 @@ class Settings:
 
     def _hd(self) -> None:
         """Hd settings and pixels locations which are used around the code"""
-        
+
         self.width = 1280
         self.height = 720
         self.size = (1280, 720)
@@ -83,7 +88,7 @@ class Settings:
         """Gets the respective theme's font"""
 
         if self.theme == "classic":
-            self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\classic.ttf", 75)
+            self.font = pg.font.Font(f"{os.getcwd()}{sep}resources{sep}fonts{sep}classic.ttf", 75)
             self.style += "options_menu_classic.json"
             self.volume = 0.25
 
@@ -101,7 +106,9 @@ class Settings:
             )
 
         elif self.theme == "halloween":
-            self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\halloween.otf", 75)
+            self.font = pg.font.Font(
+                f"{os.getcwd()}{sep}resources{sep}fonts{sep}halloween.otf", 75
+            )
             self.style += "options_menu_halloween.json"
             self.volume = 0.35
 
@@ -119,7 +126,9 @@ class Settings:
             )
 
         elif self.theme == "old_west":
-            self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\old_west.otf", 75)
+            self.font = pg.font.Font(
+                f"{os.getcwd()}{sep}resources{sep}fonts{sep}old_west.otf", 75
+            )
             self.style += "options_menu_old_west.json"
             self.volume = 0.30
 
@@ -137,7 +146,9 @@ class Settings:
             )
 
         elif self.theme == "vaporwave":
-            self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\\vaporwave.otf", 75)
+            self.font = pg.font.Font(
+                f"{os.getcwd()}{sep}resources{sep}fonts{sep}vaporwave.otf", 75
+            )
             self.style += "options_menu_vaporwave.json"
             self.volume = 0.35
 
@@ -155,7 +166,9 @@ class Settings:
             )
 
         elif self.theme == "christmas":
-            self.font = pg.font.Font(f"{os.getcwd()}\data\\fonts\christmas.ttf", 75)
+            self.font = pg.font.Font(
+                f"{os.getcwd()}{sep}resources{sep}fonts{sep}christmas.ttf", 75
+            )
             self.style += "options_menu_christmas.json"
             self.volume = 0.10
 
@@ -174,10 +187,14 @@ class Settings:
         """Gets the respective theme's images, like the board and each chips, it also resizes them for HD"""
 
         self.bg_image = pg.image.load(
-            f"data/images/game_screens/{self.theme}/game_screen.png"
+            f"{self.resources_images}game_screens{sep}{self.theme}{sep}game_screen.png"
         )
-        self.chip_1 = pg.image.load(f"data/images/game_screens/{self.theme}/chip_1.png")
-        self.chip_2 = pg.image.load(f"data/images/game_screens/{self.theme}/chip_2.png")
+        self.chip_1 = pg.image.load(
+            f"{self.resources_images}game_screens{sep}{self.theme}{sep}chip_1.png"
+        )
+        self.chip_2 = pg.image.load(
+            f"{self.resources_images}game_screens{sep}{self.theme}{sep}chip_2.png"
+        )
 
         if self.size == (1280, 720):
             self.bg_image = pg.transform.scale(self.bg_image, (1280, 720))
@@ -187,12 +204,16 @@ class Settings:
     def _config_sound(self) -> None:
         """Gets the respective theme's sounds for the chips and background song"""
 
-        pg.mixer.music.load(f"data/soundtracks/{self.theme}.mp3")
-        self.sound_chip_1 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_1.mp3")
-        self.sound_chip_2 = pg.mixer.Sound(f"data/sounds/{self.theme}/chip_2.mp3")
+        pg.mixer.music.load(f"{self.resources_soundtracks}{self.theme}.mp3")
+        self.sound_chip_1 = pg.mixer.Sound(
+            f"{self.resources_sounds}{self.theme}{sep}chip_1.mp3"
+        )
+        self.sound_chip_2 = pg.mixer.Sound(
+            f"{self.resources_sounds}{self.theme}{sep}chip_2.mp3"
+        )
 
     def _config_start_menu(self):
-        """Configures the start/select menu for both resolutions"""
+        """Configures the start{sep}select menu for both resolutions"""
 
         self.sm_title = (660, 20, 600, 300) if self.fullhd else (340, 40, 600, 150)
         self.sm_mode_txt = (460, 260, 200, 300) if self.fullhd else (140, 150, 200, 300)

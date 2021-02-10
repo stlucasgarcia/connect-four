@@ -2,12 +2,12 @@ import pygame as pg
 import math
 import sys
 
-from ending_screens import EndingScreen
-from utilities import UtilitiesMain
+from screens.ending_screens import EndingScreen
+from utils.utilities import UtilitiesMain
 
-from controller import Controller
-from settings import Settings
-from menu import OptionsMenu
+from utils.controller import Controller
+from utils.settings import Settings
+from screens.menu import OptionsMenu
 
 """
 The second most important file, it creates the game itself (board, esc menu, check who is the winner and so on),

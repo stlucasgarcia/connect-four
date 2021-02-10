@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "/home/lsglucas/Documents/Projects/connect-four/venv/bin/python3",
+    "python.linting.flake8Enabled": false,
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
+}
