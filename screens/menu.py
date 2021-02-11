@@ -4,9 +4,8 @@ import pygame as pg
 from sys import exit
 from json import dump
 from typing import Any, Tuple
-from os import sep
-from utils.controller import Controller
 
+from utils import Path, Controller, sep
 
 class OptionsMenu:
     """ Creates a menu when esc is pressed during the game, it has 3 options, resume, starter menu and quit"""
@@ -26,7 +25,7 @@ class OptionsMenu:
         self.quit_res = attr["quit"]
 
         self.img = pg.image.load(
-            f"resources{sep}images{sep}background{sep}{attr['theme']}{sep}esc_image.png"
+            f"{Path.images()}background{sep}{attr['theme']}{sep}esc_image{Path.IMAGE_SUFFIX}"
         )
         self.img.set_alpha(100)
 
@@ -129,7 +128,7 @@ class StarterMenu:
         self.data: dict = {}
         self.selected = True
 
-        self.style: str = f"resources{sep}styles{sep}select_menu.json"
+        self.style: str = f"{Path.styles()}select_menu{Path.DATA_SUFFIX}"
         self.screen = attr["screen"]
         self.window = "select"
         self.plrs = (False, False)
@@ -147,7 +146,7 @@ class StarterMenu:
     def _read_json(self):
         """Opens, close and reads the user_settings json"""
 
-        with open("user_settings.json", "r") as user:
+        with open(f"user_settings{Path.DATA_SUFFIX}", "r") as user:
             data = user.readlines()
 
             if self.res == (1920, 1080):
@@ -318,13 +317,13 @@ class StarterMenu:
         """Runs the select menu loop"""
 
         pg.mixer.music.stop()
-        snd = pg.mixer.Sound(f"resources{sep}soundtracks{sep}select_menu.mp3")
+        snd = pg.mixer.Sound(f"{Path.soundtracks()}select_menu{Path.AUDIO_SUFFIX}")
         pg.mixer.Sound.play(snd, -1)
-        pg.mixer.Sound.set_volume(snd, 0.35)
+        pg.mixer.Sound.set_volume(snd, 0.25)
 
         self.next.disable()
 
-        img = pg.image.load(f"resources{sep}images{sep}menu{sep}select_menu.png")
+        img = pg.image.load(f"{Path.images()}menu{sep}select_menu{Path.IMAGE_SUFFIX}")
 
         if self.res == (1280, 720):
             img = pg.transform.scale(img, self.res)
@@ -372,11 +371,11 @@ class StarterMenu:
 
         change_res = False
 
-        res = open("user_settings.json", "r+").readlines()
+        res = open(f"user_settings{Path.DATA_SUFFIX}", "r+").readlines()
         if res:
             change_res = True if data["resolution"] != res[3].split('"')[-2] else False
 
-        with open("user_settings.json", "w+") as user:
+        with open(f"user_settings{Path.DATA_SUFFIX}", "w+") as user:
             dump(data, user, indent=4)
 
         return change_res

@@ -2,10 +2,10 @@ import pygame as pg
 
 from screens.starter_screen import InitScreen
 from screens.main_screen import MainScreen
-from utils.settings import Settings
 from screens.menu import StarterMenu
 
-from os import sep
+from utils import Settings, Path, sep
+
 scores = [0, 0]
 
 """
@@ -22,11 +22,11 @@ def game_run():
 
     size: tuple = (width, height)
 
-    screen: pg.Surface = pg.display.set_mode(size)
+    screen: pg.Surface = pg.display.set_mode(size, pg.FULLSCREEN)
 
     pg.display.set_caption("Connect Four")
 
-    icon: pg.Surface = pg.image.load("data\images\icon.png")
+    icon: pg.Surface = pg.image.load(f"{Path.images()}icon{Path.IMAGE_SUFFIX}")
 
     pg.display.set_icon(icon)
 

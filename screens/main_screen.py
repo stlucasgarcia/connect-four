@@ -5,8 +5,8 @@ import sys
 from screens.ending_screens import EndingScreen
 from utils.utilities import UtilitiesMain
 
-from utils.controller import Controller
-from utils.settings import Settings
+
+from utils import Controller, Settings
 from screens.menu import OptionsMenu
 
 """

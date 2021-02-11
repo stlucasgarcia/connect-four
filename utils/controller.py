@@ -1,7 +1,6 @@
 import pygame
 from pygame.locals import *
 
-
 class Controller:
     """Class created to manage all the controllers features """
 

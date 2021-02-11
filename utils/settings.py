@@ -1,9 +1,8 @@
-import os
 import json
 import pygame as pg
 
 from typing import Tuple, Any
-from os import sep
+from utils.paths import Path, sep
 
 T = Tuple[int, int, int, int]
 S = Tuple[Tuple[int, int], Tuple[int, int]]
@@ -13,20 +12,21 @@ class Settings:
     """Class created to organize the different options and variables"""
 
     def __init__(self):
-        kwargs = json.load(open("user_settings.json", "r"))
+        kwargs = json.load(open(f"user_settings{Path.DATA_SUFFIX}", "r"))
         self.res = "_full_hd" if kwargs["resolution"] == "FULLHD" else "_hd"
         self.theme = kwargs["theme"]
         self.option = kwargs["mode"]
-        self.resources = "resources" + sep
-        self.resources_images = self.resources + f"images{sep}"
-        self.resources_sounds = self.resources + f"sounds{sep}"
-        self.resources_soundtracks = self.resources + f"soundtracks{sep}"
+        
+        self.resources_images = Path.images()
+        self.resources_sounds = Path.sounds()
+        self.resources_soundtracks = Path.soundtracks()
+        self.resources_font = Path.fonts()
 
+        self.style: str = Path.styles()
         self.height: int
         self.width: int
         self.size: Tuple[int, int]
         self.font: Any
-        self.style: str = f"resources{sep}styles{sep}"
         self.volume: float
 
         self.sm_title = T
@@ -88,8 +88,8 @@ class Settings:
         """Gets the respective theme's font"""
 
         if self.theme == "classic":
-            self.font = pg.font.Font(f"{os.getcwd()}{sep}resources{sep}fonts{sep}classic.ttf", 75)
-            self.style += "options_menu_classic.json"
+            self.font = pg.font.Font(f"{self.resources_font}classic.ttf", 75)
+            self.style += f"options_menu_classic{Path.DATA_SUFFIX}"
             self.volume = 0.25
 
             self.op_label = (
@@ -107,9 +107,9 @@ class Settings:
 
         elif self.theme == "halloween":
             self.font = pg.font.Font(
-                f"{os.getcwd()}{sep}resources{sep}fonts{sep}halloween.otf", 75
+                f"{self.resources_font}halloween.otf", 75
             )
-            self.style += "options_menu_halloween.json"
+            self.style += f"options_menu_halloween{Path.DATA_SUFFIX}"
             self.volume = 0.35
 
             self.op_label = (
@@ -127,9 +127,9 @@ class Settings:
 
         elif self.theme == "old_west":
             self.font = pg.font.Font(
-                f"{os.getcwd()}{sep}resources{sep}fonts{sep}old_west.otf", 75
+                f"{self.resources_font}old_west.otf", 75
             )
-            self.style += "options_menu_old_west.json"
+            self.style += f"options_menu_old_west{Path.DATA_SUFFIX}"
             self.volume = 0.30
 
             self.op_label = (
@@ -147,9 +147,9 @@ class Settings:
 
         elif self.theme == "vaporwave":
             self.font = pg.font.Font(
-                f"{os.getcwd()}{sep}resources{sep}fonts{sep}vaporwave.otf", 75
+                f"{self.resources_font}vaporwave.otf", 75
             )
-            self.style += "options_menu_vaporwave.json"
+            self.style += f"options_menu_vaporwave{Path.DATA_SUFFIX}"
             self.volume = 0.35
 
             self.op_label = (
@@ -167,9 +167,9 @@ class Settings:
 
         elif self.theme == "christmas":
             self.font = pg.font.Font(
-                f"{os.getcwd()}{sep}resources{sep}fonts{sep}christmas.ttf", 75
+                f"{self.resources_font}christmas.ttf", 75
             )
-            self.style += "options_menu_christmas.json"
+            self.style += f"options_menu_christmas{Path.DATA_SUFFIX}"
             self.volume = 0.10
 
             self.op_label = (740, 220, 470, 210) if self.fullhd else (445, 60, 400, 210)
@@ -187,13 +187,13 @@ class Settings:
         """Gets the respective theme's images, like the board and each chips, it also resizes them for HD"""
 
         self.bg_image = pg.image.load(
-            f"{self.resources_images}game_screens{sep}{self.theme}{sep}game_screen.png"
+            f"{self.resources_images}game_screens{sep}{self.theme}{sep}game_screen{Path.IMAGE_SUFFIX}"
         )
         self.chip_1 = pg.image.load(
-            f"{self.resources_images}game_screens{sep}{self.theme}{sep}chip_1.png"
+            f"{self.resources_images}game_screens{sep}{self.theme}{sep}chip_1{Path.IMAGE_SUFFIX}"
         )
         self.chip_2 = pg.image.load(
-            f"{self.resources_images}game_screens{sep}{self.theme}{sep}chip_2.png"
+            f"{self.resources_images}game_screens{sep}{self.theme}{sep}chip_2{Path.IMAGE_SUFFIX}"
         )
 
         if self.size == (1280, 720):
@@ -204,12 +204,12 @@ class Settings:
     def _config_sound(self) -> None:
         """Gets the respective theme's sounds for the chips and background song"""
 
-        pg.mixer.music.load(f"{self.resources_soundtracks}{self.theme}.mp3")
+        pg.mixer.music.load(f"{self.resources_soundtracks}{self.theme}{Path.AUDIO_SUFFIX}")
         self.sound_chip_1 = pg.mixer.Sound(
-            f"{self.resources_sounds}{self.theme}{sep}chip_1.mp3"
+            f"{self.resources_sounds}{self.theme}{sep}chip_1{Path.AUDIO_SUFFIX}"
         )
         self.sound_chip_2 = pg.mixer.Sound(
-            f"{self.resources_sounds}{self.theme}{sep}chip_2.mp3"
+            f"{self.resources_sounds}{self.theme}{sep}chip_2{Path.AUDIO_SUFFIX}"
         )
 
     def _config_start_menu(self):
