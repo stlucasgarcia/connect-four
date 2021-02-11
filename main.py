@@ -1,9 +1,10 @@
 import pygame as pg
 
-from starter_screen import InitScreen
-from main_screen import MainScreen
-from settings import Settings
-from menu import StarterMenu
+from screens.starter_screen import InitScreen
+from screens.main_screen import MainScreen
+from screens.menu import StarterMenu
+
+from utils import Settings, Path, sep
 
 scores = [0, 0]
 
@@ -21,11 +22,11 @@ def game_run():
 
     size: tuple = (width, height)
 
-    screen: pg.Surface = pg.display.set_mode(size)
+    screen: pg.Surface = pg.display.set_mode(size, pg.FULLSCREEN)
 
     pg.display.set_caption("Connect Four")
 
-    icon: pg.Surface = pg.image.load("data\images\icon.png")
+    icon: pg.Surface = pg.image.load(f"{Path.images()}icon{Path.IMAGE_SUFFIX}")
 
     pg.display.set_icon(icon)
 
@@ -92,7 +93,7 @@ def re_exec():
 
     subprocess.call(
         [
-            f"{sys.path[0]}\\venv\Scripts\python.exe",
+            f"{sys.path[0]}{sep}venv{sep}bin{sep}python.exe",
             os.path.join(sys.path[0], __file__),
         ]
         + sys.argv[1:]
