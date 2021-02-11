@@ -41,7 +41,7 @@
         {
             "name": "vaporwave",
             "size": "50",
-            "regular_path": "data/fonts/vaporwave.otf"
+            "regular_path": "resources/fonts/vaporwave.otf"
         }
     },
 
@@ -56,7 +56,7 @@
         {
             "name": "vaporwave",
             "size": "150",
-            "regular_path": "data/fonts/vaporwave.otf"
+            "regular_path": "resources/fonts/vaporwave.otf"
         }
     }
 }

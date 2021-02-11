@@ -28,7 +28,7 @@
         {
             "name": "classic",
             "size": "90",
-            "regular_path": "data/fonts/classic.ttf"
+            "regular_path": "resources/fonts/classic.ttf"
         }
     },
 
@@ -118,7 +118,7 @@
         {
             "name": "classic",
             "size": "50",
-            "regular_path": "data/fonts/classic.ttf"
+            "regular_path": "resources/fonts/classic.ttf"
         }
     },
 
@@ -133,7 +133,7 @@
         {
             "name": "vaporwave",
             "size": "150",
-            "regular_path": "data/fonts/classic.ttf"
+            "regular_path": "resources/fonts/classic.ttf"
         }
     },
 
@@ -148,7 +148,7 @@
         {
             "name": "classic",
             "size": "80",
-            "regular_path": "data/fonts/classic.ttf"
+            "regular_path": "resources/fonts/classic.ttf"
         }
     },
 
@@ -173,7 +173,7 @@
         {
             "name": "classic",
             "size": "40",
-            "regular_path": "data/fonts/classic.ttf"
+            "regular_path": "resources/fonts/classic.ttf"
         }
     }
 }

@@ -41,7 +41,7 @@
         {
             "name": "classic",
             "size": "50",
-            "regular_path": "data/fonts/classic.ttf"
+            "regular_path": "resources/fonts/classic.ttf"
         }
     },
 
@@ -61,7 +61,7 @@
         {
             "name": "classic",
             "size": "70",
-            "regular_path": "data/fonts/classic.ttf"
+            "regular_path": "resources/fonts/classic.ttf"
         }
     },
 
@@ -72,7 +72,7 @@
         {
             "name": "classic",
             "size": "50",
-            "regular_path": "data/fonts/classic.ttf"
+            "regular_path": "resources/fonts/classic.ttf"
         }
     }
 }

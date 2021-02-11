@@ -41,7 +41,7 @@
         {
             "name": "halloween",
             "size": "50",
-            "regular_path": "data/fonts/halloween.otf"
+            "regular_path": "resources/fonts/halloween.otf"
         }
     },
 
@@ -56,7 +56,7 @@
         {
             "name": "halloween",
             "size": "150",
-            "regular_path": "data/fonts/halloween.otf"
+            "regular_path": "resources/fonts/halloween.otf"
         }
     }
 }
