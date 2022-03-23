@@ -1,11 +1,12 @@
-import pygame_gui
-import pygame as pg
-
-from sys import exit
 from json import dump
+from sys import exit
 from typing import Any, Tuple
 
+import pygame as pg
+import pygame_gui
+
 from utils import Path, Controller, sep
+
 
 class OptionsMenu:
     """ Creates a menu when esc is pressed during the game, it has 3 options, resume, starter menu and quit"""
@@ -75,7 +76,7 @@ class OptionsMenu:
             for event in pg.event.get():
                 self.manager.process_events(event)
 
-                if control.isControllerEscEvent(event):
+                if control.is_controller_esc_event(event):
                     options = False
                     return True
 
@@ -141,7 +142,7 @@ class StarterMenu:
 
         self.clock = pg.time.Clock()
         self._read_json()
-        self._create_first_UI()
+        self._create_first_ui()
 
     def _read_json(self):
         """Opens, close and reads the user_settings json"""
@@ -158,7 +159,7 @@ class StarterMenu:
             self.last_theme = data[2].split('"')[-2].capitalize()
             self.last_res = prep + data[3].split('"')[-2]
 
-    def _create_first_UI(self):
+    def _create_first_ui(self):
         """Creates the select menu UI"""
 
         self.manager = pygame_gui.UIManager(self.res, self.style)
@@ -304,8 +305,8 @@ class StarterMenu:
                 self.next.enable()
 
             elif (self.p1.get_text() and self.p2.get_text()) and self.plrs == (
-                True,
-                True,
+                    True,
+                    True,
             ):
                 self.next.enable()
                 self.next.enable()
@@ -337,9 +338,9 @@ class StarterMenu:
                 self.manager.process_events(event)
 
                 if (
-                    self.mode.selected_option
-                    and self.theme_selector.selected_option
-                    and self.res_selector.selected_option
+                        self.mode.selected_option
+                        and self.theme_selector.selected_option
+                        and self.res_selector.selected_option
                 ):
                     self.next.enable()
 

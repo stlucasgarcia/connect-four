@@ -1,11 +1,11 @@
-import os
-import pygame_gui
-import pygame as pg
-
 from sys import exit
 from typing import Any
-from utils import Settings, Path, sep
+
+import pygame as pg
+import pygame_gui
+
 from db import ScoreboardData
+from utils import Settings, Path, sep
 
 
 class EndingScreen:
@@ -27,13 +27,13 @@ class EndingScreen:
         self.font = Path.fonts()
         self.image = Path.images()
 
-        self._createUI(kwargs)
+        self._create_ui(kwargs)
 
         self.sb = ScoreboardData(data)
         self.sb.updateTable()
         self.sb.winnerUpdate()
 
-    def _createUI(self, kwargs):
+    def _create_ui(self, kwargs):
         """Creates the menu UI and the style of ita"""
 
         # pg.display.set_mode(kwargs["res"], pg.FULLSCREEN)
@@ -164,13 +164,12 @@ class LeaderBoard:
         self.screen = screen
         self.res = size
 
-        self.style = f"{Path.style()}winner_menu{Path.DATA_SUFFIX}"
-        self.soundtrack =  Path.soundtracks()
+        self.style = f"{Path.styles()}winner_menu{Path.DATA_SUFFIX}"
+        self.soundtrack = Path.soundtracks()
         self.image = Path.images()
 
         self.lb_back, self.lb_player, self.lb_score, self.lb_mult = lb_res
         self.object_id = "#Text" if size[0] == 1920 else "#Text2"
-
 
         self.sb = sb
         self.scores = self._get_scores()

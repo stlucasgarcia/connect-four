@@ -1,9 +1,11 @@
-import pygame as pg
 import sys
 import time
-
 from itertools import cycle
+
+import pygame as pg
+
 from utils import Path, Settings, sep
+
 
 class InitScreen:
     """Starter loop which emulates a gif"""
@@ -40,7 +42,7 @@ class InitScreen:
     def starter_screen(self):
         """Starter screen loop"""
 
-        Clock = pg.time.Clock()
+        clock = pg.time.Clock()
 
         backgrounds = cycle(
             [
@@ -52,14 +54,13 @@ class InitScreen:
             ]
         )
 
-        startGame = True
-        while startGame == True:
+        start_game = True
+        while start_game:
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         sys.exit()
 
-                    startGame = False
                     return
 
             self.screen.blit(next(backgrounds), (0, 0))
@@ -68,4 +69,4 @@ class InitScreen:
 
             time.sleep(1.5)
 
-            Clock.tick(60)
+            clock.tick(60)

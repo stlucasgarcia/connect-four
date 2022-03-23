@@ -1,7 +1,8 @@
 import json
+from typing import Tuple, Any
+
 import pygame as pg
 
-from typing import Tuple, Any
 from utils.paths import Path, sep
 
 T = Tuple[int, int, int, int]
@@ -16,7 +17,7 @@ class Settings:
         self.res = "_full_hd" if kwargs["resolution"] == "FULLHD" else "_hd"
         self.theme = kwargs["theme"]
         self.option = kwargs["mode"]
-        
+
         self.resources_images = Path.images()
         self.resources_sounds = Path.sounds()
         self.resources_soundtracks = Path.soundtracks()

@@ -1,18 +1,25 @@
+from _thread import start_new_thread
+
 import pygame as pg
 
-from screens.starter_screen import InitScreen
-from screens.main_screen import MainScreen
-from screens.menu import StarterMenu
-
+from multiplayer import Server, Client
+from screens import MainScreen, StarterMenu, InitScreen
 from utils import Settings, Path, sep
 
 scores = [0, 0]
 
 """
-Main file, it's used to create the main loop and call other function, as well as initialize classes and initial settings/menus.
+Main file, it's used to create the main loop and call other function, as well as initialize classes and initial 
+settings/menus.
 """
+
+
 # Pygame exit to stop initial loop
 def game_run():
+    server, client = init_multiplayer()
+
+    # return
+
     pg.init()
 
     config = Settings()
@@ -22,7 +29,7 @@ def game_run():
 
     size: tuple = (width, height)
 
-    screen: pg.Surface = pg.display.set_mode(size, pg.FULLSCREEN)
+    screen: pg.Surface = pg.display.set_mode(size)
 
     pg.display.set_caption("Connect Four")
 
@@ -30,7 +37,7 @@ def game_run():
 
     pg.display.set_icon(icon)
 
-    pg.mouse.set_visible(0)
+    pg.mouse.set_visible(False)
 
     pg.mouse.set_pos(963, 63)
 
@@ -38,15 +45,15 @@ def game_run():
 
     changes_res = False
 
-    isRunning = True
+    is_running = True
 
-    InitScreen_object = InitScreen(screen)
-    InitScreen_object.starter_screen()
+    init_screen_object = InitScreen(screen)
+    init_screen_object.starter_screen()
 
     play_again = False
     name1, name2 = None, None
 
-    while isRunning:
+    while is_running:
         pg.mouse.set_visible(False)
 
         try:
@@ -84,8 +91,23 @@ def game_run():
 
         pg.mouse.set_visible(False)
 
-        MainScreen_object = MainScreen(screen, is_controller, config.option)
-        play_again = MainScreen_object.main_screen(scores, usernames=[name1, name2])
+        main_screen_object = MainScreen(screen, is_controller, config.option, server, client)
+        play_again = main_screen_object.main_screen(scores, usernames=[name1, name2])
+
+
+def init_multiplayer() -> tuple[Server, Client]:
+    server = Server()
+
+    try:
+        server.post_init()
+        start_new_thread(server.listen, ())
+    except OSError:
+        print('Servidor já está inicializado')
+
+    client = Client()
+    start_new_thread(client.listen, ())
+
+    return server, client
 
 
 def re_exec():
@@ -102,3 +124,6 @@ def re_exec():
 
 if __name__ == "__main__":
     game_run()
+
+    while True:
+        pass

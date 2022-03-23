@@ -1,13 +1,13 @@
-import pygame as pg
-import math
 import sys
 
+import math
+import pygame as pg
+
+from multiplayer import Server, Client
 from screens.ending_screens import EndingScreen
-from utils.utilities import UtilitiesMain
-
-
-from utils import Controller, Settings
 from screens.menu import OptionsMenu
+from utils import Controller, Settings
+from utils.utilities import UtilitiesMain
 
 """
 The second most important file, it creates the game itself (board, esc menu, check who is the winner and so on),
@@ -18,17 +18,21 @@ as well as most utilities functions
 
 class MainScreen:
     def __init__(
-        self,
-        screen, 
-        is_controller,
-        option: str,
+            self,
+            screen,
+            is_controller,
+            option: str,
+            server: Server,
+            client: Client,
     ) -> None:
         self.config = Settings()
         self.option = option
+        self.server = server
+        self.client = client
 
         self.screen: pg.Surface = screen
         self.background_image: pg.Surface = self.config.bg_image
-        self.is_controller : bool = is_controller
+        self.is_controller: bool = is_controller
 
         self.sound_chip_1 = self.config.sound_chip_1
         self.sound_chip_2 = self.config.sound_chip_2
@@ -41,9 +45,9 @@ class MainScreen:
         """Main function to call the game screen"""
 
         control = Controller()
-        utilities = UtilitiesMain(self.screen)
+        utilities = UtilitiesMain(self.screen, self.server, self.client)
 
-        start_time = pg.time.get_ticks() # Used for timer
+        start_time = pg.time.get_ticks()  # Used for timer
 
         attr = {
             "res": self.config.size,
@@ -54,7 +58,7 @@ class MainScreen:
             "quit": self.config.op_quit,
             "theme": self.config.theme,
         }
-        menu = OptionsMenu(**attr) # Initializes the Options Menu class which is used to create the esc menu
+        menu = OptionsMenu(**attr)  # Initializes the Options Menu class which is used to create the esc menu
 
         clock = pg.time.Clock()
 
@@ -67,6 +71,19 @@ class MainScreen:
         x, y = 950, 15
 
         player_turn: int = 1  # if not option else option
+
+        self.client.add_player_move(utilities.playersTurn)
+        self.client._last_move_data = {str(value): value for value in [
+            0,
+            matrix,
+            player_turn,
+            self.sound_chip_1,
+            self.sound_chip_2,
+            usernames,
+            start_time,
+            scores,
+            self.option,
+        ]}
 
         pg.mixer.music.play(loops=-1)
         pg.mixer.music.set_volume(self.volume)
@@ -94,9 +111,12 @@ class MainScreen:
                 if event.type == pg.MOUSEBUTTONDOWN:
                     save_chip = chip
 
+                    print(player_turn)
+
                     column = utilities.location_X(pg.mouse.get_pos()[0])
+
                     if column != 0:
-                        (play_again, player_turn, chip, scores) = utilities.playersTurn(
+                        response = self.client.move_chip(
                             column,
                             matrix,
                             player_turn,
@@ -108,24 +128,21 @@ class MainScreen:
                             self.option,
                         )
 
-                        if play_again != None:
+                        (play_again, player_turn, chip, scores) = response[:4]
+
+                        if play_again is not None:
                             return play_again
 
-                        if chip == None:
+                        if chip is None:
                             chip = save_chip
 
                 if self.is_controller:
-                    if control.isControllerDropEvent(event):
+                    if control.is_controller_drop_event(event):
                         save_chip = chip
 
                         column = utilities.location_X(control.get_x_pos(event))
                         if column != 0:
-                            (
-                                play_again,
-                                player_turn,
-                                chip,
-                                scores,
-                            ) = utilities.playersTurn(
+                            response = self.client.move_chip(
                                 column,
                                 matrix,
                                 player_turn,
@@ -137,10 +154,12 @@ class MainScreen:
                                 self.option,
                             )
 
-                            if play_again != None:
+                            (play_again, player_turn, chip, scores) = response[:4]
+
+                            if play_again is not None:
                                 return play_again
 
-                            if chip == None:
+                            if chip is None:
                                 chip = save_chip
 
                 if event.type == pg.KEYDOWN:
@@ -149,12 +168,12 @@ class MainScreen:
                         if not play_again:
                             return play_again
 
-                if control.isControllerEscEvent(event):
+                if control.is_controller_esc_event(event):
                     play_again = menu.run(self.screen, clock)
                     if not play_again:
                         return play_again
 
-                if control.isControllerEvent(event):
+                if control.is_controller_esc_event(event):
                     screen = self.screen
                     control.check_event(event)
 

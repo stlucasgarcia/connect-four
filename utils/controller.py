@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 
+
 class Controller:
     """Class created to manage all the controllers features """
 
@@ -16,7 +17,7 @@ class Controller:
 
             axes = self.joysticks[i].get_numaxes()
 
-    def checkController(self):
+    def check_controller(self):
         """Check if there's a connected controller"""
         if self.joysticks:
             return True
@@ -24,15 +25,15 @@ class Controller:
             return False
 
     @staticmethod
-    def isControllerEvent(event):
+    def is_controller_event(event):
         """Used later to manage controller events"""
         return (
-            event.type == JOYBUTTONDOWN
-            or event.type == JOYAXISMOTION
-            or event.type == JOYHATMOTION
+                event.type == JOYBUTTONDOWN
+                or event.type == JOYAXISMOTION
+                or event.type == JOYHATMOTION
         )
 
-    def isControllerDropEvent(self, event):
+    def is_controller_drop_event(self, event):
         """Drop piece using the controllers available option"""
         if len(self.type) > 0:
             if self.type[0] == "PS4 Controller":
@@ -49,7 +50,7 @@ class Controller:
                 if event.type == JOYAXISMOTION:
                     return abs(event.axis) == 5 and event.value == 1
 
-    def isControllerEscEvent(self, event):
+    def is_controller_esc_event(self, event):
         """Check for the esc menu event for controller"""
         if len(self.type) > 0:
             if self.type[0] == "PS4 Controller":
@@ -139,12 +140,10 @@ class Controller:
             if event.type == JOYAXISMOTION:
                 if abs(event.axis) == 0:
                     if event.value > 0.7:
-
                         self.x_hd += 1 if self.x_hd + 1 < max_px_hd else 0
                         return self.x_hd
 
                     if event.value < -0.7:
-
                         self.x_hd -= 1 if self.x_hd - 1 >= min_px_hd else 0
                         return self.x_hd
 

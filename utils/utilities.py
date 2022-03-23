@@ -1,19 +1,23 @@
-import pygame as pg
-import numpy as np
 import random
-import math
-
-from screens.ending_screens import EndingScreen
 from datetime import timedelta
+
+import math
+import numpy as np
+import pygame as pg
+
+from multiplayer import Server, Client
+from screens import EndingScreen
 from utils.settings import Settings
 
 
 class UtilitiesMain:
     """Utilities class used to organize the main screen loop"""
 
-    def __init__(self, screen: pg.Surface):
+    def __init__(self, screen: pg.Surface, server: Server, client: Client):
         self.config = Settings()
         self.screen = screen
+        self.server = server
+        self.client = client
 
         self.COLUMN_AMOUNT = 7
         self.ROW_AMOUNT = 6
@@ -45,7 +49,8 @@ class UtilitiesMain:
         return matrix[self.ROW_AMOUNT - 1][column] == 0
 
     def location_X(self, click_loc: int) -> int:
-        """'Hit Box of the chip' this function is used to defines the place in which the chip will be placed by the player"""
+        """'Hit Box of the chip' this function is used to defines the place in which the chip will be placed by the
+        player"""
 
         # First location (X)
         if self.width == 1280:
@@ -154,10 +159,10 @@ class UtilitiesMain:
         for column in range(self.COLUMN_AMOUNT - 3):
             for row in range(self.ROW_AMOUNT):
                 if (
-                    matrix[row][column] == chip
-                    and matrix[row][column + 1] == chip
-                    and matrix[row][column + 2] == chip
-                    and matrix[row][column + 3] == chip
+                        matrix[row][column] == chip
+                        and matrix[row][column + 1] == chip
+                        and matrix[row][column + 2] == chip
+                        and matrix[row][column + 3] == chip
                 ):
                     return True
 
@@ -165,10 +170,10 @@ class UtilitiesMain:
         for column in range(self.COLUMN_AMOUNT):
             for row in range(self.ROW_AMOUNT - 3):
                 if (
-                    matrix[row][column] == chip
-                    and matrix[row + 1][column] == chip
-                    and matrix[row + 2][column] == chip
-                    and matrix[row + 3][column] == chip
+                        matrix[row][column] == chip
+                        and matrix[row + 1][column] == chip
+                        and matrix[row + 2][column] == chip
+                        and matrix[row + 3][column] == chip
                 ):
                     return True
 
@@ -176,10 +181,10 @@ class UtilitiesMain:
         for column in range(self.COLUMN_AMOUNT - 3):
             for row in range(self.ROW_AMOUNT - 3):
                 if (
-                    matrix[row][column] == chip
-                    and matrix[row + 1][column + 1] == chip
-                    and matrix[row + 2][column + 2] == chip
-                    and matrix[row + 3][column + 3] == chip
+                        matrix[row][column] == chip
+                        and matrix[row + 1][column + 1] == chip
+                        and matrix[row + 2][column + 2] == chip
+                        and matrix[row + 3][column + 3] == chip
                 ):
                     return True
 
@@ -187,10 +192,10 @@ class UtilitiesMain:
         for column in range(self.COLUMN_AMOUNT - 3):
             for row in range(3, self.ROW_AMOUNT):
                 if (
-                    matrix[row][column] == chip
-                    and matrix[row - 1][column + 1] == chip
-                    and matrix[row - 2][column + 2] == chip
-                    and matrix[row - 3][column + 3] == chip
+                        matrix[row][column] == chip
+                        and matrix[row - 1][column + 1] == chip
+                        and matrix[row - 2][column + 2] == chip
+                        and matrix[row - 3][column + 3] == chip
                 ):
                     return True
 
@@ -200,13 +205,13 @@ class UtilitiesMain:
         return (matrix[:][:] != 0).all()
 
     def is_valid(
-        self,
-        column: int,
-        is_position_available: bool,
-        turn: int,
-        sound_chip_1,
-        sound_chip_2,
-        option,
+            self,
+            column: int,
+            is_position_available: bool,
+            turn: int,
+            sound_chip_1,
+            sound_chip_2,
+            option,
     ):
         """Verify if the desired position is available in the matrix"""
 
@@ -236,9 +241,9 @@ class UtilitiesMain:
         """Check if the position will end the game, is used on the AI"""
 
         return (
-            self.is_victory(matrix, self.player_chip)
-            or self.is_victory(matrix, self.ai_chip)
-            or len(self.get_available_list(matrix)) == 0  # TODO self.is_tie()
+                self.is_victory(matrix, self.player_chip)
+                or self.is_victory(matrix, self.ai_chip)
+                or len(self.get_available_list(matrix)) == 0  # TODO self.is_tie()
         )
 
     def timer(self, start_time) -> None:
@@ -258,18 +263,19 @@ class UtilitiesMain:
         self.screen.blit(text_time, (self.width // 2 - 80, y))
 
     def playersTurn(
-        self,
-        column: int,
-        matrix,
-        player_turn,
-        sound_chip_1,
-        sound_chip_2,
-        usernames,
-        start_time,
-        scores,
-        option,
+            self,
+            column: int,
+            matrix,
+            player_turn,
+            sound_chip_1,
+            sound_chip_2,
+            usernames,
+            start_time,
+            scores,
+            option,
     ):
-        """Main function of utilities, it makes the players turn and call other function to create the difference between turns and check for win"""
+        """Main function of utilities, it makes the players turn and call other function to create the difference
+        between turns and check for win"""
 
         turn = player_turn
         play_again = None
@@ -284,6 +290,8 @@ class UtilitiesMain:
             )
 
             row = self.get_open_row(matrix, column)
+
+            self.client.move(column)
 
             self.drop_piece(matrix, row, column, turn)
 
@@ -311,7 +319,7 @@ class UtilitiesMain:
 
                 play_again = ending.scores()
 
-        return play_again, turn, chip, scores
+        return play_again, turn, chip, scores, column, matrix, sound_chip_1, sound_chip_2, usernames, start_time, option
 
     def evaluate_window(self, window, chip) -> int:
         """Evaluate the window and returns the score, it's used by the AI"""
@@ -350,14 +358,14 @@ class UtilitiesMain:
         for r in range(self.ROW_AMOUNT):
             row_array = [int(i) for i in list(matrix[r, :])]
             for c in range(self.COLUMN_AMOUNT - 3):
-                window = row_array[c : c + self.WINDOWS_LENGHT]
+                window = row_array[c: c + self.WINDOWS_LENGHT]
                 score += self.evaluate_window(window, chip)
 
         ## Score Vertical
         for c in range(self.COLUMN_AMOUNT):
             col_array = [int(i) for i in list(matrix[:, c])]
             for r in range(self.ROW_AMOUNT - 3):
-                window = col_array[r : r + self.WINDOWS_LENGHT]
+                window = col_array[r: r + self.WINDOWS_LENGHT]
                 score += self.evaluate_window(window, chip)
 
         ## Score positive sloped diagonal

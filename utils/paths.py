@@ -1,7 +1,7 @@
 from os import sep
 
-
 PATH_RESOURCES = "resources" + sep
+
 
 class Path:
     """Path manager for the entire game"""
@@ -18,27 +18,25 @@ class Path:
 
     @staticmethod
     def styles():
-        """Return styles directory path"""
+        """Return style's directory path"""
         return PATH_RESOURCES + "styles" + sep
 
     @staticmethod
     def soundtracks():
-        """Return soundstracks directory path"""
+        """Return soundtrack's directory path"""
         return PATH_RESOURCES + "soundtracks" + sep
-    
+
     @staticmethod
     def fonts():
-        """Return fonts directory path"""
+        """Return font's directory path"""
         return PATH_RESOURCES + "fonts" + sep
 
     @staticmethod
     def images():
-        """Return images directory path"""
+        """Return image's directory path"""
         return PATH_RESOURCES + "images" + sep
 
     @staticmethod
     def sounds():
-        """Return sounds directory path"""
+        """Return sound's directory path"""
         return PATH_RESOURCES + "sounds" + sep
-    
-    
