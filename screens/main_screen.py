@@ -46,8 +46,7 @@ class MainScreen:
 
         control = Controller()
         utilities = UtilitiesMain(self.screen, self.server, self.client)
-
-        start_time = pg.time.get_ticks()  # Used for timer
+        self.client.send_username(usernames[0])
 
         attr = {
             "res": self.config.size,
@@ -60,19 +59,37 @@ class MainScreen:
         }
         menu = OptionsMenu(**attr)  # Initializes the Options Menu class which is used to create the esc menu
 
-        clock = pg.time.Clock()
-
         matrix = utilities.create_matrix()
 
-        chip = self.chip_2 if self.option == "Player vs Player" else self.chip_1
+        chip = self.chip_2 if self.option == "Player vs Player" or not self.client.is_player_one else self.chip_1
 
         close_loop: bool = False
 
         x, y = 950, 15
 
-        player_turn: int = 1  # if not option else option
+        player_turn: int = 1 if self.client.is_player_one else 2  # if not option else option
 
         self.client.add_player_move(utilities.playersTurn)
+
+        # Segundo jogador
+        if not self.client.is_player_one:
+            self.client.confirm_player2()
+
+            while self.client.usernames[0] == 'AI 1':
+                pass
+
+            # Adiciona os nomes dos jogadores multiplayer
+            usernames = self.client.usernames
+
+        # Primeiro jogador (host)
+        while not self.server.is_ready and self.client.is_player_one and self.client.usernames[1] == 'AI 2':
+            pass
+
+        if self.client.is_player_one:
+            usernames = self.server.usernames
+
+        clock = pg.time.Clock()
+        start_time = pg.time.get_ticks()  # Used for timer
         self.client._last_move_data = {str(value): value for value in [
             0,
             matrix,

@@ -179,7 +179,7 @@ class StarterMenu:
         )
 
         self.mode = pygame_gui.elements.UIDropDownMenu(
-            ["Player vs AI", "Player vs Player", "AI vs AI"],
+            ["Player vs AI", "Player vs Player", "AI vs AI", "Multiplayer"],
             self.last_mode,
             pg.Rect(*self.sm_mode),
             manager=self.manager,
@@ -277,6 +277,13 @@ class StarterMenu:
                 self.mode_text.set_text("Player 1")
                 self.res_text.set_text("Player 2")
                 self.plrs = (True, True)
+
+            elif self.mode.selected_option == "Multiplayer":
+                self.mode_text.kill()
+                self.res_text.kill()
+                self.theme_text.set_text("Name")
+                self.theme_text.set_dimensions((220, 300))
+                self.plrs = (True, False)
 
             else:
                 self.selected = False

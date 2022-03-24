@@ -12,6 +12,7 @@ class Client:
         self.player_id = None
         self.is_player_one = False
         self.is_running = True
+        self.usernames = ['AI 1', 'AI 2']
 
         self.player_turn = None
         self.move_chip = None
@@ -48,6 +49,14 @@ class Client:
                 self.player_id = data["player_id"]
                 self.is_player_one = data["is_player_one"]
 
+            elif data.get("type") == "info":
+                usernames: list = data.get('usernames')
+
+                if not self.is_player_one:
+                    usernames.reverse()
+
+                self.usernames = usernames
+
             # Movimento do oponente
             elif data.get("type") == "opponent_move":
                 print("opponent_move")
@@ -64,6 +73,12 @@ class Client:
 
     def move(self, column: int):
         self._send_json({"type": "move", "player": self.player_id, "column": column})
+
+    def send_username(self, username):
+        self._send_json({"type": "info", "player": self.player_id, "username": username})
+
+    def confirm_player2(self):
+        self._send_json({"type": "player2_ready"})
 
     def close(self):
         self.is_running = False

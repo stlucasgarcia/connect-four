@@ -16,6 +16,9 @@ class Server:
 
         self.player1 = None
         self.player2 = None
+        self.usernames = ['AI 1', 'AI 2']
+        self.connections = []
+
         self.is_ready = False
 
     def post_init(self):
@@ -35,22 +38,24 @@ class Server:
         while self.is_running:
             connection, address = self.server.accept()
 
-            print_lock.acquire()
+            # print_lock.acquire()
 
             start_new_thread(self._threaded, (connection, address))
 
     def _threaded(self, connection: socket, address):
+        self.connections.append(connection)
+
         print(f'Nova conexão! {address[0]}:{address[1]}')
 
-        # Novo jogador conectado
+        # Primeiro jogador conectado
         if not self.player1:
             self.player1 = address[1]
             self._send_json(connection, {"type": "connect", "player_id": self.player1, "is_player_one": True})
 
+        # Segundo jogador conectado
         elif self.player1 and not self.player2:
             self.player2 = address[1]
             self._send_json(connection, {"type": "connect", "player_id": self.player2, "is_player_one": False})
-            self.is_ready = True
 
         print(f"{self.player1=}, {self.player2=}")
 
@@ -71,6 +76,25 @@ class Server:
                         "player": data.get("player"),
                         "column": data.get("column"),
                     })
+
+                # Recebendo nome dos jogadores
+                elif data.get("type") == "info":
+                    if data.get("player") == self.player1:
+                        self.usernames[0] = data.get("username")
+                    elif data.get("player") == self.player2:
+                        self.usernames[1] = data.get("username")
+
+                # Confirmando partida e enviando nome dos jogadores
+                elif data.get("type") == "player2_ready":
+                    self._send_json(
+                        connection, {
+                            "type": "info",
+                            "usernames": self.usernames,
+                        },
+                        sendall=True,
+                    )
+
+                    self.is_ready = True
 
             except ConnectionResetError:
                 if self.player1 == address[1]:
@@ -93,9 +117,14 @@ class Server:
         self.is_running = False
         self.server.close()
 
-    @staticmethod
-    def _send_json(connection, data: dict):
-        connection.send(json.dumps(data).encode("utf-8"))
+    def _send_json(self, connection, data: dict, sendall=False):
+        json_data = json.dumps(data).encode("utf-8")
+
+        if sendall:
+            for conn in self.connections:
+                conn.send(json_data)
+        else:
+            connection.send(json_data)
 
 
 # Just for tests
