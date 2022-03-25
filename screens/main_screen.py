@@ -56,8 +56,6 @@ class MainScreen:
         self.ai_chip: int = 2
 
     def check_multiplayer_turn(self, turn: int) -> bool:
-        print(f"player: {1 if self.client.is_player_one else 2}, current turn: {turn}")
-
         # Primeiro jogador
         if self.client.is_player_one and turn == 1:
             return True

@@ -38,11 +38,9 @@ class Server:
         while self.is_running:
             connection, address = self.server.accept()
 
-            # print_lock.acquire()
+            start_new_thread(self.threaded, (connection, address))
 
-            start_new_thread(self._threaded, (connection, address))
-
-    def _threaded(self, connection: socket, address):
+    def threaded(self, connection: socket, address):
         self.connections.append(connection)
 
         print(f'Nova conexão! {address[0]}:{address[1]}')
@@ -56,8 +54,6 @@ class Server:
         elif self.player1 and not self.player2:
             self.player2 = address[1]
             self._send_json(connection, {"type": "connect", "player_id": self.player2, "is_player_one": False})
-
-        print(f"{self.player1=}, {self.player2=}")
 
         while self.is_running:
             try:

@@ -41,25 +41,6 @@ class Client:
 
         print(f"Cliente conectado na porta {PORT}")
 
-    def _on_move_chip(self, *args, **kwargs):
-        response: tuple = self.player_turn(*args, **kwargs)
-
-        self.turn = response[1]
-
-        if kwargs.get("ignore_move"):
-            turn = 1 if response[1] == 2 else 2
-            self.turn = turn
-
-            response = (response[0], turn, *response[2:])
-
-        self.params_to_dict(response)
-
-        return response
-
-    def add_player_move(self, players_turn):
-        self.player_turn = players_turn
-        self.move_chip = self._on_move_chip
-
     def listen(self):
         self.is_running = True
 
@@ -111,12 +92,31 @@ class Client:
     def confirm_player2(self):
         self._send_json({"type": "player2_ready"})
 
-    def close(self):
-        self.is_running = False
-        self.client.close()
+    def _on_move_chip(self, *args, **kwargs):
+        response: tuple = self.player_turn(*args, **kwargs)
+
+        self.turn = response[1]
+
+        if kwargs.get("ignore_move"):
+            turn = 1 if response[1] == 2 else 2
+            self.turn = turn
+
+            response = (response[0], turn, *response[2:])
+
+        self.params_to_dict(response)
+
+        return response
+
+    def add_player_move(self, players_turn):
+        self.player_turn = players_turn
+        self.move_chip = self._on_move_chip
 
     def params_to_dict(self, data):
         self._last_move_data = {k: v for k, v in zip(turn_params, data)}
+
+    def close(self):
+        self.is_running = False
+        self.client.close()
 
     def _convert_parameters(self):
         return [
