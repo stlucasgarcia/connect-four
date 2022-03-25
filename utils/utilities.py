@@ -38,8 +38,14 @@ class UtilitiesMain:
         matrix = np.zeros((self.ROW_AMOUNT, self.COLUMN_AMOUNT))
         return matrix
 
-    def drop_piece(self, matrix: np.ndarray, row: int, column: int, piece: int) -> None:
+    def drop_piece(self, matrix: np.ndarray, row: int, column: int, piece: int, ignore_move: bool = False) -> None:
         """Drops the piece on the matrix"""
+
+        if self.client:
+            piece = 1 if self.client.is_player_one else 2
+            if ignore_move:
+                piece = 1 if piece == 2 else 2
+            print(f"has client, {ignore_move=} and {piece=}")
 
         matrix[row][column] = piece
 
@@ -273,6 +279,7 @@ class UtilitiesMain:
             start_time,
             scores,
             option,
+            ignore_move=False,
     ):
         """Main function of utilities, it makes the players turn and call other function to create the difference
         between turns and check for win"""
@@ -291,9 +298,12 @@ class UtilitiesMain:
 
             row = self.get_open_row(matrix, column)
 
-            self.client.move(column)
+            if option == "Multiplayer" and not ignore_move:
+                self.client.move(column)
 
-            self.drop_piece(matrix, row, column, turn)
+            self.drop_piece(matrix, row, column, turn, ignore_move)
+
+            print(matrix)
 
             if self.is_victory(matrix, turn) or self.is_tie(matrix):
                 scores[0] += 1 if turn % 2 == 0 else scores[0]

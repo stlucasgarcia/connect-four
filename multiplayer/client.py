@@ -4,28 +4,55 @@ import socket
 HOST = "127.0.0.1"
 PORT = 12345
 
+turn_params = [
+    "play_again",
+    "turn",
+    "chip",
+    "scores",
+    "column",
+    "matrix",
+    "sound_chip_1",
+    "sound_chip_2",
+    "usernames",
+    "start_time",
+    "option",
+]
+
 
 class Client:
     def __init__(self, host: str = None):
         print("Inicializando cliente...")
+        self.host = host
+        self.client = None
 
         self.player_id = None
         self.is_player_one = False
-        self.is_running = True
+        self.turn = 1
+        self.is_running = False
         self.usernames = ['AI 1', 'AI 2']
 
         self.player_turn = None
         self.move_chip = None
         self._last_move_data = {}
 
+    def post_init(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect((host if host else HOST, PORT))
+        self.client.connect((self.host if self.host else HOST, PORT))
 
         print(f"Cliente conectado na porta {PORT}")
 
-    def _on_move_chip(self, *args):
-        response = self.player_turn(*args)
-        self._last_move_data = {str(value): value for value in response}
+    def _on_move_chip(self, *args, **kwargs):
+        response: tuple = self.player_turn(*args, **kwargs)
+
+        self.turn = response[1]
+
+        if kwargs.get("ignore_move"):
+            turn = 1 if response[1] == 2 else 2
+            self.turn = turn
+
+            response = (response[0], turn, *response[2:])
+
+        self.params_to_dict(response)
 
         return response
 
@@ -34,11 +61,15 @@ class Client:
         self.move_chip = self._on_move_chip
 
     def listen(self):
+        self.is_running = True
+
         while self.is_running:
             data = self.client.recv(1024).decode()
 
             if not data:
                 print(f'Desconectado do servidor')
+                self.is_running = False
+
                 break
 
             data = json.loads(data)
@@ -59,14 +90,14 @@ class Client:
 
             # Movimento do oponente
             elif data.get("type") == "opponent_move":
-                print("opponent_move")
                 parameters = self._convert_parameters()
 
                 self.move_chip(
-                    data.get("column"),
+                    data.get("column") + 1,
                     parameters[1],
                     1 if self.is_player_one else 2,
-                    parameters[3:],
+                    *parameters[3:],
+                    ignore_move=True,
                 )
 
         self.client.close()
@@ -84,11 +115,14 @@ class Client:
         self.is_running = False
         self.client.close()
 
+    def params_to_dict(self, data):
+        self._last_move_data = {k: v for k, v in zip(turn_params, data)}
+
     def _convert_parameters(self):
         return [
             self._last_move_data["column"],
             self._last_move_data["matrix"],
-            self._last_move_data["player_turn"],
+            self._last_move_data["turn"],
             self._last_move_data["sound_chip_1"],
             self._last_move_data["sound_chip_2"],
             self._last_move_data["usernames"],

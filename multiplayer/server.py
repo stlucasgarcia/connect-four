@@ -71,11 +71,14 @@ class Server:
 
                 # Movimento dos jogadores
                 if data.get("type") == "move":
-                    self._send_json(connection, {
-                        "type": "opponent_move",
-                        "player": data.get("player"),
-                        "column": data.get("column"),
-                    })
+                    self._send_json(
+                        self.connections[0] if data.get("player") == self.player2 else self.connections[1],
+                        {
+                            "type": "opponent_move",
+                            "player": data.get("player"),
+                            "column": data.get("column"),
+                        },
+                    )
 
                 # Recebendo nome dos jogadores
                 elif data.get("type") == "info":

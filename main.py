@@ -1,5 +1,3 @@
-from _thread import start_new_thread
-
 import pygame as pg
 
 from multiplayer import Server, Client
@@ -16,9 +14,8 @@ settings/menus.
 
 # Pygame exit to stop initial loop
 def game_run():
-    server, client = init_multiplayer()
-
-    # return
+    server = Server()
+    client = Client()
 
     pg.init()
 
@@ -95,21 +92,6 @@ def game_run():
         play_again = main_screen_object.main_screen(scores, usernames=[name1, name2])
 
 
-def init_multiplayer() -> tuple[Server, Client]:
-    server = Server()
-
-    try:
-        server.post_init()
-        start_new_thread(server.listen, ())
-    except OSError:
-        print('Servidor já está inicializado')
-
-    client = Client()
-    start_new_thread(client.listen, ())
-
-    return server, client
-
-
 def re_exec():
     import os, sys, subprocess
 
@@ -124,6 +106,3 @@ def re_exec():
 
 if __name__ == "__main__":
     game_run()
-
-    while True:
-        pass
